@@ -1,0 +1,12 @@
+@import './index/reset.scss';
+@import './index/utils.scss';
+
+@import './theme/index.scss';
+@import './icons/style.css';
+@import './icons/fontsNew/style.css';
+@import './common/g-common.scss';
+// @import './index/utils.scss';
+.el-image__inner.el-image__inner--center{
+    width:100% !important;
+    object-fit: cover;
+  }

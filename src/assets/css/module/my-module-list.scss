@@ -1,0 +1,50 @@
+
+@import '~@/assets/css/base/utils.scss';
+
+.m-list--wrap {
+    min-height: 700px;
+    box-sizing: border-box;
+    
+    .m-list--box {
+        padding: 0 30px;
+    }
+    .m-list--page {
+        margin: 30px auto 60px;
+    }
+}
+
+.m-btn--wrap {
+    padding: 30px 0;
+    border-bottom: $--border-default;
+    text-align: right;
+
+    .m-item--btn {
+        padding: 0;
+        font-size: 16px;
+        color: #666;
+
+        & + .m-item--btn {
+            margin-left: 2em;
+        }
+    }
+}
+
+.m-operate--box {
+    width: 100px;
+    vertical-align: top;
+    cursor: default;
+
+    .operate-item--btn {
+        display: block;
+        padding: 1px 0;
+        margin-left: 100%;
+
+        &.is-info {
+            color: #666;
+        }
+
+        &.is-submit {
+            margin-top: 1em;
+        }
+    }
+}

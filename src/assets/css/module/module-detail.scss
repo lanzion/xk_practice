@@ -1,0 +1,37 @@
+@import '~@/assets/css/base/utils.scss';
+
+.m-detail--wrap {
+    padding: $--header-height 0 100px;
+    background-color: #f8f8f8;
+
+    .m-breadcrumb--wrap {
+        padding: 30px 0;
+    }
+
+    .m-dl {
+        &--item {
+            & + .m-dl--item {
+                margin-top: 16px;
+            }
+        }
+        &--title,
+        &--content {
+            font-size: inherit;
+            color: #666;
+        }
+        &--title {
+            margin-right: .5em;
+        }
+        &--content {
+            & + .m-dl--title {
+                margin-left: 40px;
+            }
+        }
+    }
+
+    .m-module {
+        &--title {
+            font-size: 20px;
+        }
+    }
+}

@@ -1,0 +1,34 @@
+.container {
+    width: 1200px;
+    margin: 0 auto;
+}
+
+.clearfix {
+    *zoom: 1;
+}
+
+.clearfix:after {
+    content: "";
+    height: 0;
+    display: block;
+    clear: both;
+    visibility: hidden;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+.table-layout {
+    display: table;
+    width: 100%;
+}
+  
+.table-cell {
+    display: table-cell;
+    vertical-align: middle;
+}

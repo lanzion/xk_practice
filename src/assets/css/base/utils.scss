@@ -1,0 +1,113 @@
+@import './base-variables.scss';
+
+/* Color
+-------------------------- */
+$--wrap-bg: #f8f8f8;
+$--disabled-color: #ccc;
+$--forenotice-color: $--color-primary;
+$--course-color: $--color-secondary;
+$--resource-color: #ff4e00;
+$--experience-color: $--color-primary;
+$--teacher-color: #009de6;
+
+/* Header
+-------------------------- */
+$--header-height: 70px !default;
+$--header-logo-margin: 28px !default;
+
+/* Nav
+-------------------------- */
+$--admin-form-width: 760px !default;
+$--admin-nav-width: 230px !default;
+$--admin-nav-bg: #2e3951 !default;
+$--nav-font-size: 16px !default;
+
+/* Layout
+-------------------------- */
+$--box-margin: 30px;
+$--box-padding: 20px;
+$--box-radius: 5px;
+$--box-border-radius: 4px;
+
+/* Default
+-------------------------- */
+$--default-image: '~@assets/image/default-image.svg' !default;
+$--default-avatar: '~@assets/image/default-avatar.svg' !default;
+$--empty-image: '~@assets/image/empty-image.svg' !default;
+
+/* Default
+-------------------------- */
+$--tab-height: 60px;
+
+/* Module
+-------------------------- */
+$--video-ratio-width: 16 / 9;
+$--banner-cover-ratio-width: 15;
+$--banner-cover-ratio-height: 4;
+$--banner-cover-ratio: $--banner-cover-ratio-width / $--banner-cover-ratio-height;
+$--course-cover-ratio-width: 16;
+$--course-cover-ratio-height: 9;
+$--course-cover-ratio: $--course-cover-ratio-width / $--course-cover-ratio-height;
+$--activity-cover-ratio-width: 23;
+$--activity-cover-ratio-height: 13;
+$--activity-cover-ratio: $--activity-cover-ratio-width / $--activity-cover-ratio-height;
+
+/* evaluate-status-color
+ * 0: 未开始
+ * 1: 进行中
+ * 2: 已结束
+-------------------------- */
+$--evaluate-status-color: (
+    0: $--disabled-color,
+    1: $--color-secondary,
+    2: $--disabled-color
+);
+/* course-status-color
+ * 评课进行状态
+ * 0: 未开始
+ * 1: 进行中
+ * 2: 已结束
+-------------------------- */
+$--course-status-color: (
+    0: $--color-text-primary,
+    1: $--color-secondary,
+    2: $--color-text-primary
+);
+/* examine-status-color
+ * 审核状态
+ * 0: 未审核
+ * 1: 通过
+ * 2: 不通过
+-------------------------- */
+$--examine-status-color: $--course-status-color;
+/* lock-status-color
+ * 审核状态
+ * 0: 正常
+ * 1: 锁定
+-------------------------- */
+$--lock-status-color: (
+    0: $--color-primary,
+    1: $--color-text-regular
+);
+/* default-status-color
+ * 状态
+ * 0: 停用
+ * 1: 启用
+-------------------------- */
+$--default-status-color: (
+    0: $--color-text-regular,
+    1: $--color-secondary
+);
+$--link-target-color: (
+    0: $--color-secondary,
+    1: $--color-primary
+);
+
+.mode-grade-box{
+    
+    input{
+         text-align: center;
+         font-size: 16px;
+         color:#000;
+    }
+}

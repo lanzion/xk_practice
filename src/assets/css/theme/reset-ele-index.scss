@@ -1,0 +1,87 @@
+
+@import '~@/assets/css/base/base-variables.scss';
+
+.el-form {
+    &.is-right-angle {
+        .el-input__inner,
+        .el-textarea__inner {
+            border-radius: 0;
+        }
+    }
+    .is-round {
+        .el-input__inner {
+            border-radius: 40px;
+        }
+    }
+    &.is-line {
+        .el-input {
+            z-index: 1;
+        }
+        .el-input__inner {
+            padding: 0;
+            border: 0;
+            border-bottom: $--border-base #ccc;
+            border-radius: 0;
+            line-height: 36px;
+            background-color: transparent;
+            color: $--color-primary;
+        }
+        .el-form-item__label {
+            padding-bottom: 0;
+            line-height: 20px;
+            color: #333;
+
+            &::before {
+                display: none;
+            }
+        }
+        .el-form-item__error {
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-size: 14px;
+            line-height: 36px;
+            color: $--color-secondary;
+            text-align: right;
+            z-index: 0;
+        }
+        .el-form-item {
+            &.is-success {
+                .el-input__validateIcon {
+                    font-size: 20px;
+                    color: $--color-primary;
+                }
+                .el-icon-circle-check:before {
+                    content: '\e904';
+                    font-family: 'xk-pingke-icon' !important;
+                }
+            }
+            &.is-error {
+                .el-input__suffix {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+.el-button {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 16px;
+}
+
+.m-list--search {
+    .m-search--input {
+        .el-input__inner {
+            padding-left: 37px;
+            padding-right: 60px;
+        }
+        .el-input__suffix {
+            right: 24px;
+            font-size: 20px;
+            line-height: 40px;
+            color: #666;
+        }
+    }
+}

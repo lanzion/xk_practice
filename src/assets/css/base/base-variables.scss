@@ -1,0 +1,51 @@
+/* Color
+-------------------------- */
+$--color-primary: #008aff !default;
+$--color-secondary: #e90021 !default;
+$--color-background: mix($--color-primary, #fff, 5%) !default;
+
+/* Font
+-------------------------- */
+$--font-size-base: 14px !default;
+$--font-size-small: 12px !default;
+$--font-size-medium: 16px !default;
+$--font-size-large: 18px !default;
+$--font-size-title: 20px !default;
+
+/* Text
+-------------------------- */
+$--color-text-primary: #333 !default; // 大标题颜色、文章详情文字
+$--color-text-secondary: #666 !default; // 统计数字颜色
+$--color-text-content: #555 !default; // 底部背景色、详细介绍内容字体颜色
+$--color-text-regular: #999 !default; // 标题下的附带信息文字颜色
+$--color-text-statis: #ccc !default;
+$--color-text-lightGray: #eee !default;
+$--color-text-placeholder: $--color-text-secondary !default;
+$--color-text-disabled: #f0f0f0 !default;
+$--color-text-error: #f56c6c;
+$--color-text-success: #67c23a;
+$--color-text-warning: #e6a23c;
+$--color-text-info: #909399;
+$--color-text-tip: #ffc000;
+$--color-status-exception: $--color-text-error !default;
+$--color-status-success: $--color-text-success !default;
+
+/* Border
+-------------------------- */
+$--border-width-base: 1px !default;
+$--border-style-base: solid !default;
+$--border-color-base: #e8e8e8 !default;
+$--border-base: $--border-width-base $--border-style-base !default;
+$--border-default: $--border-width-base $--border-style-base $--border-color-base !default;
+
+
+
+
+
+
+$--border-radius-base: 4px !default;
+
+/* Background
+-------------------------- */
+$--background-color-base: #eee !default;
+$--color-white: #fff !default;

@@ -1,0 +1,208 @@
+
+
+@import '~@/assets/css/base/utils.scss';
+@import '~@/assets/css/mixin/core.scss';
+$--footer-height: 108px;
+
+.m-page {
+    &--wrap {
+        position: relative;
+        width: 100%;
+        // padding: 100px 0 0;
+        background-color: #fff;
+        // background: linear-gradient(to bottom, rgba(79, 145, 255, 1) 0%,rgba(41, 96, 237, 1) 100%);
+        box-sizing: border-box;
+        @include background-cover;
+        overflow: auto;
+
+        &.has-bg {
+            &::after {
+                // $bg: '~@assets/image/login/login-page-bg.png' !default;
+                $bg: '~@assets/image/login/bg1.png' !default;
+                content: '';
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                bottom: 0;
+                background: url(#{$bg}) bottom center no-repeat;
+                background-size: 100%;
+            }
+
+            .m-content--box {
+                // $bg: '~@assets/image/login/login-form-bg.png' !default;
+                // height: 690px;
+                // background: #fff url(#{$bg}) center bottom #{- $--footer-height} no-repeat;
+            }
+        }
+    }
+}
+
+.m-header--wrap {
+    height: 34px;
+    color: #fff;
+
+    .logo {
+        height: 34px;
+        vertical-align: middle;
+    }
+
+    .title {
+        $mr: 20px;
+        display: inline-block;
+        padding-left: $mr;
+        margin-left: $mr;
+        border-left: $--border-base;
+        font-size: 27px;
+        line-height: 20px;
+        vertical-align: text-bottom;
+    }
+
+    .link {
+        text-align: right;
+        font-size: 14px;
+        color: #fff;
+    }
+}
+
+.m-content {
+    &--wrap {
+        position: relative;
+        z-index: 1;
+    }
+
+    &--title {
+        font-size: 24px;
+        color: $--color-primary;
+        margin-bottom: 40px;
+    }
+
+    &--box {
+        position: relative;
+        // margin-top: 40px;
+        // border-radius: 10px;
+        // background-color: #fff;
+        // box-shadow: 0 0 79px 0 rgba(11, 15, 65, .36);
+        z-index: 1;
+        height: 629px;
+
+    }
+
+    &--img {
+        // padding-top: 108px;
+        // text-align: center;
+        // vertical-align: top;
+        // text-align: center;
+        width: 520px;
+        padding-left: 40px;
+        img{
+            width: 100%;
+        }
+    }
+    &--img_top{
+        display: flex;
+        
+    }
+    &--img_top_left{
+        width: 250px;
+        padding-right: 20px;
+    }
+    &--img_top_right{
+        width: 250px;
+    }
+    &--img_bottom{
+        width: 520px;
+        padding-top: 20px;
+    }
+
+    &--field {
+       
+        width: 500px;
+        // padding: 130px 100px;
+        box-sizing: border-box;
+        text-align: center;
+        vertical-align: top;
+        padding-top: 70px;
+        
+    }
+
+    &--form {
+        text-align: left;
+        $bg: '~@assets/image/login/dengludiban.png' !default;
+        background: url(#{$bg}) center no-repeat;
+        background-size: 100%;
+        background-position: bottom;
+        width: 300px;
+        padding: 50px 50px 110px 50px;
+        border-radius: 10px;
+        /deep/ input{
+            border: none;
+        }
+        /deep/ .el-input{
+            border-bottom: 1px solid #ccc;
+        }
+    }
+    &--form:hover{
+        // box-shadow: 0px 1px 6px 0px 
+		// rgba(11, 15, 65, 0.36);
+    }
+
+    .el-input {
+        input{
+            border: none;
+        }
+    }
+
+    &--button {
+        margin-top: 40px;
+        text-align: center;
+
+        .m-button--item {
+            width: 300px;
+            font-size: 16px;
+        }
+    }
+
+    &--link {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #666;
+    }
+}
+
+.m-footer--wrap {
+    height: $--footer-height;
+    padding: 40px;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 12px;
+    color: #fff;
+}
+
+.m-button {
+
+    &--wrap {
+        &.is-inline {
+            padding-top: 50px;
+            padding-left: 20px;
+        }
+    }
+
+    &--item {
+        width: 100%;
+        padding: 0;
+        line-height: 40px;
+        font-size: 14px;
+    }
+}
+
+.agree {
+    &-wrap {
+        margin-bottom: 30px;
+    }
+    &-txt {
+        color: #666;
+    }
+    &-link {
+        color: $--color-primary;
+    }
+}

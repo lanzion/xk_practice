@@ -1,0 +1,61 @@
+@import '~@/assets/css/base/base-variables.scss';
+
+.el-submenu.is-active {
+    .el-submenu__title {
+        background-color: $--color-primary !important;
+    }
+}
+.el-menu-item,
+.el-submenu__title {
+    $h: 46px;
+    height: $h;
+    line-height: $h;
+    
+    i {
+        color: #fff;
+    }
+}
+.el-submenu__icon-arrow {
+    font-size: 16px;
+}
+.el-menu {
+    &.el-menu--inline {
+        padding-bottom: 10px;
+    }
+}
+
+.el-tree {
+    font-size: 14px;
+}
+
+.el-menu--horizontal {
+    > .el-menu-item {
+        $h: 40px;
+        height: $h;
+        line-height: $h;
+        font-size: 16px;
+        color: #666;
+
+        &.is-active {
+            color: $--color-primary;
+        }
+    }
+}
+
+.el-button {
+    &.is-plain {
+        background-color: #fff;
+    }
+}
+
+.el-table {
+    font-size: 14px;
+
+    th {
+        font-weight: normal;
+    }
+    
+    .el-table__header {
+        border-top: $--border-default;
+    }
+}

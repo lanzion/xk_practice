@@ -1,0 +1,130 @@
+@import '~@/assets/css/base/utils.scss';
+
+.m-index--module {
+    padding: 50px 0;
+
+    .m-title,
+    .m-content {
+        vertical-align: bottom;
+    }
+
+    .m-title {
+        font-size: 30px;
+
+        &::before,
+        &::after {
+            content: '/';
+            font-weight: bold;
+            color: $--color-primary;
+        }
+        &::before {
+            margin-right: 8px;
+        }
+        &::after {
+            margin-left: 8px;
+        }
+    }
+
+    .m-menu {
+        margin-top: 20px;
+
+        &--item {
+            display: inline-block;
+            margin-right: 2em;
+            font-size: 16px;
+            cursor: pointer;
+
+            &.is-active {
+                color: $--color-primary;
+            }
+        }
+    }
+
+    .m-more {
+        font-size: 14px;
+        color: #666;
+        text-align: right;
+    }
+
+    .m-content {
+        margin-top: 30px;
+    }
+
+    &.is-mult-column {
+        display: flex;
+        flex-direction: column;
+        .m-content {
+            flex: 1;
+        }
+    }
+}
+
+.m-list--wrap {
+    padding: $--header-height 0 100px;
+    background-color: #f8f8f8;
+
+    .m-list--box {
+        margin-top: 40px;
+    }
+    
+    .m-list--page {
+        margin-top: 60px;
+    }
+}
+
+.m-search--wrap {
+    padding: 30px 0 37px;
+    background-color: #fff;
+    box-shadow: 0px 6px 12px 0px rgba(206, 206, 206, .35);
+
+    $icon-size: 40px;
+    .icon {
+        display: inline-block;
+        width: $icon-size;
+        height: $icon-size;
+        line-height: $icon-size;
+        text-align: center;
+        border-radius: 50%;
+        font-size: 22px;
+        color: #fff;
+    }
+
+    .title {
+        margin-left: 20px;
+        font-size: 30px;
+        line-height: $icon-size;
+    }
+
+    .m-search--box {
+        margin-top: 43px;
+    }
+
+    .m-search--item {
+        width: 110px;
+        margin-bottom: 0;
+    }
+
+    .m-search--input {
+        width: 360px;
+    }
+}
+
+$--modules-color: (
+    forenotice: $--forenotice-color,
+    course: $--course-color,
+    resource: $--resource-color,
+    experience: $--experience-color,
+    teacher: $--teacher-color
+);
+@each $module, $color in $--modules-color  {
+    .is-#{$module} {
+        .m-search--wrap {
+            .icon {
+                background-color: $color;
+            }
+            .title {
+                color: $color;
+            }
+        }
+    }
+}

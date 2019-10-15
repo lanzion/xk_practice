@@ -1,0 +1,28 @@
+
+@import '~@/assets/css/base/base-variables.scss';
+
+.m-form--wrap {
+    min-height: 700px;
+    padding: 44px 0 50px;
+    box-sizing: border-box;
+
+    .separation-line {
+        margin: 30px 0;
+        border-color: $--border-color-base;
+    }
+
+    .el-button {
+        &.is-eq-input {
+            margin-left: 20px;
+        }
+    }
+}
+
+.m-operate--box {
+    margin-top: 60px;
+    text-align: center;
+
+    &.is-right {
+        text-align: right;
+    }
+}

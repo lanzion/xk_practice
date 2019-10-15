@@ -1,0 +1,86 @@
+@import '~@/assets/css/base/base-variables.scss';
+@import '~@/assets/css/base/utils.scss';
+
+body {
+    height: 100%;
+}
+
+/* 标签页
+-------------------------- */
+.g-tab--wrap {
+    margin-top: 20px;
+}
+
+/* 列表头部搜索框
+-------------------------- */
+.g-search--wrap {
+    margin: 36px 0 0;
+    .el-form-item {
+        margin-bottom: $--box-padding;
+    }
+}
+
+/* 表格头部上方按钮/统计模块
+-------------------------- */
+.g-table--head {
+    padding: 0 $--box-padding;
+    line-height: 32px;
+}
+.g-table--link {
+    font-size: 14px;
+}
+
+/* 表格头部上方按钮/统计模块
+-------------------------- */
+.g-tree {
+    &--wrap {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    &--head {
+        flex: 0;
+        text-align: right;
+    }
+    &--body {
+        flex: 1;
+        padding-right: 10px;
+        overflow: auto;
+    }
+}
+
+/* for循环用el-tag标签
+-------------------------- */
+.g-type--label {
+    & + .g-type--label {
+        margin-left: 4px;
+    }
+}
+
+.g-operate--box {
+    text-align: center;
+
+    &.is-right {
+        text-align: right;
+    }
+}
+
+.g-audit--wrap {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: $--border-default;
+}
+
+.g-form--wrap {
+    max-width: $--admin-form-width;
+    margin-top: 40px;
+}
+
+.content-wrap {
+    .pagination {
+        text-align: right !important;
+    }
+}
+.el-image__error{
+    background-color:aliceblue;
+}

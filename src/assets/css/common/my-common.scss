@@ -1,0 +1,44 @@
+@import '~@/assets/css/base/base-variables.scss';
+@import '~@/assets/css/base/utils.scss';
+@import '~@/assets/css/mixin/core.scss';
+
+/* 标签页
+-------------------------- */
+.g-tab {
+    $border-width: 2px;
+    &--wrap {
+        height: $--tab-height;
+        line-height: $--tab-height;
+        padding: 0 20px 0 10px;
+        border-bottom: $border-width solid $--border-color-base;
+        box-sizing: border-box;
+
+        .m-button {
+            margin: 10px 0 0 40px;
+        }
+    }
+    &--box {
+        display: inline-block;
+        height: $--tab-height;
+    }
+    &--item {
+        display: inline-block;
+        height: inherit;
+        padding: 0 28px;
+        font-size: 18px;
+        cursor: pointer;
+
+        &.is-nactive {
+            .g-tab--name {
+                color: $--color-primary;
+                border-color: $--color-primary;
+            }
+        }
+    }
+    &--name {
+        display: block;
+        height: inherit;
+        border-bottom: $border-width solid transparent;
+        box-sizing: border-box;
+    }
+}
