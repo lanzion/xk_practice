@@ -76,7 +76,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="工作周期" prop="checkboxGroup">
+        <el-form-item label="工作日期" prop="checkboxGroup">
           <el-checkbox-group v-model="ruleForm.checkboxGroup">
             <el-checkbox-button
               v-for="city in cities"

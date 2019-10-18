@@ -292,7 +292,7 @@ export default {
 .nav-list-wrap {
   height: 68px;
   line-height: 68px;
-  padding-left: 79px;
+  padding-left: 100px;
   .nav-item {
     display: inline-block;
     margin-right: 32px;

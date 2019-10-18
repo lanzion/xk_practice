@@ -89,7 +89,7 @@
             class="demo-ruleForm"
             :style="{'marginBottm':'20px'}"
           >
-            <el-form-item label="工作周期" prop="workTime">
+            <el-form-item label="工作日期" prop="workTime">
               <el-checkbox-group v-model="checkboxGroup1" style="pointerEvents:none">
                 <el-checkbox-button
                   v-for="city in cities"
