@@ -62,12 +62,11 @@ export default {
                     const { permissType: type } = x
                     // const { position, permissType: type } = x
                     // const pos = position && position.split(',') || []
-                    /** 
+                    /**
                      * @type 判断类型例如按钮，菜单
                      * @position 判断位置 1头部按钮2列表按钮3全部（两者都有）
-                     * 
                     */
-                    if (type === '5') {//判断类型例如按钮，菜单
+                    if (type === '5') { // 判断类型例如按钮，菜单
                         __tabs.push(x)
                     }
                     if (type === '4') {
@@ -78,16 +77,14 @@ export default {
                     }
                     /* ---- */
                     if (type !== '3') {
-                        if(x.position==1){
+                        if (x.position == 1) {
                             __head.push(x)
-                        }else if(x.position==2){
+                        } else if (x.position == 2) {
                             __list.push(x)
-                        }else if(x.position==''){
+                        } else if (x.position == '') {
                             __head.push(x)
                             __list.push(x)
                         }
-                       
-                       
                     }
                     // if (type !== '3' && pos.includes('1')) {
                     //     __head.push(x)
@@ -96,18 +93,18 @@ export default {
                     //     __list.push(x)
                     // }
                 })
-                console.log('children', children)
+                // console.log('children', children)
             }
             this.tabsBtnGroup = __tabs
             this.headBtnGroup = __head
             this.listBtnGroup = __list
             this.typeBtnGroup = __type
             this.switchBtnGroup = __switch
-            console.log('__tabs', __tabs)
-            console.log('__head', __head)
-            console.log('__list', __list)
-            console.log('__type', __type)
-            console.log('__switch', __switch)
+            // console.log('__tabs', __tabs)
+            // console.log('__head', __head)
+            // console.log('__list', __list)
+            // console.log('__type', __type)
+            // console.log('__switch', __switch)
         }
     }
 }

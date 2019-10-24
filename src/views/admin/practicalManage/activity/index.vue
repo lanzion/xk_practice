@@ -26,7 +26,7 @@
                         :value="item.value">
                         </el-option>
                     </el-select>
-                </el-form-item> 
+                </el-form-item>
                   <el-form-item label="查看状态" v-if="userInfo.identity==9">
                     <el-select v-model="form.checkStatus" placeholder="请选择状态" @change="resetPage" clearable>
                         <el-option
@@ -36,10 +36,10 @@
                         :value="item.value">
                         </el-option>
                     </el-select>
-                </el-form-item> 
+                </el-form-item>
                 <el-form-item label="活动标题">
                     <el-input v-model="form.title" placeholder="请输入活动标题" @keyup.native.enter="resetPage"></el-input>
-                </el-form-item>     
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="resetPage">搜索</el-button>
                 </el-form-item>
@@ -86,8 +86,6 @@
 
         <!-- 分页 -->
         <pagination :param="pages"  :total="totalNum" @change="getDatas"></pagination>
-
-
         
     </div>
 </template>
@@ -100,24 +98,22 @@ import { activityDel } from '@/api/resetApi'
 import permission from '@/mixin/admin-operate'
 import user from '@/mixin/admin-user'
 
-
-
 export default {
     mixins: [permission, user],
     data() {
         return {
-            activityTime:'',//时间
-            form:{
-                title:null,
+            activityTime: '', // 时间
+            form: {
+                title: null,
               
-                startDateStr:null,
-                endDateStr:null
+                startDateStr: null,
+                endDateStr: null
                 
             },
             listData: [
                 
-                ],
-                options: [
+            ],
+            options: [
                 {
                     value: 'A',
                     label: '已查看'
@@ -127,7 +123,7 @@ export default {
                     label: '未查看'
                 }
             ],
-             fpStates: [
+            fpStates: [
                 {
                     value: '1',
                     label: '开启'
@@ -141,7 +137,7 @@ export default {
         }
     },
     computed: {
-         ...mapState({
+        ...mapState({
             // 用户信息
             userInfo: state => state.login.userInfo || {},
         }),
@@ -152,8 +148,7 @@ export default {
         })
     },
     created() {
-        this.getDatas();
-       
+        this.getDatas()
     },
     watch: {
       
@@ -164,19 +159,18 @@ export default {
         // 重置分页
         resetPage() {
             this.$set(this.pages, 'pageNum', 1)
-             this.getDatas()
+            this.getDatas()
         },
         // 获取列表数据
         async getDatas() {
             this.isLoading = true
-             const formList = Object.assign({}, this.form)
-            if(!this.activityTime){
+            const formList = Object.assign({}, this.form)
+            if (!this.activityTime) {
                   
-            }else{
-                formList.startDateStr = this.activityTime[0]||'';
-                formList.endDateStr = this.activityTime[1]||'';
+            } else {
+                formList.startDateStr = this.activityTime[0] || ''
+                formList.endDateStr = this.activityTime[1] || ''
             }
-           
           
             const res = await activityList(formList, this.pages)
 
@@ -187,23 +181,22 @@ export default {
                 this.totalNum = datas.totalNum || 0
             } catch (error) {
                 this.listData = []
-                this.totalNum = 0;
+                this.totalNum = 0
             } finally {
                 this.isLoading = false
             }
         },
-
        
-         // 删除操作
+        // 删除操作
         doDel({ data }) {
-             const items = data;
+            const items = data
             if (items) {
-                const params ={id:items.id}
+                const params = {id: items.id}
                 this.$confirm(`确认删除该数据吗?`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
-                }).then(() => { 
+                }).then(() => {
                     activityDel(params).then(res => {
                         const { code, msg } = res.data
                         if (code === 200) {

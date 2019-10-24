@@ -7,11 +7,6 @@ const container = () => import('@/views/admin/container')
 const home = () => import('@/views/admin/home/index')
 const schedule = () => import('@/views/admin/home/children/schedule')
 
-// 实践课堂
-
-
-
-
 // 活动审核记录
 const records = () => import('@/views/admin/records/records')
 const relist = () => import('@/views/admin/records/children/relist')
@@ -25,7 +20,6 @@ const managelist = () => import('@/views/admin/management/children/managelist')
 const newgrounds = () => import('@/views/admin/newgrounds/newgrounds')
 // 基础管理
 
-
 // 系统管理
 const permiss = () => import('@/views/admin/system/permiss/index')
 const role = () => import('@/views/admin/system/role/index')
@@ -38,34 +32,19 @@ const banner = () => import('@/views/admin/configure/banner/index')
 const bannerList = () => import('@/views/admin/configure/banner/list')
 const bannerAdd = () => import('@/views/admin/configure/banner/add')
 const bannerEdit = () => import('@/views/admin/configure/banner/edit')
-// 实践系统
-
-
-
-
-
-// 学校
-
-
-
-
-
-
-
 
 // 学校2.0
 const schoolList = () => import('@/views/admin/school/manage/list/index')
-const schoolListDetail = () => import('@/views/admin/school/manage/list/children/detail')
-const schoolAdd= () => import('@/views/admin/school/manage/list/add')
-const schoolEdit= () => import('@/views/admin/school/manage/list/edit')
+const schoolListDetail = () => import('@/views/admin/school/manage/list/detail')
+const schoolAdd = () => import('@/views/admin/school/manage/list/add')
+const schoolEdit = () => import('@/views/admin/school/manage/list/edit')
 const schoolGrade = () => import('@/views/admin/school/manage/grade/index')
-const schoolGradeAdd = () => import('@/views/admin/school/manage/grade/children/add')
+const schoolGradeAdd = () => import('@/views/admin/school/manage/grade/add')
 const schoolGradeEdit = () => import('@/views/admin/school/manage/grade/edit')
 const schoolGradeDetail = () => import('@/views/admin/school/manage/grade/detail')
 // 学生管理
 const schoolStudent = () => import('@/views/admin/school/manage/student/index')
 const schoolStudentAdd = () => import('@/views/admin/school/manage/student/form')
-
 const schoolTeacher = () => import('@/views/admin/school/manage/teacher/index')
 const schoolTeacherAdd = () => import('@/views/admin/school/manage/teacher/form')
 // 实践管理2.0
@@ -93,8 +72,8 @@ const evaluteModelAdd = () => import('@/views/admin/evaluteManage/model/add')
 const evaluteModeledit = () => import('@/views/admin/evaluteManage/model/edit')
 
 // 校园资讯2.0
-const informationManage = () => import('@/views/admin/information/manage/index')
-const informationCreate = () => import('@/views/admin/information/create/index')
+const informationManage = () => import('@/views/admin/information/index')
+const informationCreate = () => import('@/views/admin/information/add')
 const informationEdit = () => import('@/views/admin/information/edit')
 // 数据统计2.0
 const statisticsActive = () => import('@/views/admin/statistics/activty')
@@ -135,25 +114,25 @@ const addSetvice = () => import('@/views/admin/baseAuthority/serviceList/addSetv
 
 // 通知公告
 const noticeManage = () => import('@/views/admin/noticeManage/index')
-const noticeManageCreate = () => import('@/views/admin/noticeManage/create/index')
+const noticeManageCreate = () => import('@/views/admin/noticeManage/add')
 const noticeManageEdit = () => import('@/views/admin/noticeManage/edit')
 // 基地资讯2.0
-const informationBase = () => import('@/views/admin/informationBase/manage/index')
-const informationBaseCreate = () => import('@/views/admin/informationBase/create/index')
-const informationBaseEdit = () => import('@/views/admin/informationBase/edit/index')
+const informationBase = () => import('@/views/admin/informationBase/index')
+const informationBaseCreate = () => import('@/views/admin/informationBase/add')
+const informationBaseEdit = () => import('@/views/admin/informationBase/edit')
 
-//教育局管理2.0
-const  educationList = () => import('@/views/admin/educationBorad/educationList')
-const  educationDetail= () => import('@/views/admin/educationBorad/detail')
-const  educationAdd = () => import('@/views/admin/educationBorad/add')
-const  educationEdit= () => import('@/views/admin/educationBorad/edit')
+// 教育局管理2.0
+const educationList = () => import('@/views/admin/educationBorad/educationList')
+const educationDetail = () => import('@/views/admin/educationBorad/detail')
+const educationAdd = () => import('@/views/admin/educationBorad/add')
+const educationEdit = () => import('@/views/admin/educationBorad/edit')
 
-//类型管理
-const typeManage = () =>import('@/views/admin/typeManage/list')
-const typeManageAdd = () =>import('@/views/admin/typeManage/add')
-const typeManageEdit = () =>import('@/views/admin/typeManage/edit')
-const typeManageAddType = () =>import('@/views/admin/typeManage/addType')
-const typeManageTypeEdit = () =>import('@/views/admin/typeManage/typeEdit')
+// 类型管理
+const typeManage = () => import('@/views/admin/typeManage/list')
+const typeManageAdd = () => import('@/views/admin/typeManage/add')
+const typeManageEdit = () => import('@/views/admin/typeManage/edit')
+const typeManageAddType = () => import('@/views/admin/typeManage/addType')
+const typeManageTypeEdit = () => import('@/views/admin/typeManage/typeEdit')
 Vue.use(Router)
 
 export default new Router({
@@ -176,17 +155,6 @@ export default new Router({
             name: 'practice',
             component: container,
             children: [
-               
-            
-             
-               
-                // 实践管理
-               
-              
-              
-              
-              
-              
                 // 活动审核记录
                 {
                     path: 'records',
@@ -227,8 +195,6 @@ export default new Router({
                 },
             ]
         },
-        // 基础管理
-      
         // 系统管理
         {
             path: '/system',
@@ -272,7 +238,8 @@ export default new Router({
                 {
                     path: 'banner',
                     component: banner
-                },{
+                },
+                {
                     path: 'bannerList',
                     component: container,
                     children: [
@@ -310,7 +277,8 @@ export default new Router({
                         }, {
                             path: 'schoolListDetail',
                             component: schoolListDetail
-                        },{
+                        },
+                        {
                             path: 'add',
                             component: schoolAdd
                         },
@@ -332,13 +300,14 @@ export default new Router({
                         }, {
                             path: 'schoolGradeAdd',
                             component: schoolGradeAdd
-                        },{
+                        },
+                        {
                             path: 'edit',
                             component: schoolGradeEdit
                         },
                         {
                             path: 'detail',
-                            component:schoolGradeDetail
+                            component: schoolGradeDetail
                         }
 
                     ]
@@ -404,9 +373,10 @@ export default new Router({
                         }, {
                             path: 'add',
                             component: practicalActivityAdd
-                        },{
-                            path:'edit',
-                            component:practicalActivityEdit
+                        },
+                        {
+                            path: 'edit',
+                            component: practicalActivityEdit
                         }
 
                     ]
@@ -470,13 +440,13 @@ export default new Router({
                     children: [
                         {
                             path: '/',
-                            component:  courseEdit,
+                            component: courseEdit,
 
                         }
                     ]
 
                 },
-               
+
                 {
                     path: 'courseManageRecord',
                     component: container,
@@ -512,22 +482,22 @@ export default new Router({
                         }
                     ]
 
-                },{
+                },
+                {
                     path: 'baseAuthortySchedule',
                     component: container,
                     children: [
                         {
                             path: '/',
                             component: baseAuthortySchedule
-                        },{
+                        },
+                        {
                             path: 'baseAuthortyScheduleDetail',
                             component: baseAuthortyScheduleDetail
                         },
-                        
+
                     ]
                 },
-                
-
             ]
         },
         // 评分管理2.0
@@ -771,13 +741,13 @@ export default new Router({
             {
                 path: 'create',
                 component: noticeManageCreate
-            },{
-                path:'edit',
-                component:noticeManageEdit
+            },
+            {
+                path: 'edit',
+                component: noticeManageEdit
             }]
         },
-        
-         {
+        {
             name: 'baseAuthority',
             path: '/baseAuthority',
             component: container,
@@ -826,7 +796,7 @@ export default new Router({
                 component: informationBaseEdit
             }]
         },
-        //教育局管理2.0
+        // 教育局管理2.0
         {
             name: 'educationBorad',
             path: '/educationBorad',
@@ -847,28 +817,33 @@ export default new Router({
                 path: 'edit',
                 component: educationEdit
             }]
-        },{
+        },
+        {
             name: 'typeManage',
             path: '/typeManage',
             component: container,
-          
+
             children: [{
                 path: 'list',
                 component: typeManage,
-            },{
+            },
+            {
                 path: 'add',
-                component:  typeManageAdd
-            },{
+                component: typeManageAdd
+            },
+            {
                 path: 'addType',
-                component:    typeManageAddType
-            },{
+                component: typeManageAddType
+            },
+            {
                 path: 'edit',
-                component:   typeManageEdit
-            },{
+                component: typeManageEdit
+            },
+            {
                 path: 'typeEdit',
-                component:   typeManageTypeEdit
+                component: typeManageTypeEdit
             }]
-           
+
         }
 
     ]

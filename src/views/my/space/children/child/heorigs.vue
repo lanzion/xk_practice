@@ -39,63 +39,63 @@
   </div>
 </template>
 <script>
-import { listofworkevaluatedbyteachers } from "@/api/frontstage";
+import { listofworkevaluatedbyteachers } from '@/api/frontstage'
 export default {
-  name: "heorigs",
-  data() {
-    return {
-      nomore: false,
-      datas: [],
-      pages: {
-        pageNum: 1,
-        pageSize: 6
-      }
-    };
-  },
-  created() {
-    this.getlist();
-  },
-  computed: {
-    teachernamefen() {
-      return this.$store.state.test.teachernamefen;
-    }
-  },
-  watch: {
-    teachernamefen: {
-      handler: function() {
-        this.getlist();
-      }
-    },
-    "datas.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
+    name: 'heorigs',
+    data() {
+        return {
+            nomore: false,
+            datas: [],
+            pages: {
+                pageNum: 1,
+                pageSize: 6
+            }
         }
-      },
-      deep: true
-    }
-  },
-  methods: {
-    changes(busId) {
-      localStorage.setItem("busId", busId);
-      this.$router.push({
-        name: "scofworks",
-        params: { busId: busId, type: 2 }
-      });
     },
-    async getlist() {
-      let res = await listofworkevaluatedbyteachers(
-        { cname: this.teachernamefen },
-        this.pages
-      );
-      // console.log(res.data.entity.resultData);
-      this.datas = res.data.entity.resultData || [];
-      this.totalNum = res.data.entity.totalNum || 0;
+    created() {
+        this.getlist()
+    },
+    computed: {
+        teachernamefen() {
+            return this.$store.state.test.teachernamefen
+        }
+    },
+    watch: {
+        teachernamefen: {
+            handler: function () {
+                this.getlist()
+            }
+        },
+        'datas.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = true
+                } else {
+                    this.nomore = false
+                }
+            },
+            deep: true
+        }
+    },
+    methods: {
+        changes(busId) {
+            localStorage.setItem('busId', busId)
+            this.$router.push({
+                name: 'scofworks',
+                params: { busId: busId, type: 2 }
+            })
+        },
+        async getlist() {
+            let res = await listofworkevaluatedbyteachers(
+                { cname: this.teachernamefen },
+                this.pages
+            )
+            // console.log(res.data.entity.resultData);
+            this.datas = res.data.entity.resultData || []
+            this.totalNum = res.data.entity.totalNum || 0
+        }
     }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .heorigs {

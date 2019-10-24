@@ -8,17 +8,17 @@
 </template>
 <script>
 export default {
-  name: "community",
-  data() {
-    return {
-      imgnum: "2"
-    };
-  },
-  components: {
-    swriper: resolve => require(["@/views/my/swriper/swriper"], resolve),
-    wselect: resolve => require(["@/views/my/wselect/wselect"], resolve)
-  }
-};
+    name: 'community',
+    data() {
+        return {
+            imgnum: '2'
+        }
+    },
+    components: {
+        swriper: resolve => require(['@/views/my/swriper/swriper'], resolve),
+        wselect: resolve => require(['@/views/my/wselect/wselect'], resolve)
+    }
+}
 </script>
 <style lang="scss" scoped>
 .container {

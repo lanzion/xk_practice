@@ -110,108 +110,108 @@
 </template>
 <script>
 import {
-  getparticipationinschools,
-  gettingareainterface
-} from "@/api/frontstage";
+    getparticipationinschools,
+    gettingareainterface
+} from '@/api/frontstage'
 export default {
-  name: "participation",
-  data() {
-    return {
-      value: "",
-      value1: "",
-      value2: "",
-      input3: "",
-      datas: [],
-      schoolName: "",
-      goods: [],
-      nomoretwo: false,
-      id: "",
-      options: [],
-      nomore: false,
-      pages: {
-        pageNum: 1,
-        pageSize: 16
-      },
-      imgnum: "4"
-    };
-  },
-  created() {
-    this.getlist();
-    this.getadders();
-    this.getgoods();
-  },
-  components: {
-    swriper: resolve => require(["@/views/my/swriper/swriper"], resolve)
-  },
-  watch: {
-    "datas.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
+    name: 'participation',
+    data() {
+        return {
+            value: '',
+            value1: '',
+            value2: '',
+            input3: '',
+            datas: [],
+            schoolName: '',
+            goods: [],
+            nomoretwo: false,
+            id: '',
+            options: [],
+            nomore: false,
+            pages: {
+                pageNum: 1,
+                pageSize: 16
+            },
+            imgnum: '4'
         }
-      },
-      deep: true
     },
-    "goods.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomoretwo = true;
-        } else {
-          this.nomoretwo = false;
-        }
-      },
-      deep: true
-    }
-  },
-  methods: {
-    getaddres(value) {
-      this.value = value[0].code;
-      this.value1 = value[1].code;
-      this.value2 = value[2].code;
-      this.getlist();
+    created() {
+        this.getlist()
+        this.getadders()
+        this.getgoods()
     },
-    resetPage() {
-      this.$set(this.pages, "pageNum", 1);
-      this.getlist();
+    components: {
+        swriper: resolve => require(['@/views/my/swriper/swriper'], resolve)
     },
-    async getadders() {
-      let res = await gettingareainterface();
-      let qts = {
-        name: "全部",
-        id: ""
-      };
-      this.options = res.data.appendInfo.list;
-      this.options.unshift(qts);
-    },
-    async getlist() {
-      let res = await getparticipationinschools(
-        {
-          schoolName: this.schoolName,
-          provinceId: this.value,
-          cityId: this.value1,
-          areaId: this.value2
+    watch: {
+        'datas.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = true
+                } else {
+                    this.nomore = false
+                }
+            },
+            deep: true
         },
-        this.pages
-      );
-      this.datas = res.data.entity.resultData;
-      this.totalNum = res.data.entity.totalNum;
+        'goods.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomoretwo = true
+                } else {
+                    this.nomoretwo = false
+                }
+            },
+            deep: true
+        }
     },
-    async getgoods() {
-      let res = await getparticipationinschools({}, this.pages);
-      this.goods = res.data.entity.resultData;
-    },
-    letgo(id) {
-      localStorage.setItem("sid", id);
-      this.$router.push({ path: "/schoolhomepage", query: { id: id } });
-    },
-    letgoone(id) {
-      localStorage.setItem("sid", id);
-      this.$router.push({ path: "/schoolhomepage", query: { id: id } });
+    methods: {
+        getaddres(value) {
+            this.value = value[0].code
+            this.value1 = value[1].code
+            this.value2 = value[2].code
+            this.getlist()
+        },
+        resetPage() {
+            this.$set(this.pages, 'pageNum', 1)
+            this.getlist()
+        },
+        async getadders() {
+            let res = await gettingareainterface()
+            let qts = {
+                name: '全部',
+                id: ''
+            }
+            this.options = res.data.appendInfo.list
+            this.options.unshift(qts)
+        },
+        async getlist() {
+            let res = await getparticipationinschools(
+                {
+                    schoolName: this.schoolName,
+                    provinceId: this.value,
+                    cityId: this.value1,
+                    areaId: this.value2
+                },
+                this.pages
+            )
+            this.datas = res.data.entity.resultData
+            this.totalNum = res.data.entity.totalNum
+        },
+        async getgoods() {
+            let res = await getparticipationinschools({}, this.pages)
+            this.goods = res.data.entity.resultData
+        },
+        letgo(id) {
+            localStorage.setItem('sid', id)
+            this.$router.push({ path: '/schoolhomepage', query: { id: id } })
+        },
+        letgoone(id) {
+            localStorage.setItem('sid', id)
+            this.$router.push({ path: '/schoolhomepage', query: { id: id } })
+        }
     }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .participation {

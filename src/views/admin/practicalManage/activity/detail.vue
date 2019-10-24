@@ -87,50 +87,50 @@
 </template>
 
 <script>
-import { activityDetail } from "@/api/newApi";
-import Axios from "axios";
+import { activityDetail } from '@/api/newApi'
+import Axios from 'axios'
 export default {
-  data() {
-    return {
-      data: {}
-    };
-  },
-  props: {},
-  computed: {},
-  watch: {},
-  mounted() {},
-  created() {
-    this.getDetailData();
-  },
+    data() {
+        return {
+            data: {}
+        }
+    },
+    props: {},
+    computed: {},
+    watch: {},
+    mounted() {},
+    created() {
+        this.getDetailData()
+    },
 
-  methods: {
+    methods: {
     // 获取详情
-    getDetailData() {
-      const id = this.$route.query.id,
-        detailId = this.$route.query.detailId;
-      if (id) {
-        const formData = {
-          id
-        };
-        if (detailId) formData.detailId = detailId;
+        getDetailData() {
+            const id = this.$route.query.id,
+                detailId = this.$route.query.detailId
+            if (id) {
+                const formData = {
+                    id
+                }
+                if (detailId) formData.detailId = detailId
 
-        activityDetail(formData)
-          .then(res => {
-            const { code, entity: datas } = res.data;
-            if (code === 200 && datas) {
-              this.data = datas || {};
+                activityDetail(formData)
+                    .then(res => {
+                        const { code, entity: datas } = res.data
+                        if (code === 200 && datas) {
+                            this.data = datas || {}
+                        }
+                    })
+                    .finally(() => {})
             }
-          })
-          .finally(() => {});
-      }
-    },
+        },
 
-    // 返回列表页
-    cancel() {
-      this.$router.go(-1);
-    },
-  }
-};
+        // 返回列表页
+        cancel() {
+            this.$router.go(-1)
+        },
+    }
+}
 </script>
 
 <style lang='scss' module>

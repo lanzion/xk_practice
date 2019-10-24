@@ -172,162 +172,162 @@
 </template>
 <script>
 import {
-  listofpracticalcourses,
-  getalistofinformation,
-  getlistofschoolworks
-} from "@/api/frontstage";
+    listofpracticalcourses,
+    getalistofinformation,
+    getlistofschoolworks
+} from '@/api/frontstage'
 export default {
-  name: "schoolfirst",
-  data() {
-    return {
-      arr: ["小学", "初中", "高中"],
-      datas: [],
-      goods: [],
-      imgarr: [],
-      schoolId: "",
-      nomore: false,
-      nomoretwo: false,
-      nomorethr: false,
-      timeshow: [],
-      timeshowone: [],
-      timeshowtwo: [],
-      dianzan: require("../../../../../static/img/dianzan02.png"),
-      fenxiang: require("../../../../../static/img/fenxiong.png"),
-      yanjing: require("../../../../../static/img/liulanhui.png")
-    };
-  },
-  created() {
-    this.getlsit();
-    this.getwork();
-    this.getinformation();
-  },
-  watch: {
-    pages: {
-      handler: function() {
-        this.getlists();
-      },
-      deep: true
-    },
-    "datas.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
+    name: 'schoolfirst',
+    data() {
+        return {
+            arr: ['小学', '初中', '高中'],
+            datas: [],
+            goods: [],
+            imgarr: [],
+            schoolId: '',
+            nomore: false,
+            nomoretwo: false,
+            nomorethr: false,
+            timeshow: [],
+            timeshowone: [],
+            timeshowtwo: [],
+            dianzan: require('../../../../../static/img/dianzan02.png'),
+            fenxiang: require('../../../../../static/img/fenxiong.png'),
+            yanjing: require('../../../../../static/img/liulanhui.png')
         }
-      },
-      deep: true
     },
-    "goods.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomoretwo = true;
-        } else {
-          this.nomoretwo = false;
-        }
-      },
-      deep: true
+    created() {
+        this.getlsit()
+        this.getwork()
+        this.getinformation()
     },
-    "timeshow.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomorethr = true;
-        } else {
-          this.nomorethr = false;
+    watch: {
+        pages: {
+            handler: function () {
+                this.getlists()
+            },
+            deep: true
+        },
+        'datas.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = true
+                } else {
+                    this.nomore = false
+                }
+            },
+            deep: true
+        },
+        'goods.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomoretwo = true
+                } else {
+                    this.nomoretwo = false
+                }
+            },
+            deep: true
+        },
+        'timeshow.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomorethr = true
+                } else {
+                    this.nomorethr = false
+                }
+            },
+            deep: true
         }
-      },
-      deep: true
+    },
+    methods: {
+        async getlsit() {
+            let uid = this.$route.query.id
+            let sid = localStorage.getItem('sid')
+            // console.log(uid, sid);
+            let id = ''
+            if (uid) {
+                id = uid
+            } else {
+                id = sid
+            }
+            let res = await listofpracticalcourses({ schoolId: id }, this.pages)
+            // console.log(res);
+            this.datas = res.data.entity.resultData
+            this.datas.forEach(x => {
+                let sum = x.fit.split(',')
+                x.fit = sum
+            })
+        },
+        async getinformation() {
+            let uid = this.$route.query.id
+            let sid = localStorage.getItem('sid')
+            // console.log(uid, sid);
+            let id = ''
+            if (uid) {
+                id = uid
+            } else {
+                id = sid
+            }
+            let res = await getalistofinformation(
+                { orgType: 'C', orgId: id },
+                this.pages
+            )
+            this.timeshow = res.data.entity.resultData
+            this.timeshowone = this.timeshow.slice(0, 1)
+            this.timeshowtwo = this.timeshow.slice(1, 5)
+            let imgarr = []
+            this.timeshow.forEach(x => {
+                imgarr.push(x.cover)
+            })
+            this.imgarr = imgarr
+        },
+        async getwork() {
+            let uid = this.$route.query.id
+            let sid = localStorage.getItem('sid')
+            let id = ''
+            if (uid) {
+                id = uid
+            } else {
+                id = sid
+            }
+            this.schoolId = id
+            let res = await getlistofschoolworks({ schoolId: id }, this.pages)
+            if (res.data.code !== 200) {
+                this.nomoretwo = true
+            } else {
+                this.goods = res.data.entity.resultData
+            }
+            if (res.data.entity) {
+                this.totalNum = res.data.entity.totalNum || 0
+            }
+        },
+        goone(id) {
+            localStorage.setItem('mid', id)
+            sessionStorage.setItem('schoolid', this.schoolId)
+            this.$router.push({
+                path: '/goods',
+                qurey: { id: id, schoolId: this.schoolId }
+            })
+        },
+        gotwo(id) {
+            localStorage.setItem('did', id)
+            this.$router.push({ path: '/listsdetail', qurey: { id: id } })
+        },
+        gothr(id) {
+            localStorage.setItem('xid', id)
+            this.$router.push({
+                path: '/baseinformationdetails',
+                query: { id: id, type: 2 }
+            })
+        },
+        movemore01() {
+            this.$router.push({ path: '/schoolpracticecourse' })
+        },
+        movemore02() {
+            this.$router.push({ path: '/campusinformation' })
+        }
     }
-  },
-  methods: {
-    async getlsit() {
-      let uid = this.$route.query.id;
-      let sid = localStorage.getItem("sid");
-      // console.log(uid, sid);
-      let id = "";
-      if (uid) {
-        id = uid;
-      } else {
-        id = sid;
-      }
-      let res = await listofpracticalcourses({ schoolId: id }, this.pages);
-      // console.log(res);
-      this.datas = res.data.entity.resultData;
-      this.datas.forEach(x => {
-        let sum = x.fit.split(",");
-        x.fit = sum;
-      });
-    },
-    async getinformation() {
-      let uid = this.$route.query.id;
-      let sid = localStorage.getItem("sid");
-      // console.log(uid, sid);
-      let id = "";
-      if (uid) {
-        id = uid;
-      } else {
-        id = sid;
-      }
-      let res = await getalistofinformation(
-        { orgType: "C", orgId: id },
-        this.pages
-      );
-      this.timeshow = res.data.entity.resultData;
-      this.timeshowone = this.timeshow.slice(0, 1);
-      this.timeshowtwo = this.timeshow.slice(1, 5);
-      let imgarr = [];
-      this.timeshow.forEach(x => {
-        imgarr.push(x.cover);
-      });
-      this.imgarr = imgarr;
-    },
-    async getwork() {
-      let uid = this.$route.query.id;
-      let sid = localStorage.getItem("sid");
-      let id = "";
-      if (uid) {
-        id = uid;
-      } else {
-        id = sid;
-      }
-      this.schoolId = id;
-      let res = await getlistofschoolworks({ schoolId: id }, this.pages);
-      if (res.data.code !== 200) {
-        this.nomoretwo = true;
-      } else {
-        this.goods = res.data.entity.resultData;
-      }
-      if (res.data.entity) {
-        this.totalNum = res.data.entity.totalNum || 0;
-      }
-    },
-    goone(id) {
-      localStorage.setItem("mid", id);
-      sessionStorage.setItem("schoolid", this.schoolId);
-      this.$router.push({
-        path: "/goods",
-        qurey: { id: id, schoolId: this.schoolId }
-      });
-    },
-    gotwo(id) {
-      localStorage.setItem("did", id);
-      this.$router.push({ path: "/listsdetail", qurey: { id: id } });
-    },
-    gothr(id) {
-      localStorage.setItem("xid", id);
-      this.$router.push({
-        path: "/baseinformationdetails",
-        query: { id: id, type: 2 }
-      });
-    },
-    movemore01() {
-      this.$router.push({ path: "/schoolpracticecourse" });
-    },
-    movemore02() {
-      this.$router.push({ path: "/campusinformation" });
-    }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .el-carousel__item h3 {

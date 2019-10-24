@@ -23,6 +23,7 @@
                 :default-active="defaultActiveMenu"
                 :background-color="$style.navBg"
                 :active-text-color="$style.navActiveText"
+                :unique-opened="true"
             >
                 <template v-for="item in nav">
                     <el-menu-item

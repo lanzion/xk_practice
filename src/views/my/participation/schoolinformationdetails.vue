@@ -112,80 +112,80 @@
 </template>
 <script>
 import {
-  detailsofpublicinformation,
-  getalistofinformation
-} from "@/api/frontstage";
+    detailsofpublicinformation,
+    getalistofinformation
+} from '@/api/frontstage'
 export default {
-  name: "schoolinformationdetails",
-  data() {
-    return {
-      imgurl: require("../../../../static/img/xuexiaobeijng4.png"),
-      dizhi: require("../../../../static/img/dizhi.png"),
-      renhei: require("../../../../static/img/renhei.png"),
-      phone: require("../../../../static/img/shouji.png"),
-      eye: require("../../../../static/img/liulanhui.png"),
-      tolfurl: require("../../../../static/img/biaoqiamchen.png"),
-      lists: "",
-      datas: "",
-      goods: [],
-      nomore: false
-    };
-  },
-  created() {
-    this.getlist();
-    this.getdatas();
-  },
-  watch: {
-    pages: {
-      handler: function() {
-        this.getlist();
-      },
-      deep: true
-    },
-    "goods.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
+    name: 'schoolinformationdetails',
+    data() {
+        return {
+            imgurl: require('../../../../static/img/xuexiaobeijng4.png'),
+            dizhi: require('../../../../static/img/dizhi.png'),
+            renhei: require('../../../../static/img/renhei.png'),
+            phone: require('../../../../static/img/shouji.png'),
+            eye: require('../../../../static/img/liulanhui.png'),
+            tolfurl: require('../../../../static/img/biaoqiamchen.png'),
+            lists: '',
+            datas: '',
+            goods: [],
+            nomore: false
         }
-      },
-      deep: true
-    }
-  },
-  methods: {
-    changesid(gid) {
-      this.getlist(gid);
-      window.scrollTo(0,0);
     },
-    async getlist(gid) {
-      let res = "";
-      if (gid) {
-        res = await detailsofpublicinformation({ id: gid });
-      } else {
-        let uid = localStorage.getItem("xid");
-        let hid = this.$route.query.id;
-        let id = "";
-        if (hid) {
-          id = hid;
-        } else {
-          id = uid;
+    created() {
+        this.getlist()
+        this.getdatas()
+    },
+    watch: {
+        pages: {
+            handler: function () {
+                this.getlist()
+            },
+            deep: true
+        },
+        'goods.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = true
+                } else {
+                    this.nomore = false
+                }
+            },
+            deep: true
         }
-        res = await detailsofpublicinformation({ id: id });
-      }
+    },
+    methods: {
+        changesid(gid) {
+            this.getlist(gid)
+            window.scrollTo(0, 0)
+        },
+        async getlist(gid) {
+            let res = ''
+            if (gid) {
+                res = await detailsofpublicinformation({ id: gid })
+            } else {
+                let uid = localStorage.getItem('xid')
+                let hid = this.$route.query.id
+                let id = ''
+                if (hid) {
+                    id = hid
+                } else {
+                    id = uid
+                }
+                res = await detailsofpublicinformation({ id: id })
+            }
 
-      this.datas = res.data.entity;
-      this.lists = JSON.parse(sessionStorage.getItem("schoollist"));
-    },
-    async getdatas() {
-      let res = await getalistofinformation(
-        { orgType: "C", isrecommend: "A" },
-        this.pages
-      );
-      this.goods = res.data.entity.resultData;
+            this.datas = res.data.entity
+            this.lists = JSON.parse(sessionStorage.getItem('schoollist'))
+        },
+        async getdatas() {
+            let res = await getalistofinformation(
+                { orgType: 'C', isrecommend: 'A' },
+                this.pages
+            )
+            this.goods = res.data.entity.resultData
+        }
     }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .workshow {
@@ -245,6 +245,9 @@ export default {
           width: 100%;
           i {
             float: left;
+            img{
+                width: 16px;
+            }
           }
           span {
             float: left;
@@ -256,6 +259,9 @@ export default {
           width: 100%;
           height: 30px;
           overflow: hidden;
+          img{
+                width: 16px;
+            }
           .container_one_r_name {
             float: left;
             margin-right: 10px;

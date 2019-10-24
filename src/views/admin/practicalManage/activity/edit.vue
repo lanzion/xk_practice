@@ -75,7 +75,7 @@
                         :value="item.value">
                         </el-option>
                     </el-select>
-                </el-form-item>   
+                </el-form-item>
             </el-col>
              <el-col :span="8">
                 <el-form-item label="学校搜索">
@@ -104,7 +104,6 @@
                                                     <div class="school-table-cell">
                                                             {{item.identityCode}}
                                                     </div>
-                                                
                                                 
                                             </div>
                                             <div class="school-table-td">
@@ -143,7 +142,7 @@
                 </div>
             </el-col>
             <el-col :span="1">&nbsp;</el-col>
-             <el-col :span="11"> 
+             <el-col :span="11">
                 <div class="school-table-head">已选择通知学校</div>
                   <div class="school-table-box">
                              <div class="school-table-tr school-table-tr-head">
@@ -155,14 +154,12 @@
                        </div>
                  <div class="school-infinite-box">
                             <div class="school-table-box"  >
-                                      
             
                                         <div class="school-table-tr" v-for="(item,index) in schoolListed" :key="index" v-show="schoolListed.length!=0">
                                             <div class="school-table-td">
                                                     <div class="school-table-cell">
                                                             {{item.identityCode}}
                                                     </div>
-                                                
                                                 
                                             </div>
                                             <div class="school-table-td">
@@ -186,7 +183,6 @@
                                             </div>
                                     </div>
                             </div>
-                          
                             
                         </div>
                         <div class="school-table-footer" v-if="schoolListed.length==0">
@@ -210,7 +206,7 @@
              </div>
              <div v-else>
                        暂无学校
-             </div>     
+             </div>
         </el-form-item>
         <el-form-item class="g-operate--box">
             <el-button @click="cancel">取消</el-button>
@@ -221,44 +217,43 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { schoolList,activityEdit} from '@/api/resetApi'
+import { schoolList, activityEdit} from '@/api/resetApi'
 import { activityDetail } from '@/api/newApi'
 import { validateAccount, validateUserName, validateIDCode, validatePhone, validateEmail } from '@/utils/utility/validateRule'
- import { uploadFileSize } from '@/mixin/uploadFileSize.js'
+import { uploadFileSize } from '@/mixin/uploadFileSize.js'
 import aliUpload from '@/components/common/upload.vue'
 
-
 export default {
-      mixins: [uploadFileSize],
-     components: {
-            'ali-upload': aliUpload
-        },
+    mixins: [uploadFileSize],
+    components: {
+        'ali-upload': aliUpload
+    },
     data() {
         return {
-            isLoading1:false,
-            fileType:'.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,.rar',
-            activityTime:[],
-            cover:[],//封面
-            playbillPage:[],
-            data:{},
-            searchForm:{
-                provinceId:'',
-                cityId:'',
-                areaId:'',
-                schoolType:'',
-                codeName:'',
+            isLoading1: false,
+            fileType: '.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,.rar',
+            activityTime: [],
+            cover: [], // 封面
+            playbillPage: [],
+            data: {},
+            searchForm: {
+                provinceId: '',
+                cityId: '',
+                areaId: '',
+                schoolType: '',
+                codeName: '',
             },
-            resetList:[//学校列表备份
+            resetList: [// 学校列表备份
                 
-             ],
-             schoolList:[//学校列表
+            ],
+            schoolList: [// 学校列表
                 
-             ],
-             schoolListed:[//学校被选中列表
+            ],
+            schoolListed: [// 学校被选中列表
                 
-             ],
+            ],
            
-             fpStates: [
+            fpStates: [
               
                 {
                     value: 'primarySchool',
@@ -276,278 +271,256 @@ export default {
             cover: [],
             isLoading: false,
             dialogVisible: false,
-            isMust:[
+            isMust: [
                 {
-                    id:1,
-                    name:'开启'
+                    id: 1,
+                    name: '开启'
                 },
                 {
-                    id:0,
-                    name:'关闭'
+                    id: 0,
+                    name: '关闭'
                 }
             ],
-             form: {
-                    status:'',//开启状态
-                    activityTime:'',
-                    startDateStr:'',//开始时间
-                    endDateStr:'',
-                    activityTheme:'',//主题
-                    activityTarget:'',//指标
-                    cover:'',//封面
-                    playbillPage:'',//详情海报
-                    resourceList:[],
-                    schoolIdList:[],//学校数组
-                    title:''//标题
+            form: {
+                status: '', // 开启状态
+                activityTime: '',
+                startDateStr: '', // 开始时间
+                endDateStr: '',
+                activityTheme: '', // 主题
+                activityTarget: '', // 指标
+                cover: '', // 封面
+                playbillPage: '', // 详情海报
+                resourceList: [],
+                schoolIdList: [], // 学校数组
+                title: ''// 标题
             },
-            form1:{
-                    selectedOptions:''
+            form1: {
+                selectedOptions: ''
             },
             rules: {
-                title:[{
-                     required: true, message: '请输入活动标题', trigger: ['blur']
+                title: [{
+                    required: true, message: '请输入活动标题', trigger: ['blur']
                 }],
-                cover:[{
-                     required: true, message:'请选择活动封面', trigger: ['blur']
+                cover: [{
+                    required: true, message: '请选择活动封面', trigger: ['blur']
                 }],
-                playbillPage:[{
-                     required: true, message:'请选择详情海报', trigger: ['blur']
+                playbillPage: [{
+                    required: true, message: '请选择详情海报', trigger: ['blur']
                 }],
-                activityTheme:[{
-                     required: true, message:'请输入活动主题', trigger: ['blur']
+                activityTheme: [{
+                    required: true, message: '请输入活动主题', trigger: ['blur']
                 }],
-                 activityTarget:[{
-                     required: true, message:'请输入活动指标', trigger: ['blur']
+                activityTarget: [{
+                    required: true, message: '请输入活动指标', trigger: ['blur']
                 }],
-                 status: [
+                status: [
                     { required: true, message: '请选择开启状态', trigger: ['change', 'blur'] }
                 ],
-               activityTime:[{
-                     required: true, message:'请选择活动开始和结束时间', trigger: ['blur','change']
+                activityTime: [{
+                    required: true, message: '请选择活动开始和结束时间', trigger: ['blur', 'change']
                 }],
-                resourceList:[{
-                     required: true, message:'请上传活动资源', trigger: ['blur','change']
+                resourceList: [{
+                    required: true, message: '请上传活动资源', trigger: ['blur', 'change']
                 }],
             },
-             pages:{
-                 pageNum:1,
-                 pageSize:10,
+            pages: {
+                pageNum: 1,
+                pageSize: 10,
             }
 
         }
     },
-     computed: {
-        noMore () {
-        return this.pages.pageNum >= this.totalNum
-      },
-      disabled () {
-        return this.isLoading1 || this.noMore
-      }
+    computed: {
+        noMore() {
+            return this.pages.pageNum >= this.totalNum
+        },
+        disabled() {
+            return this.isLoading1 || this.noMore
+        }
     },
     watch: {
-        
        
     },
-     mounted () {
+    mounted() {
           
     },
     created() {
         this.getDetailData()
     },
     methods: {
-        checkIs(item){
-            
-            let arr =this.schoolListed.filter(o=>o.id==item.id),
-                istrue = false;
-            if(arr.length==0) istrue =true;
+        checkIs(item) {
+            let arr = this.schoolListed.filter(o => o.id == item.id),
+                istrue = false
+            if (arr.length == 0) istrue = true
             return istrue
         },
-           // 获取详情
+        // 获取详情
         getDetailData() {
             const id = this.id || this.$route.query.id
             if (id) {
                 activityDetail({ id }).then(res => {
-
                     const { code, entity: datas } = res.data
                     if (code === 200 && datas) {
-                     
-                        this.data = datas;
-                        this.form.title = datas.title;
-                        this.form.cover = [datas.cover];
+                        this.data = datas
+                        this.form.title = datas.title
+                        this.form.cover = [datas.cover]
                         this.cover = [{
-                            name: "2.png",
+                            name: '2.png',
                             size: 63600,
-                            status: "success",
-                            uploadName: "d77e555877554abab3394032b5922988-1566870608494__2.png",
+                            status: 'success',
+                            uploadName: 'd77e555877554abab3394032b5922988-1566870608494__2.png',
                             url: datas.cover
                         }]
-                        this.form.playbillPage = [datas.playbillPage];
+                        this.form.playbillPage = [datas.playbillPage]
                         this.playbillPage = [{
-                            name: "2.png",
+                            name: '2.png',
                             size: 63600,
-                            status: "success",
-                            uploadName: "d77e555877554abab3394032b5922988-1566870608494__2.png",
+                            status: 'success',
+                            uploadName: 'd77e555877554abab3394032b5922988-1566870608494__2.png',
                             url: datas.playbillPage
                         }]
-                        this.form.activityTarget = datas.activityTarget;
-                        this.form.id = id;
-                        this.form.endDateStr = datas.endDate.slice(0,10);
-                        this.form.startDateStr = datas.startDate.slice(0,10);
-                        this.form.activityTime =[new Date(this.form.startDateStr),new Date(this.form.endDateStr)]
-                        this.form.status = datas.status||1;
-                        this.form.activityTheme = datas.activityTheme;
-                        let arry =[]
-                         datas.resourceVoList.forEach(o=>{
-                                arry.push({
-                                    name: o.name,
-                                    size: 63600,
-                                    status: "success",
-                                    uploadName: "d77e555877554abab3394032b5922988-1566870608494__2.png",
-                                    url: o.resourceId
-                                });
-                        });
+                        this.form.activityTarget = datas.activityTarget
+                        this.form.id = id
+                        this.form.endDateStr = datas.endDate.slice(0, 10)
+                        this.form.startDateStr = datas.startDate.slice(0, 10)
+                        this.form.activityTime = [new Date(this.form.startDateStr), new Date(this.form.endDateStr)]
+                        this.form.status = datas.status || 1
+                        this.form.activityTheme = datas.activityTheme
+                        let arry = []
+                        datas.resourceVoList.forEach(o => {
+                            arry.push({
+                                name: o.name,
+                                size: 63600,
+                                status: 'success',
+                                uploadName: 'd77e555877554abab3394032b5922988-1566870608494__2.png',
+                                url: o.resourceId
+                            })
+                        })
                    
-                       this.form.resourceList =arry;
+                        this.form.resourceList = arry
                     }
                 }).finally(() => {
                     
                 })
             }
         },
-         changeRegion(region) {
-             this.searchForm.provinceId =region[0].code||'';
-             this.searchForm.cityId =region[1].code||'';
-             this.searchForm.areaId =region[2].code||'';
+        changeRegion(region) {
+            this.searchForm.provinceId = region[0].code || ''
+            this.searchForm.cityId = region[1].code || ''
+            this.searchForm.areaId = region[2].code || ''
         },
-        changeTime(){
-             this.form.startDateStr = this.form.activityTime[0]||'';
-             this.form.endDateStr = this.form.activityTime[1]||'';
+        changeTime() {
+            this.form.startDateStr = this.form.activityTime[0] || ''
+            this.form.endDateStr = this.form.activityTime[1] || ''
         },
-          load () {
-            if(this.searchForm.provinceId){
-                 this.isLoading1 = true
+        load() {
+            if (this.searchForm.provinceId) {
+                this.isLoading1 = true
                 setTimeout(() => {
-                   
                     this.getSchoolList()
-                  
                 }, 2000)
             }
-           
         },
-         resetPage() {
-              this.$set(this.pages, 'pageNum', 1)
+        resetPage() {
+            this.$set(this.pages, 'pageNum', 1)
             this.$set(this.pages, 'pageSize', 10)
-            this.resetList = [];
-            this.schoolList = [];
+            this.resetList = []
+            this.schoolList = []
             // this.schoolListed = [];
             // this.form.schoolIdList =[];
             this.getSchoolList()
-           
         },
-        async getSchoolList(){
-           
-          const formList = Object.assign({}, this.searchForm)
-            if(!formList.provinceId){
+        async getSchoolList() {
+            const formList = Object.assign({}, this.searchForm)
+            if (!formList.provinceId) {
                 this.$message({
-                  message: '请选择地区',
-                  type: 'error'
+                    message: '请选择地区',
+                    type: 'error'
                 })
-                return false;
+                return false
             }
-          
            
             const res = await schoolList(formList, this.pages)
 
             const { entity: datas = {} } = res.data
 
             try {
-                datas.resultData.forEach((o,i)=>{
+                datas.resultData.forEach((o, i) => {
                     // o.key = this.resetList.length;
-                    this.resetList.push(o);
+                    this.resetList.push(o)
                     this.schoolList.push(o)
                 })
-                this.pages.pageNum++;
+                this.pages.pageNum++
                 this.totalNum = datas.totalPageNum || 0
             } catch (error) {
-               console.log(error)
+                console.log(error)
             } finally {
-               this.isLoading1 = false
+                this.isLoading1 = false
             }
-            
         },
-        changeSchool(row,index,key){//选择取消学校
-            let changeId = row.id;
-            //添加
-              if(key=='add'){
-                        let idx =  this.form.schoolIdList.indexOf(changeId);//被选中
-                        if(idx==-1){
-                           let len =  this.form.schoolIdList.length,
-                                puId ='';
-                               for(let i=0 ; i< len ; i++){
-                                   let o =this.schoolListed[i]
+        changeSchool(row, index, key) { // 选择取消学校
+            let changeId = row.id
+            // 添加
+            if (key == 'add') {
+                let idx = this.form.schoolIdList.indexOf(changeId)// 被选中
+                if (idx == -1) {
+                    let len = this.form.schoolIdList.length,
+                        puId = ''
+                    for (let i = 0; i < len; i++) {
+                        let o = this.schoolListed[i]
                                   
-                                   if(parseInt(o.identityCode)>parseInt(row.identityCode)){//查找列表中下标比当前大的项
-                                       puId =i;
+                        if (parseInt(o.identityCode) > parseInt(row.identityCode)) { // 查找列表中下标比当前大的项
+                            puId = i
                                     
-                                       break;
-                                    }
-                                      
-                                }
-                              
-                            if(len>0){
-                              if(puId===''){
-                                 this.form.schoolIdList.push(changeId);
-                                 this.schoolListed.push(row);
-                              }else{
-                                  this.form.schoolIdList.splice(puId,0,changeId);
-                                 this.schoolListed.splice(puId,0,row);
-                              }
-                            }else{
-                                  this.form.schoolIdList.push(changeId);
-                                 this.schoolListed.push(row);
-                            }
-                         
-                           
+                            break
                         }
-              }else if(key=='del'){//删除
-                       
-                            this.form.schoolIdList.splice(index,1);
-                            this.schoolListed.splice(index,1);
-                       
-             }
-            
-        },
-        allChose(key){
-            
-            if(key=='del'){
-                this.form.schoolIdList=[];
-                this.schoolListed =[];
-            }else{
-                  const list =[...this.resetList];
-        
-               this.form.schoolIdList=list.map(o =>o.id);
-               
-                this.schoolListed =list;
+                    }
+                              
+                    if (len > 0) {
+                        if (puId === '') {
+                            this.form.schoolIdList.push(changeId)
+                            this.schoolListed.push(row)
+                        } else {
+                            this.form.schoolIdList.splice(puId, 0, changeId)
+                            this.schoolListed.splice(puId, 0, row)
+                        }
+                    } else {
+                        this.form.schoolIdList.push(changeId)
+                        this.schoolListed.push(row)
+                    }
+                }
+            } else if (key == 'del') { // 删除
+                this.form.schoolIdList.splice(index, 1)
+                this.schoolListed.splice(index, 1)
             }
         },
-         handleChange(value) {
-           let cityArr = this.$refs.myCascader.getCheckedNodes()[0].pathLabels;
-      
-			
-     	},
-         uploadCover ({ file } = {}) {
-            
-           this.form.cover = this.cover.map((item,index) =>item.url)
-             
+        allChose(key) {
+            if (key == 'del') {
+                this.form.schoolIdList = []
+                this.schoolListed = []
+            } else {
+                const list = [...this.resetList]
+        
+                this.form.schoolIdList = list.map(o => o.id)
+               
+                this.schoolListed = list
+            }
         },
-        uploadCover1 ({ file } = {}) {
-           this.form.playbillPage = this.playbillPage.map((item,index) =>item.url)
+        handleChange(value) {
+            let cityArr = this.$refs.myCascader.getCheckedNodes()[0].pathLabels
+     	},
+        uploadCover({ file } = {}) {
+            this.form.cover = this.cover.map((item, index) => item.url)
+        },
+        uploadCover1({ file } = {}) {
+            this.form.playbillPage = this.playbillPage.map((item, index) => item.url)
         },
         
         submit() {
-            let that = this;
+            let that = this
             this.$refs.form.validate((valid) => {
                 if (valid) {
-                    const formList = Object.assign({}, this.form);
+                    const formList = Object.assign({}, this.form)
                   
                     //   if(formList.schoolIdList.length==0){
                     //     this.$message({
@@ -556,41 +529,37 @@ export default {
                     //     })
                     //     return false;
                     // }
-                    const formData ={
-                        id:formList.id,
-                        startDateStr:formList.startDateStr,//开始时间
-                        endDateStr:formList.endDateStr,
-                        activityTheme:formList.activityTheme,//主题
-                        activityTarget:formList.activityTarget,//指标
-                        cover:this.getFileUrl(formList.cover[0]),//封面
-                        playbillPage:this.getFileUrl(formList.playbillPage[0]),//详情海报
-                        resourceList:[],
-                        status:formList.status,
-                        schoolIdList:formList.schoolIdList,//学校数组
-                        title:formList.title//标题
-                    } 
+                    const formData = {
+                        id: formList.id,
+                        startDateStr: formList.startDateStr, // 开始时间
+                        endDateStr: formList.endDateStr,
+                        activityTheme: formList.activityTheme, // 主题
+                        activityTarget: formList.activityTarget, // 指标
+                        cover: this.getFileUrl(formList.cover[0]), // 封面
+                        playbillPage: this.getFileUrl(formList.playbillPage[0]), // 详情海报
+                        resourceList: [],
+                        status: formList.status,
+                        schoolIdList: formList.schoolIdList, // 学校数组
+                        title: formList.title// 标题
+                    }
                  
-                    formList.resourceList.forEach(o=>{
+                    formList.resourceList.forEach(o => {
                         formData.resourceList.push({
-                            resourceId:o.url,
-                            name:o.name
-                        });
-                    });
-                  
-                  
+                            resourceId: o.url,
+                            name: o.name
+                        })
+                    })
                     
-                     this.isLoading = true
+                    this.isLoading = true
                     activityEdit(formData).then(res => {
                         if (res.data.code === 200) {
                             this.$message({
                                 message: `修改成功`,
                                 type: 'success',
-                                onClose(){
-                                  
+                                onClose() {
                                     that.$router.go(-1)
                                 }
                             })
-                          
                         } else {
                             this.isLoading = false
                             this.$message({
@@ -601,22 +570,19 @@ export default {
                     }).finally(() => {
                         
                     })
-                   
-                   
                 } else {
-                  
                     return false
                 }
             })
         },
-        remove(file){
-             this.form.cover = this.cover.map((item,index) =>item.url)
+        remove(file) {
+            this.form.cover = this.cover.map((item, index) => item.url)
         },
-        remove1(file){
-             this.form.playbillPage = this.playbillPage.map((item,index) =>item.url)
+        remove1(file) {
+            this.form.playbillPage = this.playbillPage.map((item, index) => item.url)
         },
         cancel() {
-           this.$router.go(-1)
+            this.$router.go(-1)
         },
     }
 }
@@ -674,8 +640,6 @@ export default {
                 }
             }
         }
-       
-        
       
    }
    .school-show-title{

@@ -26,22 +26,22 @@
 </template>
 <script>
 export default {
-  name: "atsecuritys",
-  methods:{
-      changeone(){
-          this.$router.push({'name':'imrevision'})
-      },
-      changeotwo(){
-          this.$router.push({'name':'imbinding'})
-      },
-      changeothr(){
-          this.$router.push({'name':'momailbox'})
-      }
-  },
-  created() {
-    this.$store.commit("changetitle", "账号安全");
+    name: 'atsecuritys',
+    methods: {
+        changeone() {
+            this.$router.push({'name': 'imrevision'})
+        },
+        changeotwo() {
+            this.$router.push({'name': 'imbinding'})
+        },
+        changeothr() {
+            this.$router.push({'name': 'momailbox'})
+        }
+    },
+    created() {
+        this.$store.commit('changetitle', '账号安全')
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .titlego {

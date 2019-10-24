@@ -1,11 +1,11 @@
 <template>
   <div class="information">
-    <information-info></information-info>
+    <information-info :orgType="'c'"></information-info>
   </div>
 </template>
 
 <script>
-import informationInfo from "./children/noticeManageInfo";
+import informationInfo from "@/components/admin/information/informationInfo";
 export default {
   components: {
     "information-info": informationInfo
