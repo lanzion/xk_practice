@@ -11,7 +11,7 @@
     <div class="xk_swriper" v-if="imgUrl.length>1">
       <swiper :options="swiperOption">
         <swiper-slide v-for="(item,index) in imgUrl" :key="index" class="testshow">
-          <img :src="getFileUrl(item.imageUrl)" />
+          <img :src="getFileUrl(item.imageUrl)" @error="loadimg"/>
         </swiper-slide>
       </swiper>
       <div class="swiper-button-next swiper-button-white"></div>
@@ -19,7 +19,7 @@
       <div class="swiper-pagination"></div>
     </div>
     <div class="xk_swriper" v-if="imgUrl.length==1">
-      <img :src="getFileUrl(imgUrl[0].imageUrl)" alt />
+      <img :src="getFileUrl(imgUrl[0].imageUrl)" alt  @error="loadimg"/>
     </div>
   </div>
 </template>
@@ -42,6 +42,7 @@ export default {
   },
   data() {
     return {
+      defaultImg: require('@/assets/image/info.jpg'),
       imgUrl: [],
       bannerHeight: 400,
       // screenWidth: 1920,
@@ -89,6 +90,11 @@ export default {
     // );
   },
   methods: {
+    loadimg (e) {
+    //   console.log(e)
+      let img = e.srcElement
+      img.src = this.defaultImg
+    },
     async getbanner() {
       let res = await requestBannerList({ bannerType: this.type });
       this.imgUrl = res.data.appendInfo.list;

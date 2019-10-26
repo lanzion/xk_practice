@@ -71,7 +71,7 @@
               @click="goto(g.id)"
             >
               <div class="aggregate_two_s_l_top">
-                <el-image :src="getFileUrl(g.cover)" fit="cover" style="width: 204px;height:278px">
+                <!-- <el-image :src="getFileUrl(g.cover)" fit="cover" style="width: 204px;height:278px">
                   <div
                     slot="error"
                     class="image-slot"
@@ -79,7 +79,8 @@
                   >
                     <i class="el-icon-picture-outline"></i>
                   </div>
-                </el-image>
+                </el-image> -->
+                <img :src="getFileUrl(g.cover)" @error="defaultImg" alt="">
               </div>
               <div class="aggregate_two_s_l_box"></div>
               <div class="aggregate_two_s_l_bot">
@@ -99,7 +100,7 @@
               @click="goto(g.id)"
             >
               <div class="aggregate_two_s_l_top">
-                <el-image :src="getFileUrl(g.cover)" fit="cover" style="width: 202px;height:278px">
+                <!-- <el-image :src="getFileUrl(g.cover)" fit="cover" style="width: 202px;height:278px">
                   <div
                     slot="error"
                     class="image-slot"
@@ -107,7 +108,8 @@
                   >
                     <i class="el-icon-picture-outline"></i>
                   </div>
-                </el-image>
+                </el-image> -->
+                <img :src="getFileUrl(g.cover)" @error="defaultImg" alt="">
               </div>
               <div class="aggregate_two_s_l_box"></div>
               <div class="aggregate_two_s_l_bot">
@@ -270,6 +272,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+img{
+  object-fit: cover;
+}
 .conenttwo {
   margin-top: 30px;
   .el-select .el-input {
