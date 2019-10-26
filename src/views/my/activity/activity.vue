@@ -94,61 +94,61 @@
   </div>
 </template>
 <script>
-import { getlatestannouncement } from "@/api/frontstage";
+import { getlatestannouncement } from '@/api/frontstage'
 export default {
-  name: "community",
-  data() {
-    return {
-      input3: "",
-      datas: [],
-      lists: [],
-      pages: {
-        pageNum: 1,
-        pageSize: 10
-      },
-      nomore: false,
-      imgnum: "5"
-    };
-  },
-  components: {
-    swriper: resolve => require(["@/views/my/swriper/swriper"], resolve)
-  },
-  created() {
-    this.getlist();
-    this.getdatas();
-  },
-  watch: {
-    "datas.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
+    name: 'community',
+    data() {
+        return {
+            input3: '',
+            datas: [],
+            lists: [],
+            pages: {
+                pageNum: 1,
+                pageSize: 10
+            },
+            nomore: false,
+            imgnum: '5'
         }
-      },
-      deep: true
+    },
+    components: {
+        swriper: resolve => require(['@/views/my/swriper/swriper'], resolve)
+    },
+    created() {
+        this.getlist()
+        this.getdatas()
+    },
+    watch: {
+        'datas.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = true
+                } else {
+                    this.nomore = false
+                }
+            },
+            deep: true
+        }
+    },
+    methods: {
+        resetPage() {
+            this.$set(this.pages, 'pageNum', 1)
+            this.getlist()
+        },
+        async getlist() {
+            let res = await getlatestannouncement({ title: this.input3 }, this.pages)
+            this.datas = res.data.entity.resultData
+            this.totalNum = res.data.entity.totalNum || 0
+        },
+        async getdatas() {
+            let res = await getlatestannouncement({}, this.pages)
+            this.lists = res.data.entity.resultData
+        },
+        letgo(id) {
+            localStorage.setItem('eid', id)
+            this.$router.push({ path: '/detailsofannouncement', query: { id: id } })
+        }
     }
-  },
-  methods: {
-    resetPage() {
-      this.$set(this.pages, "pageNum", 1);
-      this.getlist();
-    },
-    async getlist() {
-      let res = await getlatestannouncement({ title: this.input3 }, this.pages);
-      this.datas = res.data.entity.resultData;
-      this.totalNum = res.data.entity.totalNum || 0;
-    },
-    async getdatas() {
-      let res = await getlatestannouncement({}, this.pages);
-      this.lists = res.data.entity.resultData;
-    },
-    letgo(id) {
-      localStorage.setItem("eid", id);
-      this.$router.push({ path: "/detailsofannouncement", query: { id: id } });
-    }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .community {

@@ -12,38 +12,38 @@
   </div>
 </template>
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters } from 'vuex'
 export default {
-  name: "index",
-  data() {
-    return {
-      numimg: "1",
-      permiss: [],
-      breadcrumb: [],
-      groundimg: require("../../../../static/img/daohang.png"),
-      flag: true,
-      isFlag: true
-    };
-  },
-  components: {
-    swriper: resolve => require(["@/views/my/swriper/swriper"], resolve),
-    conentfrist: resolve =>
-      require(["@/views/my/conentfrist/conentfrist"], resolve),
-    conenttwo: resolve => require(["@/views/my/conenttwo/conenttwo"], resolve),
-    conentthr: resolve => require(["@/views/my/conentthr/conentthr"], resolve)
+    name: 'index',
+    data() {
+        return {
+            numimg: '1',
+            permiss: [],
+            breadcrumb: [],
+            groundimg: require('../../../../static/img/daohang.png'),
+            flag: true,
+            isFlag: true
+        }
+    },
+    components: {
+        swriper: resolve => require(['@/views/my/swriper/swriper'], resolve),
+        conentfrist: resolve =>
+            require(['@/views/my/conentfrist/conentfrist'], resolve),
+        conenttwo: resolve => require(['@/views/my/conenttwo/conenttwo'], resolve),
+        conentthr: resolve => require(['@/views/my/conentthr/conentthr'], resolve)
     // "aside-menu": resolve => require(["@/components/my/common/aside"], resolve)
-  },
-  computed: {
-    ...mapGetters("login", {
-      identity: "identityCode"
-    }),
-    ...mapState("login", {
-      // 用户信息
-      user: state => state.userInfo || {},
-      permission: state => state.permission || {}
-    })
-  },
-  watch: {
+    },
+    computed: {
+        ...mapGetters('login', {
+            identity: 'identityCode'
+        }),
+        ...mapState('login', {
+            // 用户信息
+            user: state => state.userInfo || {},
+            permission: state => state.permission || {}
+        })
+    },
+    watch: {
     // 'user.id': {
     //     handler: function (id) {
     //         if (!id) {
@@ -52,38 +52,38 @@ export default {
     //     },
     //     immediate: true
     // },
-    identity: {
-      handler: function(identity) {
-        if (identity) {
-          this.permiss = Object.values(this.permission[identity] || {});
-          // console.log('左侧导航数据：', this.permiss)
+        identity: {
+            handler: function (identity) {
+                if (identity) {
+                    this.permiss = Object.values(this.permission[identity] || {})
+                    // console.log('左侧导航数据：', this.permiss)
+                }
+            },
+            immediate: true
         }
-      },
-      immediate: true
-    }
-  },
-  mounted() {
+    },
+    mounted() {
     // window.addEventListener("scroll", this.handleScroll);
-  },
-  methods: {
-    handleScroll() {
-      let scrollTop =
+    },
+    methods: {
+        handleScroll() {
+            let scrollTop =
         window.pageYOffset ||
         document.documentElement.scrollTop ||
-        document.body.scrollTop;
-      if (scrollTop >= 800) {
-        if (this.isFlag) this.flag = true;
-      }
+        document.body.scrollTop
+            if (scrollTop >= 800) {
+                if (this.isFlag) this.flag = true
+            }
+        },
+        sol() {
+            this.flag = false
+            this.isFlag = false
+        }
     },
-    sol() {
-      this.flag = false;
-      this.isFlag = false;
-    }
-  },
-  destroyed: function() {
+    destroyed: function () {
     // window.removeEventListener("scroll", this.handleScroll); //  离开页面清除（移除）滚轮滚动事件
-  }
-};
+    }
+}
 </script>
 <style lang="scss" scoped>
 .diyt {

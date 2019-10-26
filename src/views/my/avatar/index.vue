@@ -68,105 +68,105 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
-import { updateAvatar } from "@/api/account";
+import { mapState, mapMutations } from 'vuex'
+import { updateAvatar } from '@/api/account'
 
-import { upload } from "@/mixin/common";
+import { upload } from '@/mixin/common'
 
 export default {
-  mixins: [upload],
-  data() {
-    return {
-      face: "",
-      preview: "", // 预览图
-      style: {}, // 预览图样式
-      size: 2 // 图片限制大小, 单位M
-    };
-  },
-  computed: {
-    ...mapState("login", {
-      cover: state => (state.userInfo || {}).face || null
-    }),
-    pictureAccept: function() {
-      return this.imageSupportFormat.map(type => `.${type}`).join(",");
-    }
-  },
-  watch: {
-    cover: {
-      handler: function(cover) {
-        this.preview = cover;
-      },
-      deep: true,
-      immediate: true
-    }
-  },
-  methods: {
-    ...mapMutations("login", {
-      saveAvatar: "SAVE_USERINFOPARAM"
-    }),
-
-    previewImage(item) {
-      if (item.url) {
-        this.preview = item.url;
-        this.style = item.style;
-      }
-    },
-
-    select() {
-      this.$refs.uploader.click();
-    },
-
-    // 选择文件值改变
-    changeFile(event) {
-      const file = event.target.files[0];
-
-      if (this.size && file.size > this.size * 1024 * 1024) {
-        this.$message({
-          message: `图片大小不能超过${this.size}M`,
-          type: "warning"
-        });
-        return;
-      }
-
-      this.$refs.cropper.changeFile(file);
-    },
-
-    uploadPicture() {
-      this.$refs.cropper.upload("avatar");
-    },
-
-    // 图片上传成功
-    submit(file) {
-      let that = this;
-      const face = file.url;
-      updateAvatar({ face }).then(res => {
-        const { code, msg } = res.data;
-        if (code === 200) {
-          this.saveAvatar({ key: "face", val: file.url });
-          this.$store.state.login.userInfo.face = face;
-          this.$message({
-            message: "保存成功",
-            type: "success",
-            onClose() {
-              // that.$router.push({path:'/bsinfor'});
-            }
-          });
-        } else {
-          this.$message({
-            message: msg,
-            type: "warning"
-          });
+    mixins: [upload],
+    data() {
+        return {
+            face: '',
+            preview: '', // 预览图
+            style: {}, // 预览图样式
+            size: 2 // 图片限制大小, 单位M
         }
-      });
     },
+    computed: {
+        ...mapState('login', {
+            cover: state => (state.userInfo || {}).face || null
+        }),
+        pictureAccept: function () {
+            return this.imageSupportFormat.map(type => `.${type}`).join(',')
+        }
+    },
+    watch: {
+        cover: {
+            handler: function (cover) {
+                this.preview = cover
+            },
+            deep: true,
+            immediate: true
+        }
+    },
+    methods: {
+        ...mapMutations('login', {
+            saveAvatar: 'SAVE_USERINFOPARAM'
+        }),
 
-    cancel() {
-      this.face = "";
-      this.preview = this.cover;
-      this.style = {};
+        previewImage(item) {
+            if (item.url) {
+                this.preview = item.url
+                this.style = item.style
+            }
+        },
+
+        select() {
+            this.$refs.uploader.click()
+        },
+
+        // 选择文件值改变
+        changeFile(event) {
+            const file = event.target.files[0]
+
+            if (this.size && file.size > this.size * 1024 * 1024) {
+                this.$message({
+                    message: `图片大小不能超过${this.size}M`,
+                    type: 'warning'
+                })
+                return
+            }
+
+            this.$refs.cropper.changeFile(file)
+        },
+
+        uploadPicture() {
+            this.$refs.cropper.upload('avatar')
+        },
+
+        // 图片上传成功
+        submit(file) {
+            let that = this
+            const face = file.url
+            updateAvatar({ face }).then(res => {
+                const { code, msg } = res.data
+                if (code === 200) {
+                    this.saveAvatar({ key: 'face', val: file.url })
+                    this.$store.state.login.userInfo.face = face
+                    this.$message({
+                        message: '保存成功',
+                        type: 'success',
+                        onClose() {
+                            // that.$router.push({path:'/bsinfor'});
+                        }
+                    })
+                } else {
+                    this.$message({
+                        message: msg,
+                        type: 'warning'
+                    })
+                }
+            })
+        },
+
+        cancel() {
+            this.face = ''
+            this.preview = this.cover
+            this.style = {}
+        }
     }
-  }
-};
+}
 </script>
 
 <style lang="scss" scoped>

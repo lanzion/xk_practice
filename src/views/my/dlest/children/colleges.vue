@@ -36,59 +36,59 @@
   </div>
 </template>
 <script>
-import { getcontents, getpracticalstatistics } from "@/api/frontstage";
+import { getcontents, getpracticalstatistics } from '@/api/frontstage'
 export default {
-  data() {
-    return {
-      id: "",
-      datas: "",
-      playbillPage: "",
-      tableData: [
-        {
-          date: "参与院校",
-          name: "1"
-        },
-        {
-          date: "参与班级",
-          name: "2"
-        },
-        {
-          date: "参与学生",
-          name: "3"
+    data() {
+        return {
+            id: '',
+            datas: '',
+            playbillPage: '',
+            tableData: [
+                {
+                    date: '参与院校',
+                    name: '1'
+                },
+                {
+                    date: '参与班级',
+                    name: '2'
+                },
+                {
+                    date: '参与学生',
+                    name: '3'
+                }
+            ]
         }
-      ]
-    };
-  },
-  computed: {
-    aydetailsId() {
-      return this.$store.state.test.aydetailsId;
-    }
-  },
-  created() {
-    this.getpractical();
-    this.getqueryid();
-  },
-  methods: {
-    async getqueryid() {
-      let Mactiveid = localStorage.getItem("activeid");
-      let activeid = this.$route.query.id ? this.$route.query.id : Mactiveid;
-      let datas = await getcontents({ id: activeid });
-      this.datas = datas.data.entity;
-      this.playbillPage = this.datas.playbillPage;
-      this.$store.commit("changesurl", this.playbillPage);
-      this.$store.commit("changeactivitytitle", this.datas.title);
     },
-    async getpractical() {
-      this.id = this.$route.query.id ? this.$route.query.id : this.aydetailsId;
-      this.$store.commit("changeaydetailsId", this.id);
-      let lists = await getpracticalstatistics({ activityId: this.id });
-      let list = lists.data;
-      this.$set(this.tableData[0], "name", list.actschoolNum);
-      this.$set(this.tableData[1], "name", list.classNum);
-      this.$set(this.tableData[2], "name", list.actStudentNum);
+    computed: {
+        aydetailsId() {
+            return this.$store.state.test.aydetailsId
+        }
+    },
+    created() {
+        this.getpractical()
+        this.getqueryid()
+    },
+    methods: {
+        async getqueryid() {
+            let Mactiveid = localStorage.getItem('activeid')
+            let activeid = this.$route.query.id ? this.$route.query.id : Mactiveid
+            let datas = await getcontents({ id: activeid })
+            this.datas = datas.data.entity
+            this.playbillPage = this.datas.playbillPage
+            this.$store.commit('changesurl', this.playbillPage)
+            this.$store.commit('changeactivitytitle', this.datas.title)
+        },
+        async getpractical() {
+            this.id = this.$route.query.id ? this.$route.query.id : this.aydetailsId
+            this.$store.commit('changeaydetailsId', this.id)
+            let lists = await getpracticalstatistics({ activityId: this.id })
+            let list = lists.data
+            this.$set(this.tableData[0], 'name', list.actschoolNum)
+            this.$set(this.tableData[1], 'name', list.classNum)
+            this.$set(this.tableData[2], 'name', list.actStudentNum)
+        }
     }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .conent {

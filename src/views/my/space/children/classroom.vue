@@ -29,39 +29,39 @@
 </template>
 <script>
 export default {
-  name: "classroom",
-  data() {
-    return {
-      teacherworkname: "",
-      lists: [
-        {
-          name: "未开始",
-          path: "/classroom/abtd"
-        },
-        {
-          name: "进行中",
-          path: "/classroom/giss"
-        },
-        {
-          name: "已完成",
-          path: "/classroom/ptba"
-        },
-        {
-          name: "待评价",
-          path: "/classroom/teacherstobeevaluated"
+    name: 'classroom',
+    data() {
+        return {
+            teacherworkname: '',
+            lists: [
+                {
+                    name: '未开始',
+                    path: '/classroom/abtd'
+                },
+                {
+                    name: '进行中',
+                    path: '/classroom/giss'
+                },
+                {
+                    name: '已完成',
+                    path: '/classroom/ptba'
+                },
+                {
+                    name: '待评价',
+                    path: '/classroom/teacherstobeevaluated'
+                }
+            ]
         }
-      ]
-    };
-  },
-  methods: {
-    change(url) {
-      this.$router.push({ path: url });
     },
-    getworks() {
-      this.$store.commit("teacherworkname", this.teacherworkname);
+    methods: {
+        change(url) {
+            this.$router.push({ path: url })
+        },
+        getworks() {
+            this.$store.commit('teacherworkname', this.teacherworkname)
+        }
     }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .classroom_h {

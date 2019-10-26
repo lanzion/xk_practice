@@ -13,7 +13,7 @@ export default {
     name: 'aside-menu',
     data() {
         return {
-            groundimg:require('../../../../static/img/daohang.png')
+            groundimg: require('../../../../static/img/daohang.png')
         }
     },
     props: {

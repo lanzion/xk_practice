@@ -70,101 +70,101 @@
   </div>
 </template>
 <script>
-import { teacherscheckclasslist, classviewstudentlist } from "@/api/frontstage";
+import { teacherscheckclasslist, classviewstudentlist } from '@/api/frontstage'
 export default {
-  name: "mgtudent",
-  data() {
-    return {
-      nomore: false,
-      datas: [],
-      value: "",
-      label: "",
-      lists: [],
-      input: "",
-      classId:'',
-      pages: {
-        pageNum: 1,
-        pageSize: 10
-      },
-      totalNum: 0
-    };
-  },
-  watch: {
-    "lists.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
+    name: 'mgtudent',
+    data() {
+        return {
+            nomore: false,
+            datas: [],
+            value: '',
+            label: '',
+            lists: [],
+            input: '',
+            classId: '',
+            pages: {
+                pageNum: 1,
+                pageSize: 10
+            },
+            totalNum: 0
         }
-      },
-      deep: true
-    }
-  },
-  methods: {
-    errorHandler() {
-      return true;
     },
-    inputchange() {
-      this.getinputchange();
+    watch: {
+        'lists.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = true
+                } else {
+                    this.nomore = false
+                }
+            },
+            deep: true
+        }
     },
-    async getinputchange() {
-      let res = await classviewstudentlist(
-        { name: this.input, classId:this.classId  },
-        this.pages
-      );
-      this.lists = res.data.entity.resultData;
-      this.totalNum = res.data.entity.totalNum;
-    },
-    changes(studentId) {
-      this.$router.push({ name: "archives", query: { studentId: studentId } });
-    },
-    change(id, name) {
-      localStorage.setItem("xkcreateId", id);
-      this.$router.push({ name: "viewworks", query: { id: id, name: name } });
-    },
-    async getlist(teacherId) {
-      let res = await teacherscheckclasslist(
-        { teacherId: teacherId },
-        this.pages
-      );
-      this.datas = res.data.appendInfo.classList;
-      this.classId = this.datas.slice(0,1)[0].id;
-      this.moren(this.classId);
-    },
-    async moren(classId) {
-      let lists = await classviewstudentlist(
-        {
-          classId: classId
+    methods: {
+        errorHandler() {
+            return true
         },
-        this.pages
-      );
-      this.lists = lists.data.entity.resultData;
-      console.log(this.lists);
-      this.totalNum = lists.data.entity.totalNum;
-    },
-    async changedatas(classId) {
-      this.classId = classId
-      let lists = await classviewstudentlist(
-        {
-          classId: classId
+        inputchange() {
+            this.getinputchange()
         },
-        this.pages
-      );
-      this.lists = lists.data.entity.resultData;
-      this.totalNum = lists.data.entity.totalNum;
+        async getinputchange() {
+            let res = await classviewstudentlist(
+                { name: this.input, classId: this.classId },
+                this.pages
+            )
+            this.lists = res.data.entity.resultData
+            this.totalNum = res.data.entity.totalNum
+        },
+        changes(studentId) {
+            this.$router.push({ name: 'archives', query: { studentId: studentId } })
+        },
+        change(id, name) {
+            localStorage.setItem('xkcreateId', id)
+            this.$router.push({ name: 'viewworks', query: { id: id, name: name } })
+        },
+        async getlist(teacherId) {
+            let res = await teacherscheckclasslist(
+                { teacherId: teacherId },
+                this.pages
+            )
+            this.datas = res.data.appendInfo.classList
+            this.classId = this.datas.slice(0, 1)[0].id
+            this.moren(this.classId)
+        },
+        async moren(classId) {
+            let lists = await classviewstudentlist(
+                {
+                    classId: classId
+                },
+                this.pages
+            )
+            this.lists = lists.data.entity.resultData
+            console.log(this.lists)
+            this.totalNum = lists.data.entity.totalNum
+        },
+        async changedatas(classId) {
+            this.classId = classId
+            let lists = await classviewstudentlist(
+                {
+                    classId: classId
+                },
+                this.pages
+            )
+            this.lists = lists.data.entity.resultData
+            this.totalNum = lists.data.entity.totalNum
+        }
+    },
+    created() {
+        this.$store.commit('changetitle', '学生管理')
+        this.getlist(this.teacherId)
+    },
+    computed: {
+        teacherId() {
+            return this.$store.state.login.userInfo.baseId
+        }
     }
-  },
-  created() {
-    this.$store.commit("changetitle", "学生管理");
-    this.getlist(this.teacherId);
-  },
-  computed: {
-    teacherId() {
-      return this.$store.state.login.userInfo.baseId;
-    }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .mgtudent {

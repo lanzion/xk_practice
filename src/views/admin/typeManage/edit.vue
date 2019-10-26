@@ -15,7 +15,7 @@
                 <el-col :span="16">
                     <el-form-item label="领域备注" prop="remark">
                         <el-input type="textarea" :rows="4" placeholder="请输入备注" show-word-limit maxlength="100" v-model="form.remark" ></el-input>
-                    </el-form-item> 
+                    </el-form-item>
                 </el-col>
             </el-row>
             <el-form-item >
@@ -28,39 +28,36 @@
 </template>
 
 <script>
-import {activityTypeEdit,activityTypeDetail} from '@/api/resetApi'
+import {activityTypeEdit, activityTypeDetail} from '@/api/resetApi'
 export default {
     name: 'typeAdd',
     data() {
         return {
-            isDisabled:true,
-            isLoading:false,
+            isDisabled: true,
+            isLoading: false,
             form: {
-                name:'',
-                code:'',
-                remark:''
+                name: '',
+                code: '',
+                remark: ''
             },
-            
            
             // 表单校验提示
             rules: {
-                 name:[{
-                     required: true, message: '请输入领域名称', trigger: ['change','blur']
+                name: [{
+                    required: true, message: '请输入领域名称', trigger: ['change', 'blur']
                 }],
-                code:[{
-                     required: true, message: '请输入code', trigger: ['change','blur']
+                code: [{
+                    required: true, message: '请输入code', trigger: ['change', 'blur']
                 }],
-                 remark:[{
-                     required: true, message: '请输入领域备注', trigger: ['change','blur']
+                remark: [{
+                    required: true, message: '请输入领域备注', trigger: ['change', 'blur']
                 }],
-               
                 
             },
           
         }
     },
     computed: {
-
        
     },
     watch: {
@@ -68,43 +65,41 @@ export default {
     },
     methods: {
         
-           // 获取详情
+        // 获取详情
         getDetailData() {
             const id = this.id || this.$route.query.id
             if (id) {
                 activityTypeDetail({ id }).then(res => {
-
                     const { code, entity: datas } = res.data
                     if (code === 200 && datas) {
-                        this.form.id=datas.id;
-                        this.form.name=datas.name;
-                        this.form.code=datas.code;
-                        this.form.remark=datas.remark;
-                            
+                        this.form.id = datas.id
+                        this.form.name = datas.name
+                        this.form.code = datas.code
+                        this.form.remark = datas.remark
                     }
                 }).finally(() => {
                     
                 })
-            }else{
+            } else {
                 this.$message({
-                  message: '参数缺失',
-                  type: "warning"
-                });
+                    message: '参数缺失',
+                    type: 'warning'
+                })
             }
         },
-        checkCode(){
-                let str = this.form.code||'';
-                str =str.replace(/[^\w]/g, '');
-                str = str.replace(/[0-9.a-z]/g,'')
-                this.form.code = str;
+        checkCode() {
+            let str = this.form.code || ''
+            str = str.replace(/[^\w]/g, '')
+            str = str.replace(/[0-9.a-z]/g, '')
+            this.form.code = str
         },
         // 提交表单
         onSubmit() {
             this.$refs.form.validate((valid) => {
                 if (valid) {
-                   this.isLoading = true;
-                      const formList = Object.assign({}, this.form);
-                       activityTypeEdit(formList).then( response => {
+                    this.isLoading = true
+                    const formList = Object.assign({}, this.form)
+                    activityTypeEdit(formList).then(response => {
                         if (response.data.code == 200) {
                             this.$message({
                                 message: `修改成功`,
@@ -112,23 +107,21 @@ export default {
                             })
                             this.$router.go(-1)
                         } else {
-                            this.isLoading =false;
+                            this.isLoading = false
                             this.$message.error(response.data.msg)
                         }
                     })
                 } else {
-                  
-                    return false;
+                    return false
                 }
-            });
+            })
         },
-        cancel(){
-            this.$router.go(-1);
+        cancel() {
+            this.$router.go(-1)
         }
     },
     created() {
-     
-       this. getDetailData()
+        this.getDetailData()
     },
    
 }

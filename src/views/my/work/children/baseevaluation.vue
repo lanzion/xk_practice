@@ -50,58 +50,58 @@
   </div>
 </template>
 <script>
-import { getbaseevaluationlist } from "@/api/frontstage";
+import { getbaseevaluationlist } from '@/api/frontstage';
 export default {
-  name: "baseevaluation",
-  data() {
-    return {
-      datas: [],
-      nomore: false,
-      pages: {
-        pageNum: 1,
-        pageSize: 10
-      }
-    };
-  },
-  created() {
-    this.getlist();
-  },
-  watch: {
-    "datas.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
+    name: 'baseevaluation',
+    data() {
+        return {
+            datas: [],
+            nomore: false,
+            pages: {
+                pageNum: 1,
+                pageSize: 10
+            }
         }
-      },
-      deep: true
-    }
   },
-  methods: {
-    errorHandler() {
-      return true;
+    created() {
+        this.getlist()
+  },
+    watch: {
+        'datas.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = true
+        } else {
+                    this.nomore = false
+        }
+            },
+            deep: true
+        }
     },
-    async getlist() {
-      let kid = localStorage.getItem("zid");
-      let oid = this.$route.query.id;
-      let id = "";
-      if (oid) {
-        id = oid;
+    methods: {
+        errorHandler() {
+            return true
+    },
+        async getlist() {
+            let kid = localStorage.getItem('zid')
+      let oid = this.$route.query.id
+      let id = '';
+            if (oid) {
+                id = oid
       } else {
-        id = kid;
+                id = kid
       }
-      let res = await getbaseevaluationlist(
-        {
-          serverBsinfoId: id
-        },
-        this.pages
-      );
-      this.datas = res.data.entity.resultData;
-      this.totalNum = res.data.entity.totalNum;
+            let res = await getbaseevaluationlist(
+                {
+                    serverBsinfoId: id
+                },
+                this.pages
+            )
+      this.datas = res.data.entity.resultData
+      this.totalNum = res.data.entity.totalNum
     }
-  }
-};
+    }
+}
 </script>
 <style lang="scss" scoped>
 .conent_for {

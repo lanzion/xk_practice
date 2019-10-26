@@ -21,7 +21,7 @@
               @click="letsgo(f.id,f.playbillPage)"
             >
               <div class="container_r_thr_li_img">
-                <el-image :src="getFileUrl(f.cover)" fit="cover" style="width: 420px;height:190px">
+                <!-- <el-image :src="getFileUrl(f.cover)" fit="cover" style="width: 420px;height:190px">
                   <div
                     slot="error"
                     class="image-slot"
@@ -29,7 +29,8 @@
                   >
                     <i class="el-icon-picture-outline"></i>
                   </div>
-                </el-image>
+                </el-image> -->
+                <ov-image :src-data="getFileUrl(f.cover)"></ov-image>
 
                 <span
                   :class="f.activityStatus=='进行中'?'active':''"
@@ -103,91 +104,91 @@
   </div>
 </template>
 <script>
-import { gettingshow, getlatestannouncement } from "@/api/frontstage";
-const img = require("@/assets/image/wechat.png");
+import { gettingshow, getlatestannouncement } from '@/api/frontstage'
+const img = require('@/assets/image/wechat.png')
 export default {
-  data() {
-    return {
-      datas: [],
-      lists: [],
-      morenImage: 'this.src="static/img/jiditubiao22.png"', // 默认头像
-      isactive: -1,
-      istrue: 0,
-      nomore: false,
-      nomoretwo: false,
-      pages: {
-        pageSize: 20,
-        pageNum: 1
-      }
-    };
-  },
-  created() {
-    this.getnav();
-    this.getlist();
-  },
-  watch: {
-    "datas.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
+    data() {
+        return {
+            datas: [],
+            lists: [],
+            morenImage: 'this.src="static/img/jiditubiao22.png"', // 默认头像
+            isactive: -1,
+            istrue: 0,
+            nomore: false,
+            nomoretwo: false,
+            pages: {
+                pageSize: 20,
+                pageNum: 1
+            }
         }
-      },
-      deep: true
     },
-    "lists.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomoretwo = true;
-        } else {
-          this.nomoretwo = false;
+    created() {
+        this.getnav()
+        this.getlist()
+    },
+    watch: {
+        'datas.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = true
+                } else {
+                    this.nomore = false
+                }
+            },
+            deep: true
+        },
+        'lists.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomoretwo = true
+                } else {
+                    this.nomoretwo = false
+                }
+            },
+            deep: true
         }
-      },
-      deep: true
+    },
+    methods: {
+        errorHandler() {
+            return true
+        },
+        change(code) {
+            this.getlist(code)
+        },
+        moveover(index) {
+            this.isactive = index
+        },
+        moveout() {
+            this.isactive = false
+        },
+        async getnav() {
+            const res = await getlatestannouncement({}, this.pages)
+            this.datas = res.data.entity.resultData.slice(0, 17)
+            // console.log(this.datas)
+        },
+        async getlist() {
+            const lists = await gettingshow({}, this.pages)
+            this.lists = lists.data.entity.resultData.slice(0, 4)
+            // console.log(this.lists);
+        },
+        letsgo(id, playbillPage) {
+            this.$store.commit('changesurl', playbillPage)
+            localStorage.setItem('activeid', id)
+            this.$router.push({ path: '/dlest', query: { id: id } })
+        },
+        gomoretwo() {
+            sessionStorage.setItem('xk_headerNav', 1)
+            this.$router.push({ path: '/community' })
+        },
+        gomoreone() {
+            this.$router.push({ path: '/activity' })
+        },
+        goshow(id) {
+            localStorage.setItem('eid', id)
+            this.$router.push({ path: '/detailsofannouncement', query: { id: id } })
+        }
     }
-  },
-  methods: {
-    errorHandler() {
-      return true;
-    },
-    change(code) {
-      this.getlist(code);
-    },
-    moveover(index) {
-      this.isactive = index;
-    },
-    moveout() {
-      this.isactive = false;
-    },
-    async getnav() {
-      const res = await getlatestannouncement({}, this.pages);
-      this.datas = res.data.entity.resultData.slice(0, 17);
-      // console.log(this.datas)
-    },
-    async getlist() {
-      const lists = await gettingshow({}, this.pages);
-      this.lists = lists.data.entity.resultData.slice(0, 4);
-      // console.log(this.lists);
-    },
-    letsgo(id,playbillPage) {
-      this.$store.commit("changesurl", playbillPage);
-      localStorage.setItem("activeid", id);
-      this.$router.push({ path: "/dlest", query: { id: id } });
-    },
-    gomoretwo() {
-      sessionStorage.setItem("xk_headerNav", 1);
-      this.$router.push({ path: "/community" });
-    },
-    gomoreone() {
-      this.$router.push({ path: "/activity" });
-    },
-    goshow(id) {
-      localStorage.setItem("eid", id);
-      this.$router.push({ path: "/detailsofannouncement", query: { id: id } });
-    }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .conentfrist {
@@ -229,7 +230,6 @@ export default {
     }
     .container_l_two {
       width: 100%;
-
       overflow: hidden;
       box-sizing: border-box;
       padding: 10px 7px 20px 7px;

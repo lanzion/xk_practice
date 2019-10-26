@@ -22,7 +22,7 @@
                 <el-col :span="16">
                     <el-form-item label="主题备注" prop="remark">
                         <el-input type="textarea" :rows="4" placeholder="请输入备注" show-word-limit maxlength="100" v-model="form.remark" ></el-input>
-                    </el-form-item> 
+                    </el-form-item>
                 </el-col>
             </el-row>
             <el-form-item >
@@ -40,56 +40,52 @@ export default {
     name: 'typeAdd',
     data() {
         return {
-            isLoading:false,
+            isLoading: false,
             form: {
-                name:'',
-                code:'',
-                remark:'',
-                orders:1
+                name: '',
+                code: '',
+                remark: '',
+                orders: 1
             },
-            
            
             // 表单校验提示
             rules: {
-                 name:[{
-                     required: true, message: '请输入主题名称', trigger: ['change','blur']
+                name: [{
+                    required: true, message: '请输入主题名称', trigger: ['change', 'blur']
                 }],
-                code:[{
-                     required: true, message: '请输入code', trigger: ['change','blur']
+                code: [{
+                    required: true, message: '请输入code', trigger: ['change', 'blur']
                 }],
-                 remark:[{
-                     required: true, message: '请输入主题备注', trigger: ['change','blur']
+                remark: [{
+                    required: true, message: '请输入主题备注', trigger: ['change', 'blur']
                 }],
-               
                 
             },
           
         }
     },
     computed: {
-
        
     },
     watch: {
         
     },
     methods: {
-        
     
-        checkCode(){
-                let str = this.form.code||'';
-                str =str.replace(/[^\w]/g, '');
-                str = str.replace(/[0-9.a-z]/g,'')
-                this.form.code = str;
+        checkCode() {
+            let str = this.form.code || ''
+            str = str.replace(/[^\w]/g, '')
+            str = str.replace(/[0-9.a-z]/g, '')
+            this.form.code = str
         },
         // 提交表单
         onSubmit() {
             this.$refs.form.validate((valid) => {
                 if (valid) {
-                   this.isLoading = true;
-                     const formList = Object.assign({}, this.form);
+                    this.isLoading = true
+                    const formList = Object.assign({}, this.form)
                     
-                       activityTypeAddType(formList).then( response => {
+                    activityTypeAddType(formList).then(response => {
                         if (response.data.code == 200) {
                             this.$message({
                                 message: `添加成功`,
@@ -97,31 +93,29 @@ export default {
                             })
                             this.$router.go(-1)
                         } else {
-                            this.isLoading =false;
+                            this.isLoading = false
                             this.$message.error(response.data.msg)
                         }
                     })
                 } else {
-                  
-                    return false;
+                    return false
                 }
-            });
+            })
         },
-        cancel(){
-            this.$router.go(-1);
+        cancel() {
+            this.$router.go(-1)
         }
     },
     created() {
-          const id = this.$route.query.id
-            if (id) {
-               this.form.dicTypeId= id;
-            }else{
-                this.$message({
-                  message: '参数缺失',
-                  type: "warning"
-                });
-            }
-       
+        const id = this.$route.query.id
+        if (id) {
+            this.form.dicTypeId = id
+        } else {
+            this.$message({
+                message: '参数缺失',
+                type: 'warning'
+            })
+        }
     },
    
 }

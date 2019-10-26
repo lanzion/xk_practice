@@ -7,7 +7,7 @@
       <div class="container">
         <div class="container_one">
           <div class="container_one_l">
-            <el-image :src="lists.imgurl" style="width: 400px;height:240px">
+            <!-- <el-image :src="lists.imgurl" style="width: 400px;height:240px">
               <div
                 slot="error"
                 class="image-slot"
@@ -15,7 +15,8 @@
               >
                 <i class="el-icon-picture-outline"></i>
               </div>
-            </el-image>
+            </el-image> -->
+            <ov-image :src-data="lists.imgurl"></ov-image>
           </div>
           <div class="container_one_r">
             <div class="container_one_r_header">{{lists.name}}</div>

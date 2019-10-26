@@ -11,7 +11,7 @@
               :key="index"
             >
               <div class="container_one_conent_img">
-                <el-image :src="g.cover" style="width: 270px;height:180px">
+                <!-- <el-image :src="g.cover" style="width: 270px;height:180px">
                   <div
                     slot="error"
                     class="image-slot"
@@ -19,7 +19,8 @@
                   >
                     <i class="el-icon-picture-outline"></i>
                   </div>
-                </el-image>
+                </el-image> -->
+                <ov-image :src-data="getFileUrl(g.cover)"></ov-image>
               </div>
               <div class="container_one_conent_name">
                 <p>{{g.name}}</p>
@@ -58,57 +59,57 @@
   </div>
 </template>
 <script>
-import { listofpracticalcourses } from "@/api/frontstage";
+import { listofpracticalcourses } from '@/api/frontstage'
 export default {
-  name: "schoolpracticecourse",
-  data() {
-    return {
-      datas: [],
-      arr: ["小学", "初中", "高中"],
-      nomore: false,
-      pages: {
-        pageNum: 1,
-        pageSize: 12
-      }
-    };
-  },
-  created() {
-    this.getlist();
-  },
-  watch: {
-    "datas.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
+    name: 'schoolpracticecourse',
+    data() {
+        return {
+            datas: [],
+            arr: ['小学', '初中', '高中'],
+            nomore: false,
+            pages: {
+                pageNum: 1,
+                pageSize: 12
+            }
         }
-      },
-      deep: true
-    }
-  },
-  methods: {
-    async getlist() {
-      let uid = this.$route.query.id;
-      let sid = localStorage.getItem("sid");
-      let id = "";
-      if (uid) {
-        id = uid;
-      } else {
-        id = sid;
-      }
-      let res = await listofpracticalcourses({ schoolId: id }, this.pages);
-      this.datas = res.data.entity.resultData;
-      this.totalNum = res.data.entity.totalNum || 0;
-      this.pageSize = 12;
     },
+    created() {
+        this.getlist()
+    },
+    watch: {
+        'datas.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = true
+                } else {
+                    this.nomore = false
+                }
+            },
+            deep: true
+        }
+    },
+    methods: {
+        async getlist() {
+            let uid = this.$route.query.id
+            let sid = localStorage.getItem('sid')
+            let id = ''
+            if (uid) {
+                id = uid
+            } else {
+                id = sid
+            }
+            let res = await listofpracticalcourses({ schoolId: id }, this.pages)
+            this.datas = res.data.entity.resultData
+            this.totalNum = res.data.entity.totalNum || 0
+            this.pageSize = 12
+        },
 
-    goone(id) {
-      localStorage.setItem("mid", id);
-      this.$router.push({ path: "/goods", qurey: { id: id } });
+        goone(id) {
+            localStorage.setItem('mid', id)
+            this.$router.push({ path: '/goods', qurey: { id: id } })
+        }
     }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .container {

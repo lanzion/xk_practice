@@ -24,6 +24,8 @@ const newgrounds = () => import('@/views/admin/newgrounds/newgrounds')
 const permiss = () => import('@/views/admin/system/permiss/index')
 const role = () => import('@/views/admin/system/role/index')
 const datadict = () => import('@/views/admin/system/datadict/index')
+// 学年学期
+const term = () => import('@/views/admin/system/term/index')
 
 // 配置管理
 const link = () => import('@/views/admin/configure/link/index')
@@ -215,6 +217,11 @@ export default new Router({
                 {
                     path: 'datadict',
                     component: datadict
+                },
+                // 学年学期
+                {
+                    path: 'term',
+                    component: term
                 }
             ]
         },

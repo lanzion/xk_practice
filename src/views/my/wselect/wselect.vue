@@ -23,7 +23,7 @@
       <ul>
         <li @click="changes(item.id)" v-for="(item,index) in datas" :key="index" class="cordlist">
           <div class="mgshow">
-            <el-image :src="item.cover" fit="cover" style="width: 590px;height:300px">
+            <!-- <el-image :src="item.cover" fit="cover" style="width: 590px;height:300px">
               <div
                 slot="error"
                 class="image-slot"
@@ -31,7 +31,8 @@
               >
                 <i class="el-icon-picture-outline"></i>
               </div>
-            </el-image>
+            </el-image> -->
+             <ov-image :src-data="getFileUrl(item.cover)"></ov-image>
             <span
               :class="item.activityStatus == '进行中'?'active':''"
               :style="item.activityStatus == '已结束'? {'background':'#ccc'}:''"
@@ -79,95 +80,92 @@
 </template>
 
 <script>
-import { gettingshow } from "@/api/frontstage";
+import { gettingshow } from '@/api/frontstage'
 export default {
-  data() {
-    return {
-      morenImage: 'this.src="static/img/jiditubiao22.png"', // 默认头像
-      datas: [],
-      listData: [],
-      codeid: "",
-      input5: "",
-      select: "",
-      options: [
-        {
-          value: "",
-          label: "全部"
-        },
-        {
-          value: "1",
-          label: "未开始"
-        },
-        {
-          value: "2",
-          label: "进行中"
-        },
-        {
-          value: "3",
-          label: "已结束"
+    data() {
+        return {
+            morenImage: 'this.src="static/img/jiditubiao22.png"', // 默认头像
+            datas: [],
+            listData: [],
+            codeid: '',
+            input5: '',
+            select: '',
+            options: [
+                {
+                    value: '',
+                    label: '全部'
+                },
+                {
+                    value: '1',
+                    label: '未开始'
+                },
+                {
+                    value: '2',
+                    label: '进行中'
+                },
+                {
+                    value: '3',
+                    label: '已结束'
+                }
+            ],
+            value: '',
+            nomore: false
         }
-      ],
-      value: "",
-      nomore: false
-    };
-  },
-  created() {
-    this.getlists();
-  },
-  watch: {
-    "datas.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
+    },
+    created() {
+        this.getlists()
+    },
+    watch: {
+        'datas.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = true
+                } else {
+                    this.nomore = false
+                }
+            },
+            deep: true
         }
-      },
-      deep: true
+    },
+    methods: {
+        errorHandler() {
+            return true
+        },
+        getshow() {
+            this.getlists()
+        },
+        // 重置分页
+        resetPage() {
+            this.$set(this.pages, 'pageNum', 1)
+            this.getlists()
+        },
+        activeyover() {
+            this.getlists()
+        },
+        async getlists() {
+            this.isLoading = true
+            let form = {
+                title: this.input5,
+                activityStatus: this.value
+            }
+            const res = await gettingshow(form, this.pages)
+            const { entity: datas = {} } = res.data
+            try {
+                this.datas = datas.resultData || []
+                this.listData = datas.resultData || []
+                this.totalNum = datas.totalNum || 0
+            } catch (error) {
+                this.datas = []
+            } finally {
+                this.isLoading = false
+            }
+        },
+        changes(id) {
+            localStorage.setItem('activeid', id)
+            this.$router.push({ path: '/colleges', query: { id: id } })
+        }
     }
-  },
-  methods: {
-    errorHandler() {
-      return true;
-    },
-    getshow() {
-      this.getlists();
-    },
-    // 重置分页
-    resetPage() {
-      this.$set(this.pages, "pageNum", 1);
-      this.getlists();
-    },
-    errorHandler() {
-      return true;
-    },
-    activeyover() {
-      this.getlists();
-    },
-    async getlists() {
-      this.isLoading = true;
-      let form = {
-        title: this.input5,
-        activityStatus: this.value
-      };
-      const res = await gettingshow(form, this.pages);
-      const { entity: datas = {} } = res.data;
-      try {
-        this.datas = datas.resultData || [];
-        this.listData = datas.resultData || [];
-        this.totalNum = datas.totalNum || 0;
-      } catch (error) {
-        this.datas = [];
-      } finally {
-        this.isLoading = false;
-      }
-    },
-    changes(id) {
-      localStorage.setItem("activeid", id);
-      this.$router.push({ path: "/colleges", query: { id: id } });
-    }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .nimi {

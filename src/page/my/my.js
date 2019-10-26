@@ -58,10 +58,6 @@ Vue.prototype.downloadItem = function (url, name) {
         })
 }
 
-Vue.prototype.defaultImg = function (e) {
-    let img = e.srcElement
-    img.src = require('@/assets/image/info.png')
-}
 
 window.requests = []
 

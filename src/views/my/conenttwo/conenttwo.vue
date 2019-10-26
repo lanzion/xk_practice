@@ -79,8 +79,14 @@
                   >
                     <i class="el-icon-picture-outline"></i>
                   </div>
+<<<<<<< .mine
                 </el-image> -->
-                <img :src="getFileUrl(g.cover)" @error="defaultImg" alt="">
+                <ov-image :src-data="getFileUrl(g.cover)"></ov-image>
+
+                <!-- </el-image>
+
+                </el-image> --> -->
+                <!-- <img :src="getFileUrl(g.cover)" @error="defaultImg" alt=""> -->
               </div>
               <div class="aggregate_two_s_l_box"></div>
               <div class="aggregate_two_s_l_bot">
@@ -108,8 +114,12 @@
                   >
                     <i class="el-icon-picture-outline"></i>
                   </div>
+<<<<<<< .mine
                 </el-image> -->
-                <img :src="getFileUrl(g.cover)" @error="defaultImg" alt="">
+                 <ov-image :src-data="getFileUrl(g.cover)"></ov-image>
+              <!--   </el-image>
+                </el-image> -->
+                <!-- <img :src="getFileUrl(g.cover)" @error="defaultImg" alt=""> -->
               </div>
               <div class="aggregate_two_s_l_box"></div>
               <div class="aggregate_two_s_l_bot">
@@ -134,142 +144,142 @@
 </template>
 <script>
 import {
-  gettingnavigation,
-  gettinglists,
-  gettingbase,
-  getjidi
-} from "@/api/frontstage";
-import "swiper/dist/css/swiper.css";
-import { swiper, swiperSlide } from "vue-awesome-swiper";
+    gettingnavigation,
+    gettinglists,
+    gettingbase,
+    getjidi
+} from '@/api/frontstage'
+import 'swiper/dist/css/swiper.css'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
 export default {
-  components: {
-    swiper,
-    swiperSlide
-  },
-  data() {
-    return {
-      datas: [],
-      imgurl: require("../../../../static/img/jidiruzhu.png"),
-      lists: [],
-      goods: [],
-      goodeover: [],
-      num: -1,
-      isok: true,
-      nomore: false,
-      nomoretwo: false,
-      pages: {
-        pageNum: 1,
-        pageSize: 19
-      },
-      HeaderSwiperOption: {
-        freeMode: true,
-        slidesPerView: "auto",
-        observer: true,
-        observeParents: true,
-        on: {
-          init() {},
-          click(e) {
-            var navWidth = 0;
-            for (var i = 0; i < this.slides.length; i++) {
-              navWidth += parseInt(this.slides.eq(i).outerWidth(true));
-            }
-            var clientWidth = parseInt(this.$wrapperEl.outerWidth(true));
-            var clickIndex = this.clickedIndex;
-            var activeSlidePosition = this.slides[clickIndex].offsetLeft;
-            var tSpeed = 300;
-            var navSlideWidth = this.slides.eq(clickIndex).outerWidth(true);
-            this.slides
-              .eq(clickIndex)
-              .find("span")
-              .transition(tSpeed);
-            if (clickIndex > 0) {
-              this.slides.eq(clickIndex - 1).transition(tSpeed);
-            }
-            if (clickIndex < this.slides.length) {
-              this.slides.eq(clickIndex + 1).transition(tSpeed);
-            }
-            var navActiveSlideLeft = this.slides[clickIndex].offsetLeft;
-            this.setTransition(tSpeed);
-            if (
-              navActiveSlideLeft <
+    components: {
+        swiper,
+        swiperSlide
+    },
+    data() {
+        return {
+            datas: [],
+            imgurl: require('../../../../static/img/jidiruzhu.png'),
+            lists: [],
+            goods: [],
+            goodeover: [],
+            num: -1,
+            isok: true,
+            nomore: false,
+            nomoretwo: false,
+            pages: {
+                pageNum: 1,
+                pageSize: 19
+            },
+            HeaderSwiperOption: {
+                freeMode: true,
+                slidesPerView: 'auto',
+                observer: true,
+                observeParents: true,
+                on: {
+                    init() {},
+                    click(e) {
+                        var navWidth = 0
+                        for (var i = 0; i < this.slides.length; i++) {
+                            navWidth += parseInt(this.slides.eq(i).outerWidth(true))
+                        }
+                        var clientWidth = parseInt(this.$wrapperEl.outerWidth(true))
+                        var clickIndex = this.clickedIndex
+                        var activeSlidePosition = this.slides[clickIndex].offsetLeft
+                        var tSpeed = 300
+                        var navSlideWidth = this.slides.eq(clickIndex).outerWidth(true)
+                        this.slides
+                            .eq(clickIndex)
+                            .find('span')
+                            .transition(tSpeed)
+                        if (clickIndex > 0) {
+                            this.slides.eq(clickIndex - 1).transition(tSpeed)
+                        }
+                        if (clickIndex < this.slides.length) {
+                            this.slides.eq(clickIndex + 1).transition(tSpeed)
+                        }
+                        var navActiveSlideLeft = this.slides[clickIndex].offsetLeft
+                        this.setTransition(tSpeed)
+                        if (
+                            navActiveSlideLeft <
               (clientWidth - parseInt(navSlideWidth)) / 2
-            ) {
-              this.setTranslate(0);
-            } else if (
-              navActiveSlideLeft >
+                        ) {
+                            this.setTranslate(0)
+                        } else if (
+                            navActiveSlideLeft >
               navWidth - (parseInt(navSlideWidth) + clientWidth) / 2
-            ) {
-              this.setTranslate(clientWidth - navWidth);
-            } else {
-              this.setTranslate(
-                (clientWidth - parseInt(navSlideWidth)) / 2 - navActiveSlideLeft
-              );
+                        ) {
+                            this.setTranslate(clientWidth - navWidth)
+                        } else {
+                            this.setTranslate(
+                                (clientWidth - parseInt(navSlideWidth)) / 2 - navActiveSlideLeft
+                            )
+                        }
+                    }
+                }
             }
-          }
         }
-      }
-    };
-  },
-  created() {
-    this.getnav();
-    this.getconent();
-  },
-  watch: {
-    "lists.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
-        }
-      },
-      deep: true
     },
-    "goods.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomoretwo = true;
-        } else {
-          this.nomoretwo = false;
+    created() {
+        this.getnav()
+        this.getconent()
+    },
+    watch: {
+        'lists.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = true
+                } else {
+                    this.nomore = false
+                }
+            },
+            deep: true
+        },
+        'goods.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomoretwo = true
+                } else {
+                    this.nomoretwo = false
+                }
+            },
+            deep: true
         }
-      },
-      deep: true
+    },
+    methods: {
+        changes() {
+            this.$router.push({ path: '/registrationinformation' })
+        },
+        changeone() {
+            this.isok = true
+            if (this.goods.length) this.nomore = false
+            this.num = -1
+        },
+        async getnav() {
+            const res = await gettingnavigation()
+            const data = res.data.list
+            this.datas = data
+            // console.log(data);
+        },
+        async getlist(index, code) {
+            this.isok = false
+            this.num = index
+            const list = await getjidi({ specialTypeId: code }, this.pages)
+            this.lists = list.data.entity.resultData.splice(0, 8)
+            // console.log(this.lists);
+        },
+        async getconent() {
+            const good = await gettingbase({}, this.pages)
+            let goods = good.data.entity.resultData
+            this.goodeover = JSON.parse(JSON.stringify(goods))
+            this.goods = goods.splice(0, 8)
+        },
+        goto(id) {
+            localStorage.setItem('nid', id)
+            this.$router.push({ path: '/workshow', query: { id: id } })
+        }
     }
-  },
-  methods: {
-    changes() {
-      this.$router.push({ path: "/registrationinformation" });
-    },
-    changeone() {
-      this.isok = true;
-      if (this.goods.length) this.nomore = false;
-      this.num = -1;
-    },
-    async getnav() {
-      const res = await gettingnavigation();
-      const data = res.data.list;
-      this.datas = data;
-      // console.log(data);
-    },
-    async getlist(index, code) {
-      this.isok = false;
-      this.num = index;
-      const list = await getjidi({ specialTypeId: code }, this.pages);
-      this.lists = list.data.entity.resultData.splice(0, 8);
-      // console.log(this.lists);
-    },
-    async getconent() {
-      const good = await gettingbase({}, this.pages);
-      let goods = good.data.entity.resultData;
-      this.goodeover = JSON.parse(JSON.stringify(goods));
-      this.goods = goods.splice(0, 8);
-    },
-    goto(id) {
-      localStorage.setItem("nid", id);
-      this.$router.push({ path: "/workshow", query: { id: id } });
-    }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 img{
@@ -456,7 +466,7 @@ img{
           // position: relative;
           ul {
             overflow: hidden;
-            
+
             li {
               width: 88px;
               text-align: center;

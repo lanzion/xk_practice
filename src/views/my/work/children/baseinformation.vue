@@ -85,82 +85,82 @@
   </div>
 </template>
 <script>
-import { getalistofinformation } from "@/api/frontstage";
+import { getalistofinformation } from '@/api/frontstage'
 export default {
-  name: "baseinformation",
-  data() {
-    return {
-      input3: "",
-      datas: [],
-      goods: [],
-      nomore: false,
-      nomoretwo: false,
-      pages: {
-        pageNum: 1,
-        pageSize: 9
-      }
-    };
-  },
-  created() {
-    this.getlists();
-  },
-  watch: {
-    "goods.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
+    name: 'baseinformation',
+    data() {
+        return {
+            input3: '',
+            datas: [],
+            goods: [],
+            nomore: false,
+            nomoretwo: false,
+            pages: {
+                pageNum: 1,
+                pageSize: 9
+            }
         }
-      },
-      deep: true
     },
-    "datas.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomoretwo = true;
-        } else {
-          this.nomoretwo = false;
-        }
-      },
-      deep: true
-    }
-  },
-  methods: {
-    async getlists() {
-      let nid = localStorage.getItem("nid");
-      let oid = this.$route.query.id;
-      let id = "";
-      if (oid) {
-        id = oid;
-      } else {
-        id = nid;
-      }
-      let res = await getalistofinformation(
-        { orgId: id, orgType: "B" },
-        this.pages
-      );
-      this.datas = res.data.entity.resultData;
-      let good = await getalistofinformation(
-        {
-          orgId: id,
-          orgType: "B",
-          isrecommend: "A"
+    created() {
+        this.getlists()
+    },
+    watch: {
+        'goods.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = true
+                } else {
+                    this.nomore = false
+                }
+            },
+            deep: true
         },
-        this.pages
-      );
-      this.goods = good.data.entity.resultData;
-      this.totalNum = res.data.entity.totalNum;
+        'datas.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomoretwo = true
+                } else {
+                    this.nomoretwo = false
+                }
+            },
+            deep: true
+        }
     },
-    letgo(id) {
-      localStorage.setItem("vid", id);
-      this.$router.push({
-        path: "baseinformationdetails",
-        query: { id: id }
-      });
+    methods: {
+        async getlists() {
+            let nid = localStorage.getItem('nid')
+            let oid = this.$route.query.id
+            let id = ''
+            if (oid) {
+                id = oid
+            } else {
+                id = nid
+            }
+            let res = await getalistofinformation(
+                { orgId: id, orgType: 'B' },
+                this.pages
+            )
+            this.datas = res.data.entity.resultData
+            let good = await getalistofinformation(
+                {
+                    orgId: id,
+                    orgType: 'B',
+                    isrecommend: 'A'
+                },
+                this.pages
+            )
+            this.goods = good.data.entity.resultData
+            this.totalNum = res.data.entity.totalNum
+        },
+        letgo(id) {
+            localStorage.setItem('vid', id)
+            this.$router.push({
+                path: 'baseinformationdetails',
+                query: { id: id }
+            })
+        }
     }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .el-select .el-input {

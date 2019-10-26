@@ -12,7 +12,8 @@
       </div>
       <div class="container_one">
         <div class="container_one_l">
-          <img :src="datas.cover" alt />
+          <!-- <img :src="datas.cover" alt /> -->
+           <ov-image :src-data="datas.cover"></ov-image>
         </div>
         <div class="container_one_r">
           <div class="container_one_r_header">{{datas.name}}</div>

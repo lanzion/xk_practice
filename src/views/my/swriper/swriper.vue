@@ -11,7 +11,7 @@
     <div class="xk_swriper" v-if="imgUrl.length>1">
       <swiper :options="swiperOption">
         <swiper-slide v-for="(item,index) in imgUrl" :key="index" class="testshow">
-          <img :src="getFileUrl(item.imageUrl)" @error="loadimg"/>
+          <ov-image :type = 2 :src-data="getFileUrl(item.imageUrl)" alt></ov-image >
         </swiper-slide>
       </swiper>
       <div class="swiper-button-next swiper-button-white"></div>
@@ -19,63 +19,62 @@
       <div class="swiper-pagination"></div>
     </div>
     <div class="xk_swriper" v-if="imgUrl.length==1">
-      <img :src="getFileUrl(imgUrl[0].imageUrl)" alt  @error="loadimg"/>
+      <ov-image :type = 2 :src-data="getFileUrl(imgUrl[0].imageUrl)" alt></ov-image >
     </div>
   </div>
 </template>
 <script>
-import { requestBannerList } from "@/api/common";
-import "swiper/dist/css/swiper.css";
-import { swiper, swiperSlide } from "vue-awesome-swiper";
+import { requestBannerList } from '@/api/common'
+import 'swiper/dist/css/swiper.css'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
 export default {
-  components: {
-    swiper,
-    swiperSlide
-  },
-  props: {
-    type: {
-      type: String,
-      default() {
-        return "";
-      }
-    }
-  },
-  data() {
-    return {
-      defaultImg: require('@/assets/image/info.jpg'),
-      imgUrl: [],
-      bannerHeight: 400,
-      // screenWidth: 1920,
-      swiperOption: {
-        observer: true, //修改swiper自己或子元素时，自动初始化swiper
-        observeParents: true, //修改swiper的父元素时，自动初始化swiper
-        loop: true,
-        loopAdditionalSlides: 1,
-        autoHeight:true,
-        autoplay: {
-          delay: 3000,
-          speed: 500,
-          disableOnInteraction: false
-        },
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true
-        },
-
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev"
+    components: {
+        swiper,
+        swiperSlide
+    },
+    props: {
+        type: {
+            type: String,
+            default() {
+                return ''
+            }
         }
-      }
-    };
-  },
-  created() {
-    this.getbanner();
-  },
-  mounted() {
+    },
+    data() {
+        return {
+            imgUrl: [],
+            bannerHeight: 400,
+            // screenWidth: 1920,
+            swiperOption: {
+                observer: true, // 修改swiper自己或子元素时，自动初始化swiper
+                observeParents: true, // 修改swiper的父元素时，自动初始化swiper
+                loop: true,
+                loopAdditionalSlides: 1,
+                autoHeight: true,
+                autoplay: {
+                    delay: 3000,
+                    speed: 500,
+                    disableOnInteraction: false
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true
+                },
+
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev'
+                }
+            }
+        }
+    },
+    created() {
+        this.getbanner()
+    },
+    mounted() {
     // this.setSize1();
-    const that = this;
-    //监听浏览器窗口大小改变
+        // const that = this
+    // 监听浏览器窗口大小改变
     // window.addEventListener(
     //   "resize",
     //   function() {
@@ -88,17 +87,12 @@ export default {
     //   },
     //   false
     // );
-  },
-  methods: {
-    loadimg (e) {
-    //   console.log(e)
-      let img = e.srcElement
-      img.src = this.defaultImg
     },
-    async getbanner() {
-      let res = await requestBannerList({ bannerType: this.type });
-      this.imgUrl = res.data.appendInfo.list;
-    },
+    methods: {
+        async getbanner() {
+            let res = await requestBannerList({ bannerType: this.type })
+            this.imgUrl = res.data.appendInfo.list
+        },
     // setSize1: function() {
     //   var width =
     //     window.innerWidth ||
@@ -118,8 +112,8 @@ export default {
     //   document.getElementById("el-carousel").style.height =
     //     this.bannerHeight + "px";
     // }
-  }
-};
+    }
+}
 </script>
 <style lang='scss' scoped>
 #el-carousel {

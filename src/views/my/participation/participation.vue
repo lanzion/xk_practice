@@ -68,7 +68,7 @@
               :key="index"
             >
               <div class="aggregate_two_s_l_top">
-                <el-image :src="g.cover" fit="cover" style="width: 188px;height:188px">
+                <!-- <el-image :src="g.cover" fit="cover" style="width: 188px;height:188px">
                   <div
                     slot="error"
                     class="image-slot"
@@ -76,7 +76,8 @@
                   >
                     <i class="el-icon-picture-outline"></i>
                   </div>
-                </el-image>
+                </el-image> -->
+                <ov-image :src-data="getFileUrl(g.cover)"></ov-image>
               </div>
               <div class="aggregate_two_s_l_bot">
                 <span>{{g.schoolName}}</span>

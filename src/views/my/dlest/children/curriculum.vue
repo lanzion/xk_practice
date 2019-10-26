@@ -103,182 +103,182 @@
 </template>
 <script>
 import {
-  gettingnavigation,
-  gettinglists,
-  listofpractical,
-  collectionofsubstituteteachers
-} from "@/api/frontstage";
+    gettingnavigation,
+    gettinglists,
+    listofpractical,
+    collectionofsubstituteteachers
+} from '@/api/frontstage'
 // import "swiper/dist/css/swiper.css";
 // import { swiper, swiperSlide } from "vue-awesome-swiper";
 export default {
-  // components: {
-  //   swiper,
-  //   swiperSlide
-  // },
-  // 课程
-  data() {
-    return {
-      options: [],
-      optionslist: [],
-      value10: "",
-      isactive: -1,
-      isok: 0,
-      datas: "",
-      lists: "",
-      rid: "",
-      arr: [],
-      goods: ["小学", "初中", "高中"],
-      code: "",
-      nomore: false,
-      pages: {
-        pageNum: 1,
-        pageSize: 12
-      }
-      // HeaderSwiperOption: {
-      //   freeMode: true,
-      //   slidesPerView: "auto",
-      //   observer: true,
-      //   observeParents: true,
-      //   freeModeMomentum:false,
-      //   on: {
-      //     init() {},
-      //     click(e) {
-      //       var navWidth = 0;
-      //       for (var i = 0; i < this.slides.length; i++) {
-      //         navWidth += parseInt(this.slides.eq(i).outerWidth(true));
-      //       }
-      //       var clientWidth = parseInt(this.$wrapperEl.outerWidth(true));
-      //       var clickIndex = this.clickedIndex;
-      //       var activeSlidePosition = this.slides[clickIndex].offsetLeft;
-      //       var tSpeed = 300;
-      //       var navSlideWidth = this.slides.eq(clickIndex).outerWidth(true);
-      //       this.slides
-      //         .eq(clickIndex)
-      //         .find("span")
-      //         .transition(tSpeed);
-      //       if (clickIndex > 0) {
-      //         this.slides.eq(clickIndex - 1).transition(tSpeed);
-      //       }
-      //       if (clickIndex < this.slides.length) {
-      //         this.slides.eq(clickIndex + 1).transition(tSpeed);
-      //       }
-      //       var navActiveSlideLeft = this.slides[clickIndex].offsetLeft;
-      //       this.setTransition(tSpeed);
-      //       if (
-      //         navActiveSlideLeft <
-      //         (clientWidth - parseInt(navSlideWidth)) / 2
-      //       ) {
-      //         this.setTranslate(0);
-      //       } else if (
-      //         navActiveSlideLeft >
-      //         navWidth - (parseInt(navSlideWidth) + clientWidth) / 2
-      //       ) {
-      //         this.setTranslate(clientWidth - navWidth);
-      //       } else {
-      //         this.setTranslate(
-      //           (clientWidth - parseInt(navSlideWidth)) / 2 - navActiveSlideLeft
-      //         );
-      //       }
-      //     }
-      //   }
-      // }
-    };
-  },
-  created() {
-    this.getnav();
-    this.getteachers();
-  },
-  watch: {
-    "arr.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
+    // components: {
+    //   swiper,
+    //   swiperSlide
+    // },
+    // 课程
+    data() {
+        return {
+            options: [],
+            optionslist: [],
+            value10: '',
+            isactive: -1,
+            isok: 0,
+            datas: '',
+            lists: '',
+            rid: '',
+            arr: [],
+            goods: ['小学', '初中', '高中'],
+            code: '',
+            nomore: false,
+            pages: {
+                pageNum: 1,
+                pageSize: 12
+            }
+            // HeaderSwiperOption: {
+            //   freeMode: true,
+            //   slidesPerView: "auto",
+            //   observer: true,
+            //   observeParents: true,
+            //   freeModeMomentum:false,
+            //   on: {
+            //     init() {},
+            //     click(e) {
+            //       var navWidth = 0;
+            //       for (var i = 0; i < this.slides.length; i++) {
+            //         navWidth += parseInt(this.slides.eq(i).outerWidth(true));
+            //       }
+            //       var clientWidth = parseInt(this.$wrapperEl.outerWidth(true));
+            //       var clickIndex = this.clickedIndex;
+            //       var activeSlidePosition = this.slides[clickIndex].offsetLeft;
+            //       var tSpeed = 300;
+            //       var navSlideWidth = this.slides.eq(clickIndex).outerWidth(true);
+            //       this.slides
+            //         .eq(clickIndex)
+            //         .find("span")
+            //         .transition(tSpeed);
+            //       if (clickIndex > 0) {
+            //         this.slides.eq(clickIndex - 1).transition(tSpeed);
+            //       }
+            //       if (clickIndex < this.slides.length) {
+            //         this.slides.eq(clickIndex + 1).transition(tSpeed);
+            //       }
+            //       var navActiveSlideLeft = this.slides[clickIndex].offsetLeft;
+            //       this.setTransition(tSpeed);
+            //       if (
+            //         navActiveSlideLeft <
+            //         (clientWidth - parseInt(navSlideWidth)) / 2
+            //       ) {
+            //         this.setTranslate(0);
+            //       } else if (
+            //         navActiveSlideLeft >
+            //         navWidth - (parseInt(navSlideWidth) + clientWidth) / 2
+            //       ) {
+            //         this.setTranslate(clientWidth - navWidth);
+            //       } else {
+            //         this.setTranslate(
+            //           (clientWidth - parseInt(navSlideWidth)) / 2 - navActiveSlideLeft
+            //         );
+            //       }
+            //     }
+            //   }
+            // }
         }
-      },
-      deep: true
-    }
-  },
-  methods: {
-    resetPage() {
-      this.$set(this.pages, "pageNum", 1);
-      this.getlist();
     },
-    async getteachers() {
-      let id = localStorage.getItem("activeid");
-      let res = await collectionofsubstituteteachers({ activityId: id });
-      this.optionslist = res.data.entity.resultData;
+    created() {
+        this.getnav()
+        this.getteachers()
     },
-    // async workcx() {
-    //   let id = localStorage.getItem("activeid");
-    //   let res = await listofpracticalcourses(
-    //     {
-    //       activeid: id,
-    //       courseTypeParent: this.code,
-    //       name: this.value10
-    //     },
-    //     this.pages
-    //   );
-    //   this.arr = res.data.entity.resultData;
-    //   this.totalNum = res.data.entity.totalNum;
-    //   this.arr.forEach(x => {
-    //     let sum = x.fit.split(",");
-    //     x.fit = sum;
-    //   });
-    // },
-    async getlist() {
-      let id = localStorage.getItem("activeid");
-      let res = await listofpractical(
-        {
-          activityId: id,
-          courseTypeParent: this.code,
-          name: this.value10
+    watch: {
+        'arr.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = true
+                } else {
+                    this.nomore = false
+                }
+            },
+            deep: true
+        }
+    },
+    methods: {
+        resetPage() {
+            this.$set(this.pages, 'pageNum', 1)
+            this.getlist()
         },
-        this.pages
-      );
-      this.arr = res.data.entity.resultData;
-      this.totalNum = res.data.entity.totalNum;
-      this.arr.forEach(x => {
-        let sum = x.fit.split(",");
-        x.fit = sum;
-      });
-    },
-    change(index, code) {
-      this.isok = index;
-      this.code = code;
-      this.value10 = "";
-      this.getlist();
-    },
-    moveover(index) {
-      this.isactive = index;
-    },
-    moveout() {
-      this.isactive = false;
-    },
-    async getnav() {
-      const res = await gettingnavigation();
-      const data = res.data.list;
-      this.datas = data;
-      let over = {
-        name: "全部",
-        code: ""
-      };
-      this.datas.unshift(over);
-      this.code = this.datas[0].code || '';
-      this.getlist();
-    },
-    // async getlist(code) {
-    //     const lists = await gettinglists({ code: code })
-    //     this.lists = lists.data.list
-    //     console.log(this.lists)
-    // },
-    letsgo(id) {
-      localStorage.setItem("mid", id);
-      this.$router.push({ path: "/goods", query: { id: id } });
+        async getteachers() {
+            let id = localStorage.getItem('activeid')
+            let res = await collectionofsubstituteteachers({ activityId: id })
+            this.optionslist = res.data.entity.resultData
+        },
+        // async workcx() {
+        //   let id = localStorage.getItem("activeid");
+        //   let res = await listofpracticalcourses(
+        //     {
+        //       activeid: id,
+        //       courseTypeParent: this.code,
+        //       name: this.value10
+        //     },
+        //     this.pages
+        //   );
+        //   this.arr = res.data.entity.resultData;
+        //   this.totalNum = res.data.entity.totalNum;
+        //   this.arr.forEach(x => {
+        //     let sum = x.fit.split(",");
+        //     x.fit = sum;
+        //   });
+        // },
+        async getlist() {
+            let id = localStorage.getItem('activeid')
+            let res = await listofpractical(
+                {
+                    activityId: id,
+                    courseTypeParent: this.code,
+                    name: this.value10
+                },
+                this.pages
+            )
+            this.arr = res.data.entity.resultData
+            this.totalNum = res.data.entity.totalNum
+            this.arr.forEach(x => {
+                let sum = x.fit.split(',')
+                x.fit = sum
+            })
+        },
+        change(index, code) {
+            this.isok = index
+            this.code = code
+            this.value10 = ''
+            this.getlist()
+        },
+        moveover(index) {
+            this.isactive = index
+        },
+        moveout() {
+            this.isactive = false
+        },
+        async getnav() {
+            const res = await gettingnavigation()
+            const data = res.data.list
+            this.datas = data
+            let over = {
+                name: '全部',
+                code: ''
+            }
+            this.datas.unshift(over)
+            this.code = this.datas[0].code || ''
+            this.getlist()
+        },
+        // async getlist(code) {
+        //     const lists = await gettinglists({ code: code })
+        //     this.lists = lists.data.list
+        //     console.log(this.lists)
+        // },
+        letsgo(id) {
+            localStorage.setItem('mid', id)
+            this.$router.push({ path: '/goods', query: { id: id } })
+        }
     }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .curriculum {

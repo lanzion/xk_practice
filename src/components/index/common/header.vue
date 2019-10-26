@@ -51,191 +51,191 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters } from 'vuex'
 
-import { requestNavList } from "@/api/common";
+import { requestNavList } from '@/api/common'
 // import { countMessage } from "@/api/message";
 
 export default {
-  data() {
-    return {
-      logourl: require("../../../../static/img/logo2-01.png"),
-      logo: {
-        dark: require("@/assets/image/logo-white.svg"),
-        light: require("@/assets/image/logo.svg")
-      },
-      nav: [],
-      usercode: -1,
-      menu: [],
-      messageCount: 0,
-      timer: null,
-      istrue: true,
-      numNav: "0"
-    };
-  },
-  computed: {
-    ...mapState("login", {
-      user: state => state.userInfo || {}
-    }),
-    ...mapGetters("login", {
-      identity: "identityCode"
-    })
-  },
-  props: {
+    data() {
+        return {
+            logourl: require('../../../../static/img/logo2-01.png'),
+            logo: {
+                dark: require('@/assets/image/logo-white.svg'),
+                light: require('@/assets/image/logo.svg')
+            },
+            nav: [],
+            usercode: -1,
+            menu: [],
+            messageCount: 0,
+            timer: null,
+            istrue: true,
+            numNav: '0'
+        }
+    },
+    computed: {
+        ...mapState('login', {
+            user: state => state.userInfo || {}
+        }),
+        ...mapGetters('login', {
+            identity: 'identityCode'
+        })
+    },
+    props: {
     /**
      * @desc 主题颜色
      * @value light: 白色
      * @value dark: 黑色
      */
-    theme: {
-      type: String,
-      default: "dark"
+        theme: {
+            type: String,
+            default: 'dark'
+        },
+        active: {
+            type: Function,
+            default() {
+                return false
+            }
+        }
     },
-    active: {
-      type: Function,
-      default() {
-        return false;
-      }
-    }
-  },
-  watch: {
-    "$route.meta.activeIndex": {
-      handler(newval) {
-        this.numNav = newval || 0;
-      },
-      deep: true
-    },
-    // "user.id": {
-    //   handler: function(user) {
-    //     const token = this.$cookies.get("token");
-    //     // 判断用户是否登录，登录则定时获取消息提示，否则清除该定时器
-    //     if (user && token) {
-    //       this.timer = setInterval(this.getMessageCount(), 1000 * 60 * 5);
-    //       this.istrue = false;
-    //     } else {
-    //       this.clearTimer();
-    //     }
-    //   },
-    //   deep: true,
-    //   immediate: true
-    // },
-    identity: {
-      handler: function(identity) {
-        this.menu =
+    watch: {
+        '$route.meta.activeIndex': {
+            handler(newval) {
+                this.numNav = newval || 0
+            },
+            deep: true
+        },
+        // "user.id": {
+        //   handler: function(user) {
+        //     const token = this.$cookies.get("token");
+        //     // 判断用户是否登录，登录则定时获取消息提示，否则清除该定时器
+        //     if (user && token) {
+        //       this.timer = setInterval(this.getMessageCount(), 1000 * 60 * 5);
+        //       this.istrue = false;
+        //     } else {
+        //       this.clearTimer();
+        //     }
+        //   },
+        //   deep: true,
+        //   immediate: true
+        // },
+        identity: {
+            handler: function (identity) {
+                this.menu =
           {
-            teacher: [
+              teacher: [
               // { name: "我的授课", url: "/my.html#/course" },
               // { name: "我的教学资源 ", url: "/my.html#/resource" },
               // { name: "我的教学心得", url: "/my.html#/experience" },
               //  13: {code: 'baseInfo', name: '基地管理员'},
-              { name: "我的空间", url: "/my.html#/space" }
-            ],
-            student: [
+                  { name: '我的空间', url: '/my.html#/space' }
+              ],
+              student: [
               // { name: '我的评课', url: '/my.html#/course' },
-              { name: "我的空间", url: "/my.html#/space" }
-            ],
-            school: [{ name: "后台管理", url: "/admin.html#/" }],
-            education: [{ name: "后台管理", url: "/admin.html#/" }],
-            baseInfo: [{ name: "后台管理", url: "/admin.html#/" }],
-            admin: [{ name: "后台管理", url: "/admin.html#/" }]
-          }[identity] || [];
-        this.getNavDatas();
-      },
-      immediate: true,
-      deep: true
-    }
-  },
-  created() {
-    this.numNav = this.$route.meta.activeIndex;
-  },
-  components: {
-    "user-avatar": resolve =>
-      require(["@/components/common/header-user"], resolve)
-  },
-  mounted() {
-    this.getNavDatas();
-  },
-  beforeDestroy() {
-    this.clearTimer();
-  },
-  methods: {
-    // 获取导航列表
-    changes(index) {
-      this.numNav = index;
-    },
-    getNavDatas() {
-      requestNavList().then(res => {
-        const { code, appendInfo = {} } = res.data;
-        // console.log("导航栏", appendInfo);
-        appendInfo.list[0].children = [
-          {
-            name:'首页',
-            url:'/my.html#/index'
-          },
-          {
-            name:'课程中心',
-            url:'/my.html#/community'
-          },
-          {
-            name:'基地/机构',
-            url:'/my.html#/work'
-          },
-          {
-            name:'学校专栏',
-            url:'/my.html#/participation'
-          },
-          {
-            name:'活动成果',
-            url:'/my.html#/community'
-          },
-          {
-            name:'通知公告',
-            url:'/my.html#/activity'
-          },
-          {
-            name:'我的大课堂',
-            url:'/my.html#/space'
-          },
-        ]
-        if (code === 200) {
-          if (
-            this.identity !== "baseInfo" &&
-            this.identity !== "admin" &&
-            this.identity !== "school" &&
-            this.identity !== "education"
-          ) {
-            this.nav = appendInfo.list[0].children || [];
-          } else {
-            this.nav = appendInfo.list[0].children.slice(0, -1) || [];
-          }
-        } else {
+                  { name: '我的空间', url: '/my.html#/space' }
+              ],
+              school: [{ name: '后台管理', url: '/admin.html#/' }],
+              education: [{ name: '后台管理', url: '/admin.html#/' }],
+              baseInfo: [{ name: '后台管理', url: '/admin.html#/' }],
+              admin: [{ name: '后台管理', url: '/admin.html#/' }]
+          }[identity] || []
+                this.getNavDatas()
+            },
+            immediate: true,
+            deep: true
         }
-      });
     },
+    created() {
+        this.numNav = this.$route.meta.activeIndex
+    },
+    components: {
+        'user-avatar': resolve =>
+            require(['@/components/common/header-user'], resolve)
+    },
+    mounted() {
+        this.getNavDatas()
+    },
+    beforeDestroy() {
+        this.clearTimer()
+    },
+    methods: {
+    // 获取导航列表
+        changes(index) {
+            this.numNav = index
+        },
+        getNavDatas() {
+            requestNavList().then(res => {
+                const { code, appendInfo = {} } = res.data
+                // console.log("导航栏", appendInfo);
+                appendInfo.list[0].children = [
+                    {
+                        name: '首页',
+                        url: '/my.html#/index'
+                    },
+                    {
+                        name: '课程中心',
+                        url: '/my.html#/community'
+                    },
+                    {
+                        name: '基地/机构',
+                        url: '/my.html#/work'
+                    },
+                    {
+                        name: '学校专栏',
+                        url: '/my.html#/participation'
+                    },
+                    {
+                        name: '活动中心',
+                        url: '/my.html#/exercise'
+                    },
+                    {
+                        name: '通知公告',
+                        url: '/my.html#/activity'
+                    },
+                    {
+                        name: '我的大课堂',
+                        url: '/my.html#/space'
+                    },
+                ]
+                if (code === 200) {
+                    if (
+                        this.identity !== 'baseInfo' &&
+            this.identity !== 'admin' &&
+            this.identity !== 'school' &&
+            this.identity !== 'education'
+                    ) {
+                        this.nav = appendInfo.list[0].children || []
+                    } else {
+                        this.nav = appendInfo.list[0].children.slice(0, -1) || []
+                    }
+                } else {
+                }
+            })
+        },
 
-    //获取消息提示
-    // getMessageCount() {
-    //   countMessage({ messageType: 1 }).then(res => {
-    //     const { code, appendInfo: datas } = res.data;
-    //     if (code === 200) {
-    //       this.messageCount = Object.values(datas.systemMessage).reduce(
-    //         (total, item) => {
-    //           total += item;
-    //           return total;
-    //         },
-    //         0
-    //       );
-    //     }
-    //   });
-    // },
+        // 获取消息提示
+        // getMessageCount() {
+        //   countMessage({ messageType: 1 }).then(res => {
+        //     const { code, appendInfo: datas } = res.data;
+        //     if (code === 200) {
+        //       this.messageCount = Object.values(datas.systemMessage).reduce(
+        //         (total, item) => {
+        //           total += item;
+        //           return total;
+        //         },
+        //         0
+        //       );
+        //     }
+        //   });
+        // },
 
-    // 清除消息提示定时器
-    clearTimer() {
-      clearInterval(this.timer);
-      this.timer = null;
+        // 清除消息提示定时器
+        clearTimer() {
+            clearInterval(this.timer)
+            this.timer = null
+        }
     }
-  }
-};
+}
 </script>
 
 <style lang="scss" scoped>

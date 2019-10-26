@@ -15,7 +15,7 @@
               :key="index"
             >
               <div class="container_one_conent_img">
-                <el-image :src="g.cover" fit="cover" style="width: 224px;height:124px">
+                <!-- <el-image :src="g.cover" fit="cover" style="width: 224px;height:124px">
                   <div
                     slot="error"
                     class="image-slot"
@@ -23,7 +23,8 @@
                   >
                     <i class="el-icon-picture-outline"></i>
                   </div>
-                </el-image>
+                </el-image> -->
+                <ov-image :src-data="getFileUrl(g.cover)"></ov-image>
               </div>
               <div class="container_one_conent_name">
                 <p>{{g.name}}</p>
@@ -61,7 +62,7 @@
             <ul>
               <li @click="gotwo(k.id)" v-for="(k,index) in goods" :key="index">
                 <div class="container_r_thr_img">
-                  <el-image :src="k.cover" fit="cover" style="width: 274px;height:180px">
+                  <!-- <el-image :src="k.cover" fit="cover" style="width: 274px;height:180px">
                     <div
                       slot="error"
                       class="image-slot"
@@ -69,7 +70,8 @@
                     >
                       <i class="el-icon-picture-outline"></i>
                     </div>
-                  </el-image>
+                  </el-image> -->
+                  <ov-image :src-data="getFileUrl(k.cover)"></ov-image>
                 </div>
                 <div class="container_r_thr_title">
                   <h4>{{k.workName}}</h4>
@@ -130,7 +132,8 @@
             <div class="container_thr_conent_l_img">
               <el-carousel :interval="5000" arrow="never" height="318px">
                 <el-carousel-item v-for="(p,index) in imgarr" :key="index">
-                  <img :src="p" alt />
+                  <!-- <img :src="p" alt /> -->
+                  <ov-image :src-data="getFileUrl(p)"></ov-image>
                 </el-carousel-item>
               </el-carousel>
             </div>

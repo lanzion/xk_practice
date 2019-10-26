@@ -37,73 +37,73 @@
   </div>
 </template>
 <script>
-import { listlofstudentscoursestobeevaluated } from "@/api/frontstage";
+import { listlofstudentscoursestobeevaluated } from '@/api/frontstage'
 export default {
-  name: "coursestobeevaluated",
-  data() {
-    return {
-      datas: [],
-      code: "",
-      pages: {
-        pageNum: 1,
-        pageSize: 9
-      },
-      nomore: false
-    };
-  },
-  created() {
-    this.getlist();
-  },
-  computed: {
-    workname() {
-      return this.$store.state.test.workname;
-    }
-  },
-  watch: {
-    workname: {
-      handler: function() {
-        this.getlist();
-      }
-    },
-    "datas.length": {
-      handler(newval, oldval) {
-        if (newval === 0 ||newval ==null) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
+    name: 'coursestobeevaluated',
+    data() {
+        return {
+            datas: [],
+            code: '',
+            pages: {
+                pageNum: 1,
+                pageSize: 9
+            },
+            nomore: false
         }
-      },
-      deep: true
-    }
-  },
-  methods: {
-    async getlist(val) {
-      let res = await listlofstudentscoursestobeevaluated(
-        { name: this.workname },
-        this.pages
-      );
-      if (res.data.entity) {
-        this.datas = res.data.entity.resultData;
-      }else{
-        this.nomore = true;
-      }
-      this.totalNum = res.data.entity.totalNum;
-      localStorage.setItem("serverType", this.goods);
     },
-    changes(id, courseTypeParent, courseType) {
-      let goods = {
-        courseTypeParent,
-        courseType
-      };
-      localStorage.setItem("fid", id);
-      localStorage.setItem("goods", JSON.stringify(goods));
-      this.$router.push({
-        path: "/toevaluationofstudentactivities",
-        params: { id: id }
-      });
+    created() {
+        this.getlist()
+    },
+    computed: {
+        workname() {
+            return this.$store.state.test.workname
+        }
+    },
+    watch: {
+        workname: {
+            handler: function () {
+                this.getlist()
+            }
+        },
+        'datas.length': {
+            handler(newval, oldval) {
+                if (newval === 0 || newval == null) {
+                    this.nomore = true
+                } else {
+                    this.nomore = false
+                }
+            },
+            deep: true
+        }
+    },
+    methods: {
+        async getlist(val) {
+            let res = await listlofstudentscoursestobeevaluated(
+                { name: this.workname },
+                this.pages
+            )
+            if (res.data.entity) {
+                this.datas = res.data.entity.resultData
+            } else {
+                this.nomore = true
+            }
+            this.totalNum = res.data.entity.totalNum
+            localStorage.setItem('serverType', this.goods)
+        },
+        changes(id, courseTypeParent, courseType) {
+            let goods = {
+                courseTypeParent,
+                courseType
+            }
+            localStorage.setItem('fid', id)
+            localStorage.setItem('goods', JSON.stringify(goods))
+            this.$router.push({
+                path: '/toevaluationofstudentactivities',
+                params: { id: id }
+            })
+        }
     }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .coursestobeevaluated {

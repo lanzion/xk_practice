@@ -42,63 +42,63 @@
   </div>
 </template>
 <script>
-import { evaluateothersevaluatedlist } from "@/api/frontstage";
+import { evaluateothersevaluatedlist } from '@/api/frontstage'
 export default {
-  name: "evaluateothersiscores",
-  data() {
-    return {
-      datas: [],
-      pass: true,
-      code: "",
-      nomore: false,
-      pages: {
-        pageNum: 1,
-        pageSize: 10
-      }
-    };
-  },
-  created() {
-    this.getlist();
-  },
-  computed: {
-    newname() {
-      return this.$store.state.test.newname;
-    }
-  },
-  watch: {
-    newname: {
-      handler: function() {
-        this.getlist();
-      }
-    },
-    "datas.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
+    name: 'evaluateothersiscores',
+    data() {
+        return {
+            datas: [],
+            pass: true,
+            code: '',
+            nomore: false,
+            pages: {
+                pageNum: 1,
+                pageSize: 10
+            }
         }
-      },
-      deep: true
-    }
-  },
-  methods: {
-    async getlist() {
-      let res = await evaluateothersevaluatedlist(
-        { cname: this.newname },
-        this.pages
-      );
-      this.datas = res.data.entity.resultData;
     },
-    changes(id) {
-      localStorage.setItem("busId", id);
-      this.$router.push({
-        path: "/detailsofselfevaluation",
-        query: { busId: id, type: 2, seetable: true }
-      });
+    created() {
+        this.getlist()
+    },
+    computed: {
+        newname() {
+            return this.$store.state.test.newname
+        }
+    },
+    watch: {
+        newname: {
+            handler: function () {
+                this.getlist()
+            }
+        },
+        'datas.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = true
+                } else {
+                    this.nomore = false
+                }
+            },
+            deep: true
+        }
+    },
+    methods: {
+        async getlist() {
+            let res = await evaluateothersevaluatedlist(
+                { cname: this.newname },
+                this.pages
+            )
+            this.datas = res.data.entity.resultData
+        },
+        changes(id) {
+            localStorage.setItem('busId', id)
+            this.$router.push({
+                path: '/detailsofselfevaluation',
+                query: { busId: id, type: 2, seetable: true }
+            })
+        }
     }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .uploadworks {

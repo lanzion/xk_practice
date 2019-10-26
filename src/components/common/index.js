@@ -6,6 +6,7 @@ import Upload from '@/components/common/upload/upload'
 import Player from '@/components/common/ali-video'
 import Reader from '@/components/common/baidu-doc-reader'
 import Comment from '@/components/common/comment/comment'
+import defaultImage from '@/components/my/common/image'
 
 const components = [
     Pagination,
@@ -15,7 +16,8 @@ const components = [
     Upload,
     Player,
     Reader,
-    Comment
+    Comment,
+    defaultImage
 ]
 
 const install = function (Vue, opts = {}) {

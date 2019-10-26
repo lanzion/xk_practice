@@ -29,35 +29,35 @@
 </template>
 <script>
 export default {
-  name: "agment",
-  data() {
-    return {
-      teachernewworks: "",
-      lists: [
-        {
-          name: "待上传",
-          path: "/agment/tbuploaded"
-        },
-        {
-          name: "未审核",
-          path: "/agment/noaudited"
-        },
-        {
-          name: "已审核",
-          path: "/agment/audited"
+    name: 'agment',
+    data() {
+        return {
+            teachernewworks: '',
+            lists: [
+                {
+                    name: '待上传',
+                    path: '/agment/tbuploaded'
+                },
+                {
+                    name: '未审核',
+                    path: '/agment/noaudited'
+                },
+                {
+                    name: '已审核',
+                    path: '/agment/audited'
+                }
+            ]
         }
-      ]
-    };
-  },
-  methods: {
-    change(url) {
-      this.$router.push({ path: url });
     },
-    getchange() {
-      this.$store.commit("teachernewworkss", this.teachernewworks);
+    methods: {
+        change(url) {
+            this.$router.push({ path: url })
+        },
+        getchange() {
+            this.$store.commit('teachernewworkss', this.teachernewworks)
+        }
     }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .agment {

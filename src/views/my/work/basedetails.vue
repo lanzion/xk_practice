@@ -14,7 +14,7 @@
                 </div>
                 <div class="container_one">
                     <div class="container_one_l">
-                        <img :src="baselist.cover" alt />
+                        <ov-image :src-data="baselist.cover" alt ></ov-image>
                     </div>
                     <div class="container_one_r">
                         <div class="container_one_r_header">{{baselist.name}}</div>

@@ -17,7 +17,8 @@
           <ul :style="{width:lists.length*388+'px'}">
             <li v-for="(g,index) in lists" :key="index" @click="goto(g.id)">
               <div class="container_r_thr_img">
-                <img :src="g.cover" alt />
+                <!-- <img :src="g.cover" alt /> -->
+                 <ov-image :src-data="getFileUrl(g.cover)"></ov-image>
                 <!-- <el-image :src="g.cover" fit="cover" style="width: 274px;height:180px">
                   <div
                     slot="error"
@@ -79,88 +80,88 @@
   </div>
 </template>
 <script>
-import vueSeamless from "vue-seamless-scroll";
-import { getlistofthelatestworks } from "@/api/frontstage";
+import vueSeamless from 'vue-seamless-scroll';
+import { getlistofthelatestworks } from '@/api/frontstage';
 export default {
-  data() {
-    return {
-      lists: [],
-      itactive: 0,
-      isactive: -1,
-      izactive: 0,
-      pages: {
-        pageNum: 1,
-        pageSize: 8
-      },
-      dianzan: require("../../../../static/img/dianzan02.png"),
-      fenxiang: require("../../../../static/img/fenxiong.png"),
-      yanjing: require("../../../../static/img/liulanhui.png"),
-      nomore: false,
-      optionCustomer: {
-        step: 1.5,
-        limitMoveNum: "",
-        openTouch: false,
-        waitTime: 1,
-        direction: 2,
-        singleWidth: 0,
-        openWatch: true,
-        autoPlay: ""
-      }
-    };
+    data() {
+        return {
+            lists: [],
+            itactive: 0,
+            isactive: -1,
+            izactive: 0,
+            pages: {
+                pageNum: 1,
+                pageSize: 8
+            },
+            dianzan: require('../../../../static/img/dianzan02.png'),
+            fenxiang: require('../../../../static/img/fenxiong.png'),
+            yanjing: require('../../../../static/img/liulanhui.png'),
+            nomore: false,
+            optionCustomer: {
+                step: 1.5,
+                limitMoveNum: '',
+                openTouch: false,
+                waitTime: 1,
+                direction: 2,
+                singleWidth: 0,
+                openWatch: true,
+                autoPlay: ''
+            }
+        }
   },
-  components: {
-    vueSeamless
-  },
-  created() {
-    this.getnow();
+    components: {
+        vueSeamless
+    },
+    created() {
+        this.getnow()
   },
 
-  watch: {
-    "lists.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomore = true;
+    watch: {
+        'lists.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = true
         } else {
-          this.nomore = false;
+                    this.nomore = false
         }
-        if (newval <= 3) {
-          this.optionCustomer.autoPlay = false;
+                if (newval <= 3) {
+                    this.optionCustomer.autoPlay = false
         }
-      },
-      deep: true
+            },
+            deep: true
+        }
+    },
+    methods: {
+        errorHandler() {
+            return true
+    },
+        moveover(index) {
+            this.isactive = index
+    },
+        moveout(index) {
+            this.isactive = false
+    },
+        moveovers(id, index) {
+            this.izactive = id
+      this.itactive = id
+      this.getnow(index)
+    },
+        moveouts(index) {
+            this.izactive = false
+    },
+        async getnow() {
+            const res = await getlistofthelatestworks({}, this.pages)
+      const lists = res.data.entity.resultData
+      this.lists = lists
+      this.optionCustomer.limitMoveNum = this.lists.length
+      let listmore = this.lists.slice(0, 3)
+      sessionStorage.setItem('listmore', JSON.stringify(listmore))
+    },
+        goto(id) {
+            this.$router.push({ path: '/listsdetail', query: { id: id } })
     }
-  },
-  methods: {
-    errorHandler() {
-      return true;
-    },
-    moveover(index) {
-      this.isactive = index;
-    },
-    moveout(index) {
-      this.isactive = false;
-    },
-    moveovers(id, index) {
-      this.izactive = id;
-      this.itactive = id;
-      this.getnow(index);
-    },
-    moveouts(index) {
-      this.izactive = false;
-    },
-    async getnow() {
-      const res = await getlistofthelatestworks({}, this.pages);
-      const lists = res.data.entity.resultData;
-      this.lists = lists;
-      this.optionCustomer.limitMoveNum = this.lists.length;
-      let listmore = this.lists.slice(0, 3);
-      sessionStorage.setItem("listmore", JSON.stringify(listmore));
-    },
-    goto(id) {
-      this.$router.push({ path: "/listsdetail", query: { id: id } });
     }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .conentthr {
@@ -336,4 +337,3 @@ export default {
   }
 }
 </style>
-

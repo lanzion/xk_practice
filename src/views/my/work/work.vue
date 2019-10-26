@@ -136,7 +136,7 @@
               @click="goshow(g.id)"
             >
               <div class="aggregate_two_s_l_top">
-                <el-image :src="g.cover" fit="cover" style="width: 188px;height:188px">
+                <!-- <el-image :src="g.cover" fit="cover" style="width: 188px;height:188px">
                   <div
                     slot="error"
                     class="image-slot"
@@ -144,7 +144,8 @@
                   >
                     <i class="el-icon-picture-outline"></i>
                   </div>
-                </el-image>
+                </el-image> -->
+             <ov-image :src-data="getFileUrl(g.cover)"></ov-image>
               </div>
               <div class="aggregate_two_s_l_bot">
                 <span>{{g.name}}</span>
@@ -171,7 +172,7 @@
               @click="goshow(g.id)"
             >
               <div class="aggregate_two_s_l_top">
-                <el-image :src="g.cover" fit="cover" style="width: 188px;height:188px">
+                <!-- <el-image :src="g.cover" fit="cover" style="width: 188px;height:188px">
                   <div
                     slot="error"
                     class="image-slot"
@@ -179,7 +180,8 @@
                   >
                     <i class="el-icon-picture-outline"></i>
                   </div>
-                </el-image>
+                </el-image> -->
+               <ov-image :src-data="getFileUrl(g.cover)"></ov-image>
               </div>
               <div class="aggregate_two_s_l_bot">
                 <span>{{g.name}}</span>
@@ -213,284 +215,284 @@
 </template>
 <script>
 import {
-  gettingnavigation,
-  gettinglists,
-  gettingbase,
-  getjidi,
-  gettingareainterface
-} from "@/api/frontstage";
+    gettingnavigation,
+    gettinglists,
+    gettingbase,
+    getjidi,
+    gettingareainterface
+} from '@/api/frontstage'
 // import "swiper/dist/css/swiper.css";
 // import { swiper, swiperSlide } from "vue-awesome-swiper";
 
 export default {
-  name: "community",
-  components: {
+    name: 'community',
+    components: {
     // swiper,
     // swiperSlide,
-    xswriper: resolve => require(["@/views/my/swriper/swriper"], resolve)
-  },
-  data() {
-    return {
-      imgnum: "3",
-      code: "",
-      imgurl: require("../../../../static/img/jidiruzhu.png"),
-      pages: {
-        pageNum: 1,
-        pageSize: 16
-      },
-      addlists: [
-        {
-          name: "革命军事类",
-          code: ""
-        },
-        {
-          name: "博物馆类",
-          code: ""
-        },
-        {
-          name: "文史艺术类",
-          code: ""
-        },
-        {
-          name: "科普环保农业类",
-          code: ""
-        },
-        {
-          name: "城市工业质量类",
-          code: ""
-        },
-        {
-          name: "城市工业质量类",
-          code: ""
-        }
-      ],
-      addres: [
-        {
-          value: "选项1",
-          label: "全部"
-        },
-        {
-          value: "选项2",
-          label: "省级"
-        },
-        {
-          value: "选项3",
-          label: "市级"
-        },
-        {
-          value: "选项4",
-          label: "区级"
-        }
-      ],
-      value08: "",
-
-      options: [],
-      value: "",
-      value1: "",
-      value2: "",
-      input3: "",
-      datas: [],
-      lists: [],
-      goods: [],
-      num: -1,
-      isok: true,
-      nomore: false,
-      nomoretwo: false,
-      goodsover: [],
-      nomorethr: false
-      // HeaderSwiperOption: {
-      //   freeMode: true,
-      //   slidesPerView: "auto",
-      //   observer: true,
-      //   observeParents: true,
-      //   on: {
-      //     init() {},
-      //     click(e) {
-      //       var navWidth = 0;
-      //       for (var i = 0; i < this.slides.length; i++) {
-      //         navWidth += parseInt(this.slides.eq(i).outerWidth(true));
-      //       }
-      //       var clientWidth = parseInt(this.$wrapperEl.outerWidth(true));
-      //       var clickIndex = this.clickedIndex;
-      //       var activeSlidePosition = this.slides[clickIndex].offsetLeft;
-      //       var tSpeed = 300;
-      //       var navSlideWidth = this.slides.eq(clickIndex).outerWidth(true);
-      //       this.slides
-      //         .eq(clickIndex)
-      //         .find("span")
-      //         .transition(tSpeed);
-      //       if (clickIndex > 0) {
-      //         this.slides.eq(clickIndex - 1).transition(tSpeed);
-      //       }
-      //       if (clickIndex < this.slides.length) {
-      //         this.slides.eq(clickIndex + 1).transition(tSpeed);
-      //       }
-      //       var navActiveSlideLeft = this.slides[clickIndex].offsetLeft;
-      //       this.setTransition(tSpeed);
-      //       if (
-      //         navActiveSlideLeft <
-      //         (clientWidth - parseInt(navSlideWidth)) / 2
-      //       ) {
-      //         this.setTranslate(0);
-      //       } else if (
-      //         navActiveSlideLeft >
-      //         navWidth - (parseInt(navSlideWidth) + clientWidth) / 2
-      //       ) {
-      //         this.setTranslate(clientWidth - navWidth);
-      //       } else {
-      //         this.setTranslate(
-      //           (clientWidth - parseInt(navSlideWidth)) / 2 - navActiveSlideLeft
-      //         );
-      //       }
-      //     }
-      //   }
-      // }
-    };
-  },
-  created() {
-    this.getnav();
-    this.getconent();
-    this.getadders();
-    this.getconents();
-  },
-  watch: {
-    "goods.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
-        }
-      },
-      deep: true
+        xswriper: resolve => require(['@/views/my/swriper/swriper'], resolve)
     },
-    "goodsover.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomorethr = true;
-        } else {
-          this.nomorethr = false;
-        }
-      },
-      deep: true
-    },
-    "lists.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomoretwo = true;
-        } else {
-          this.nomoretwo = false;
-        }
-      },
-      deep: true
-    }
-  },
-  methods: {
-    getaddres(value) {
-      this.value = value[0].code;
-      this.value1 = value[1].code;
-      this.value2 = value[2].code;
-      if (this.isok) {
-        this.getconent();
-      } else {
-        this.getlist();
-      }
-    },
-    resetPage() {
-      this.$set(this.pages, "pageNum", 1);
-      if (this.isok) {
-        this.getconent();
-      } else {
-        this.getlist();
-      }
-    },
-    async getadders() {
-      let res = await gettingareainterface();
-      let qts = {
-        label: "全部",
-        value: "-1"
-      };
-      this.options = res.data.appendInfo.list.map(v => {
+    data() {
         return {
-          value: v.code,
-          label: v.name
-        };
-      });
-      this.options.unshift(qts);
+            imgnum: '3',
+            code: '',
+            imgurl: require('../../../../static/img/jidiruzhu.png'),
+            pages: {
+                pageNum: 1,
+                pageSize: 16
+            },
+            addlists: [
+                {
+                    name: '革命军事类',
+                    code: ''
+                },
+                {
+                    name: '博物馆类',
+                    code: ''
+                },
+                {
+                    name: '文史艺术类',
+                    code: ''
+                },
+                {
+                    name: '科普环保农业类',
+                    code: ''
+                },
+                {
+                    name: '城市工业质量类',
+                    code: ''
+                },
+                {
+                    name: '城市工业质量类',
+                    code: ''
+                }
+            ],
+            addres: [
+                {
+                    value: '选项1',
+                    label: '全部'
+                },
+                {
+                    value: '选项2',
+                    label: '省级'
+                },
+                {
+                    value: '选项3',
+                    label: '市级'
+                },
+                {
+                    value: '选项4',
+                    label: '区级'
+                }
+            ],
+            value08: '',
+
+            options: [],
+            value: '',
+            value1: '',
+            value2: '',
+            input3: '',
+            datas: [],
+            lists: [],
+            goods: [],
+            num: -1,
+            isok: true,
+            nomore: false,
+            nomoretwo: false,
+            goodsover: [],
+            nomorethr: false
+            // HeaderSwiperOption: {
+            //   freeMode: true,
+            //   slidesPerView: "auto",
+            //   observer: true,
+            //   observeParents: true,
+            //   on: {
+            //     init() {},
+            //     click(e) {
+            //       var navWidth = 0;
+            //       for (var i = 0; i < this.slides.length; i++) {
+            //         navWidth += parseInt(this.slides.eq(i).outerWidth(true));
+            //       }
+            //       var clientWidth = parseInt(this.$wrapperEl.outerWidth(true));
+            //       var clickIndex = this.clickedIndex;
+            //       var activeSlidePosition = this.slides[clickIndex].offsetLeft;
+            //       var tSpeed = 300;
+            //       var navSlideWidth = this.slides.eq(clickIndex).outerWidth(true);
+            //       this.slides
+            //         .eq(clickIndex)
+            //         .find("span")
+            //         .transition(tSpeed);
+            //       if (clickIndex > 0) {
+            //         this.slides.eq(clickIndex - 1).transition(tSpeed);
+            //       }
+            //       if (clickIndex < this.slides.length) {
+            //         this.slides.eq(clickIndex + 1).transition(tSpeed);
+            //       }
+            //       var navActiveSlideLeft = this.slides[clickIndex].offsetLeft;
+            //       this.setTransition(tSpeed);
+            //       if (
+            //         navActiveSlideLeft <
+            //         (clientWidth - parseInt(navSlideWidth)) / 2
+            //       ) {
+            //         this.setTranslate(0);
+            //       } else if (
+            //         navActiveSlideLeft >
+            //         navWidth - (parseInt(navSlideWidth) + clientWidth) / 2
+            //       ) {
+            //         this.setTranslate(clientWidth - navWidth);
+            //       } else {
+            //         this.setTranslate(
+            //           (clientWidth - parseInt(navSlideWidth)) / 2 - navActiveSlideLeft
+            //         );
+            //       }
+            //     }
+            //   }
+            // }
+        }
     },
-    xuanzechange() {
-      if (this.isok) {
-        this.getconent();
-      } else {
-        this.getlist();
-      }
+    created() {
+        this.getnav()
+        this.getconent()
+        this.getadders()
+        this.getconents()
     },
-    goshowone(id) {
-      localStorage.setItem("nid", id);
-      this.$router.push({ path: "/workshow", query: { id: id } });
-    },
-    changes() {
-      this.$router.push({ path: "/registrationinformation" });
-    },
-    goshow(id) {
-      localStorage.setItem("nid", id);
-      this.$router.push({ path: "/workshow", query: { id: id } });
-    },
-    changeone() {
-      this.isok = true;
-      this.input3 = "";
-      this.num = -1;
-      this.getconent();
-    },
-    async getnav() {
-      const res = await gettingnavigation();
-      const data = res.data.list;
-      this.datas = data;
-    },
-    changeisok(index, code) {
-      this.isok = false;
-      this.input3 = "";
-      this.num = index;
-      this.code = code;
-      this.pages.pageNum = 1;
-      this.getlist();
-    },
-    async getlist() {
-      this.isLoading = true;
-      const list = await getjidi(
-        {
-          specialTypeId: this.code,
-          name: this.input3,
-          provinceId: this.value,
-          cityId: this.value1,
-          areaId: this.value2
+    watch: {
+        'goods.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = true
+                } else {
+                    this.nomore = false
+                }
+            },
+            deep: true
         },
-        this.pages
-      );
-      this.lists = list.data.entity.resultData;
-      this.totalNum = list.data.entity.totalNum;
-    },
-    async getconents() {
-      const good = await gettingbase({}, this.pages);
-      let goods = good.data.entity.resultData;
-      this.goodsover = goods;
-    },
-    async getconent() {
-      const good = await gettingbase(
-        {
-          name: this.input3,
-          provinceId: this.value,
-          cityId: this.value1,
-          areaId: this.value2
+        'goodsover.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomorethr = true
+                } else {
+                    this.nomorethr = false
+                }
+            },
+            deep: true
         },
-        this.pages
-      );
-      let goods = good.data.entity.resultData;
-      this.goods = goods;
-      this.totalNum = good.data.entity.totalNum;
+        'lists.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomoretwo = true
+                } else {
+                    this.nomoretwo = false
+                }
+            },
+            deep: true
+        }
+    },
+    methods: {
+        getaddres(value) {
+            this.value = value[0].code
+            this.value1 = value[1].code
+            this.value2 = value[2].code
+            if (this.isok) {
+                this.getconent()
+            } else {
+                this.getlist()
+            }
+        },
+        resetPage() {
+            this.$set(this.pages, 'pageNum', 1)
+            if (this.isok) {
+                this.getconent()
+            } else {
+                this.getlist()
+            }
+        },
+        async getadders() {
+            let res = await gettingareainterface()
+            let qts = {
+                label: '全部',
+                value: '-1'
+            }
+            this.options = res.data.appendInfo.list.map(v => {
+                return {
+                    value: v.code,
+                    label: v.name
+                }
+            })
+            this.options.unshift(qts)
+        },
+        xuanzechange() {
+            if (this.isok) {
+                this.getconent()
+            } else {
+                this.getlist()
+            }
+        },
+        goshowone(id) {
+            localStorage.setItem('nid', id)
+            this.$router.push({ path: '/workshow', query: { id: id } })
+        },
+        changes() {
+            this.$router.push({ path: '/registrationinformation' })
+        },
+        goshow(id) {
+            localStorage.setItem('nid', id)
+            this.$router.push({ path: '/workshow', query: { id: id } })
+        },
+        changeone() {
+            this.isok = true
+            this.input3 = ''
+            this.num = -1
+            this.getconent()
+        },
+        async getnav() {
+            const res = await gettingnavigation()
+            const data = res.data.list
+            this.datas = data
+        },
+        changeisok(index, code) {
+            this.isok = false
+            this.input3 = ''
+            this.num = index
+            this.code = code
+            this.pages.pageNum = 1
+            this.getlist()
+        },
+        async getlist() {
+            this.isLoading = true
+            const list = await getjidi(
+                {
+                    specialTypeId: this.code,
+                    name: this.input3,
+                    provinceId: this.value,
+                    cityId: this.value1,
+                    areaId: this.value2
+                },
+                this.pages
+            )
+            this.lists = list.data.entity.resultData
+            this.totalNum = list.data.entity.totalNum
+        },
+        async getconents() {
+            const good = await gettingbase({}, this.pages)
+            let goods = good.data.entity.resultData
+            this.goodsover = goods
+        },
+        async getconent() {
+            const good = await gettingbase(
+                {
+                    name: this.input3,
+                    provinceId: this.value,
+                    cityId: this.value1,
+                    areaId: this.value2
+                },
+                this.pages
+            )
+            let goods = good.data.entity.resultData
+            this.goods = goods
+            this.totalNum = good.data.entity.totalNum
+        }
     }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .el-select .el-input {

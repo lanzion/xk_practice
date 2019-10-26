@@ -6,7 +6,7 @@
                 <el-breadcrumb-item>{{activitytitle}}</el-breadcrumb-item>
             </el-breadcrumb>
             <div class="thrnice">
-                <el-image :src="bannerimgurl" fit="cover" style="width: 100%;height:300px">
+                <!-- <el-image :src="bannerimgurl" fit="cover" style="width: 100%;height:300px">
                   <div
                     slot="error"
                     class="image-slot"
@@ -14,7 +14,8 @@
                   >
                     <i class="el-icon-picture-outline"></i>
                   </div>
-                </el-image>
+                </el-image> -->
+                <ov-image :type = 2 :src-data="bannerimgurl"></ov-image>
             </div>
             <div class="nice">
                 <ul>
@@ -41,17 +42,17 @@ export default {
             lomax: 0,
             list: [
                 {
-                    name: '实践介绍',
+                    name: '活动介绍',
                     url: '/colleges'
                 },
                 {
-                    name: '参与院校',
+                    name: '活动参与',
                     url: '/introduce'
                 },
-                {
-                    name: '实践课程',
-                    url: '/curriculum'
-                },
+                // {
+                //     name: '实践课程',
+                //     url: '/curriculum'
+                // },
                 {
                     name: '活动点评',
                     url: '/comment'
@@ -69,10 +70,10 @@ export default {
         }
     },
     computed: {
-        bannerimgurl(){
+        bannerimgurl() {
             return this.$store.state.test.bannerimgurl
         },
-        activitytitle(){
+        activitytitle() {
             return this.$store.state.test.activitytitle
         }
     },

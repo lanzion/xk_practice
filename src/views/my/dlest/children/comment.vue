@@ -41,40 +41,40 @@
   </div>
 </template>
 <script>
-import { getcommentsonactivities } from "@/api/frontstage";
+import { getcommentsonactivities } from '@/api/frontstage'
 export default {
-  // 点评
-  name: "comment",
-  data() {
-    return {
-      datas: "",
-      nomore: false
-    };
-  },
-  created() {
-    this.getcomment();
-  },
-  watch: {
-    "datas.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
+    // 点评
+    name: 'comment',
+    data() {
+        return {
+            datas: '',
+            nomore: false
         }
-      },
-      deep: true
+    },
+    created() {
+        this.getcomment()
+    },
+    watch: {
+        'datas.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = true
+                } else {
+                    this.nomore = false
+                }
+            },
+            deep: true
+        }
+    },
+    methods: {
+        async getcomment() {
+            let id = localStorage.getItem('activeid')
+            let datas = await getcommentsonactivities({ activityId: id }, this.pages)
+            this.datas = datas.data.entity.resultData || []
+            this.totalNum = datas.data.entity.totalNum || 0
+        }
     }
-  },
-  methods: {
-    async getcomment() {
-      let id = localStorage.getItem("activeid");
-      let datas = await getcommentsonactivities({ activityId: id }, this.pages);
-      this.datas = datas.data.entity.resultData || [];
-      this.totalNum = datas.data.entity.totalNum || 0;
-    }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .timeer {

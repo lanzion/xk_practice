@@ -358,556 +358,556 @@
   </div>
 </template>
 <script>
-import SIdentify from "./identify.vue";
-import yanzhengma from "./yanzhengma.vue";
-import { mapState, mapGetters } from "vuex";
+import SIdentify from './identify.vue'
+import yanzhengma from './yanzhengma.vue'
+import { mapState, mapGetters } from 'vuex'
 import {
-  getlistofcoursedetails,
-  getworkreviewlist,
-  getworkresponse,
-  getcommentsontheworks,
-  getworksharing,
-  getworksreview,
-  getcomments,
-  workreviewreport,
-  getcommentreply
-} from "@/api/frontstage";
+    getlistofcoursedetails,
+    getworkreviewlist,
+    getworkresponse,
+    getcommentsontheworks,
+    getworksharing,
+    getworksreview,
+    getcomments,
+    workreviewreport,
+    getcommentreply
+} from '@/api/frontstage'
 export default {
-  name: "listsdetail",
-  data() {
-    return {
-      flag: true, //该值变化，就会触发刷新
-      code: "", //刷新后的验证码
-      flagtwo: true, //该值变化，就会触发刷新
-      codetwo: "", //刷新后的验证码
-      content: "",
-      arr: ["学生", "教师"],
-      svn: "",
-      gith: "",
-      datas: "",
-      goods: "",
-      imgurls: "",
-      videourls: "",
-      inputover: "",
-      isok: false,
-      issgow: true,
-      num: 0,
-      placeholder: "",
-      placeholdertwo: "",
-      commentlist: [],
-      responselist: [],
-      textareawork: "",
-      dialogTableVisible: false,
-      dialogFormVisible: false,
-      formLabelWidth: "120px",
-      dianzan: require("../../../../static/img/dianzan.png"),
-      dianzan02: require("../../../../static/img/dianzan02.png"),
-      huifu: require("../../../../static/img/pingjiahui.png"),
-      jubao: require("../../../../static/img/tpusu.png"),
-      input1: "",
-      dialogFormVisible: false,
-      conent: "",
-      formLabelWidth: "120px",
-      conentover: "",
-      workId: "",
-      conentthr: "",
-      centerDialogVisible: false,
-      myurl: "",
-      nomore: false,
-      nomoretwo: false,
-      nomorethr: false,
-      userId: ""
-    };
-  },
-  components: {
-    SIdentify,
-    yanzhengma
-  }, // 验证码初始化
-  mounted() {
-    this.flag = !this.flag;
-    this.flagtwo = !this.flagtwo;
-  },
-  computed: {
-    ...mapState("login", {
-      form: state => (state.baseInfo || {}).baseInfo || {}
-    })
-  },
-  created() {
-    this.getlist();
-    this.getcommentlist();
-    this.userId = localStorage.getItem("xk_practice_uid") || "";
-  },
-  watch: {
-    "datas.picResources": {
-      handler(newval, oldval) {
-        if (newval === null) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
+    name: 'listsdetail',
+    data() {
+        return {
+            flag: true, // 该值变化，就会触发刷新
+            code: '', // 刷新后的验证码
+            flagtwo: true, // 该值变化，就会触发刷新
+            codetwo: '', // 刷新后的验证码
+            content: '',
+            arr: ['学生', '教师'],
+            svn: '',
+            gith: '',
+            datas: '',
+            goods: '',
+            imgurls: '',
+            videourls: '',
+            inputover: '',
+            isok: false,
+            issgow: true,
+            num: 0,
+            placeholder: '',
+            placeholdertwo: '',
+            commentlist: [],
+            responselist: [],
+            textareawork: '',
+            dialogTableVisible: false,
+            dialogFormVisible: false,
+            formLabelWidth: '120px',
+            dianzan: require('../../../../static/img/dianzan.png'),
+            dianzan02: require('../../../../static/img/dianzan02.png'),
+            huifu: require('../../../../static/img/pingjiahui.png'),
+            jubao: require('../../../../static/img/tpusu.png'),
+            input1: '',
+            dialogFormVisible: false,
+            conent: '',
+            formLabelWidth: '120px',
+            conentover: '',
+            workId: '',
+            conentthr: '',
+            centerDialogVisible: false,
+            myurl: '',
+            nomore: false,
+            nomoretwo: false,
+            nomorethr: false,
+            userId: ''
         }
-      },
-      deep: true
     },
-    commentlist: {
-      handler(newval, oldval) {
-        // console.log(newval);
-        if (newval === null) {
-          this.nomoretwo = true;
-        } else {
-          this.nomoretwo = false;
-        }
-      },
-      deep: true
+    components: {
+        SIdentify,
+        yanzhengma
+    }, // 验证码初始化
+    mounted() {
+        this.flag = !this.flag
+        this.flagtwo = !this.flagtwo
     },
-    "goods.length": {
-      handler(newval, oldval) {
-        if (newval == 0 || newval == null) {
-          this.nomorethr = true;
-        } else {
-          this.nomorethr = false;
-        }
-      },
-      deep: true
-    }
-  },
-  methods: {
-    refreshCode() {
-      this.flag = !this.flag;
+    computed: {
+        ...mapState('login', {
+            form: state => (state.baseInfo || {}).baseInfo || {}
+        })
     },
-    refreshCodetwo() {
-      this.flagtwo = !this.flagtwo;
+    created() {
+        this.getlist()
+        this.getcommentlist()
+        this.userId = localStorage.getItem('xk_practice_uid') || ''
     },
-    getMakedCode(code) {
-      this.code = code;
-    },
-    getMakedCodetwo(codetwo) {
-      this.codetwo = codetwo;
-    },
-    change(index, name) {
-      this.svn = index;
-      this.placeholder = `回复 @${name}`;
-    },
-    changesno() {
-      this.svn = "";
-    },
-    overmove(index, name) {
-      this.gith = index;
-      this.placeholdertwo = `回复 @${name}`;
-    },
-    overmoveno() {
-      this.gith = "";
-    },
-    imgover() {
-      this.issgow = true;
-    },
-    videoover() {
-      this.issgow = false;
-    },
-    giveimg(item, index) {
-      this.$refs.imgsrc.src = item.resourceId;
-      this.num = index;
-    },
-    async getlist() {
-      let uid = this.$route.query.id;
-      let kid = localStorage.getItem("did");
-      let id = "";
-      if (uid) {
-        id = uid;
-      } else {
-        id = kid;
-      }
-      this.workId = id;
-      let res = await getlistofcoursedetails({ id: id });
-      this.datas = res.data.entity;
-
-      if (this.datas.picResources) {
-        this.imgurls = this.datas.picResources[0].resourceId;
-      }
-      if (this.datas.accResources) {
-        this.videourls = this.datas.accResources[0].resourceId;
-      }
-      this.goods = JSON.parse(sessionStorage.getItem("listmore"));
-    },
-    async getcommentlist() {
-      let uid = this.$route.query.id;
-      let kid = localStorage.getItem("did");
-      let id = "";
-      if (uid) {
-        id = uid;
-      } else {
-        id = kid;
-      }
-      let commentlists = await getworkreviewlist(
-        {
-          workId: id
+    watch: {
+        'datas.picResources': {
+            handler(newval, oldval) {
+                if (newval === null) {
+                    this.nomore = true
+                } else {
+                    this.nomore = false
+                }
+            },
+            deep: true
         },
-        this.pages
-      );
-      let aArr = commentlists.data.entity.resultData;
-      this.commentlist = aArr;
-      let bArr = [];
-      aArr.forEach(async item => {
-        let data = {
-          pId: item.id
-        };
-        let res = await getworkresponse(data, this.pages);
-        if (res.data.code !== 200) {
-        } else {
-          bArr = res.data.entity.resultData;
-          item.children = bArr;
-          this.$set(this.commentlist, item.children, bArr);
-        }
-      });
-    },
-    gomore() {
-      this.$router.push({ path: "/textworks" });
-    },
-    async dianzanone(hasPraise, id) {
-      if (this.userId) {
-        // if (hasPraise === false) {
-        //   let res = await getcommentsontheworks({ workId: id });
-        //   if (res.data.code === 200) {
-        //     this.getlist(id);
-        //     this.$alert("点赞成功", "点赞", {
-        //       confirmButtonText: "确定"
-        //     });
-        //   } else {
-        //   }
-        // } else {
-        //   this.$alert("您已经点过赞了！", "点赞", {
-        //     confirmButtonText: "确定"
-        //   });
-        // }
-        let res = await getcommentsontheworks({ workId: id });
-        if (res.data.code === 200) {
-          this.getlist();
-        }
-      } else {
-        this.$confirm("您还没有登录，请先登录", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-          .then(() => {
-            this.$message({
-              type: "success",
-              message: "请登录"
-            });
-            this.$router.push({ path: "/login" });
-          })
-          .catch(() => {
-            this.$message({
-              type: "info",
-              message: "已取消登录"
-            });
-          });
-      }
-    },
-    async fenxiang(id) {
-      if (this.userId) {
-        this.myurl = window.location.href;
-        this.centerDialogVisible = true;
-        let res = await getworksharing({ id: id });
-        this.getlist();
-      } else {
-        this.$confirm("您还没有登录，请先登录", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-          .then(() => {
-            this.$message({
-              type: "success",
-              message: "请登录"
-            });
-            this.$router.push({ path: "/login" });
-          })
-          .catch(() => {
-            this.$message({
-              type: "info",
-              message: "已取消登录"
-            });
-          });
-      }
-    },
-    async dianzantwo(sum, id) {
-      if (this.userId) {
-        // if (sum === false) {
-        //   let res = await getcomments({ commentId: id });
-        //   if (res.data.code === 200) {
-        //     this.getlist();
-        //     this.getcommentlist();
-        //     this.$alert("点赞成功", "点赞", {
-        //       confirmButtonText: "确定"
-        //     });
-        //   } else {
-        //   }
-        // } else {
-        //   this.$alert("您已经点过赞了！", "点赞", {
-        //     confirmButtonText: "确定"
-        //   });
-        // }
-        let res = await getcomments({ commentId: id });
-        if (res.data.code === 200) {
-          this.getlist();
-          this.getcommentlist();
-        }
-      } else {
-        this.$confirm("您还没有登录，请先登录", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-          .then(() => {
-            this.$message({
-              type: "success",
-              message: "请登录"
-            });
-            this.$router.push({ path: "/login" });
-          })
-          .catch(() => {
-            this.$message({
-              type: "info",
-              message: "已取消登录"
-            });
-          });
-      }
-    },
-    async getchange(id) {
-      let res = await getlistofcoursedetails({ id: id });
-      this.datas = res.data.entity;
-      let commentlists = await getworkreviewlist(
-        {
-          workId: id
+        commentlist: {
+            handler(newval, oldval) {
+                // console.log(newval);
+                if (newval === null) {
+                    this.nomoretwo = true
+                } else {
+                    this.nomoretwo = false
+                }
+            },
+            deep: true
         },
-        this.pages
-      );
-      let aArr = commentlists.data.entity.resultData;
-      this.commentlist = aArr;
-      let bArr = [];
-      aArr.forEach(async item => {
-        let data = {
-          pId: item.id
-        };
-        let res = await getworkresponse(data, this.pages);
-
-        bArr = res.data.entity.resultData;
-        item.children = bArr;
-        this.$set(this.commentlist, item.children, bArr);
-      });
+        'goods.length': {
+            handler(newval, oldval) {
+                if (newval == 0 || newval == null) {
+                    this.nomorethr = true
+                } else {
+                    this.nomorethr = false
+                }
+            },
+            deep: true
+        }
     },
-    async open(id) {
-      if (this.userId) {
-        if (this.textareawork) {
-          if (this.inputover == this.code) {
-            let res = await getworksreview({
-              workId: id,
-              content: this.textareawork
-            });
-            if (res.data.code === 200) {
-              this.$alert("评论成功", "评论", {
-                confirmButtonText: "确定"
-              });
-              this.textareawork = "";
-              this.inputover = "";
-              this.refreshCode();
-              this.getcommentlist();
+    methods: {
+        refreshCode() {
+            this.flag = !this.flag
+        },
+        refreshCodetwo() {
+            this.flagtwo = !this.flagtwo
+        },
+        getMakedCode(code) {
+            this.code = code
+        },
+        getMakedCodetwo(codetwo) {
+            this.codetwo = codetwo
+        },
+        change(index, name) {
+            this.svn = index
+            this.placeholder = `回复 @${name}`
+        },
+        changesno() {
+            this.svn = ''
+        },
+        overmove(index, name) {
+            this.gith = index
+            this.placeholdertwo = `回复 @${name}`
+        },
+        overmoveno() {
+            this.gith = ''
+        },
+        imgover() {
+            this.issgow = true
+        },
+        videoover() {
+            this.issgow = false
+        },
+        giveimg(item, index) {
+            this.$refs.imgsrc.src = item.resourceId
+            this.num = index
+        },
+        async getlist() {
+            let uid = this.$route.query.id
+            let kid = localStorage.getItem('did')
+            let id = ''
+            if (uid) {
+                id = uid
+            } else {
+                id = kid
             }
-          } else {
-            this.$alert("验证码不正确", "验证码", {
-              confirmButtonText: "确定"
-            });
-          }
-        } else {
-          this.$alert("评论不能为空", "评论", {
-            confirmButtonText: "确定"
-          });
-        }
-      } else {
-        this.$confirm("您还没有登录，请先登录", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-          .then(() => {
-            this.$message({
-              type: "success",
-              message: "请登录"
-            });
-            this.$router.push({ path: "/login" });
-          })
-          .catch(() => {
-            this.$message({
-              type: "info",
-              message: "已取消登录"
-            });
-          });
-      }
-    },
-    async letgo(id) {
-      if (this.userId) {
-        if (this.conent) {
-          this.dialogFormVisible = false;
-          let res = await workreviewreport({
-            commentId: id,
-            content: this.conent
-          });
-          if (res.data.code === 200) {
-            this.$message({
-              message: "举报成功",
-              type: "success"
-            });
-          } else {
-            this.$message({
-              message: "举报失败",
-              type: "warning"
-            });
-          }
-        }
-      } else {
-        this.$confirm("您还没有登录，请先登录", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-          .then(() => {
-            this.$message({
-              type: "success",
-              message: "请登录"
-            });
-            this.$router.push({ path: "/login" });
-          })
-          .catch(() => {
-            this.$message({
-              type: "info",
-              message: "已取消登录"
-            });
-          });
-      }
-    },
-    async huifulist(id) {
-      if (this.userId) {
-        if (this.conentover) {
-          let res = await getcommentreply({
-            workId: this.workId,
-            pId: id,
-            replyCommentId: id,
-            content: this.conentover
-          });
+            this.workId = id
+            let res = await getlistofcoursedetails({ id: id })
+            this.datas = res.data.entity
 
-          if (res.data.code === 200) {
+            if (this.datas.picResources) {
+                this.imgurls = this.datas.picResources[0].resourceId
+            }
+            if (this.datas.accResources) {
+                this.videourls = this.datas.accResources[0].resourceId
+            }
+            this.goods = JSON.parse(sessionStorage.getItem('listmore'))
+        },
+        async getcommentlist() {
+            let uid = this.$route.query.id
+            let kid = localStorage.getItem('did')
+            let id = ''
+            if (uid) {
+                id = uid
+            } else {
+                id = kid
+            }
+            let commentlists = await getworkreviewlist(
+                {
+                    workId: id
+                },
+                this.pages
+            )
+            let aArr = commentlists.data.entity.resultData
+            this.commentlist = aArr
+            let bArr = []
+            aArr.forEach(async item => {
+                let data = {
+                    pId: item.id
+                }
+                let res = await getworkresponse(data, this.pages)
+                if (res.data.code !== 200) {
+                } else {
+                    bArr = res.data.entity.resultData
+                    item.children = bArr
+                    this.$set(this.commentlist, item.children, bArr)
+                }
+            })
+        },
+        gomore() {
+            this.$router.push({ path: '/textworks' })
+        },
+        async dianzanone(hasPraise, id) {
+            if (this.userId) {
+                // if (hasPraise === false) {
+                //   let res = await getcommentsontheworks({ workId: id });
+                //   if (res.data.code === 200) {
+                //     this.getlist(id);
+                //     this.$alert("点赞成功", "点赞", {
+                //       confirmButtonText: "确定"
+                //     });
+                //   } else {
+                //   }
+                // } else {
+                //   this.$alert("您已经点过赞了！", "点赞", {
+                //     confirmButtonText: "确定"
+                //   });
+                // }
+                let res = await getcommentsontheworks({ workId: id })
+                if (res.data.code === 200) {
+                    this.getlist()
+                }
+            } else {
+                this.$confirm('您还没有登录，请先登录', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '请登录'
+                        })
+                        this.$router.push({ path: '/login' })
+                    })
+                    .catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消登录'
+                        })
+                    })
+            }
+        },
+        async fenxiang(id) {
+            if (this.userId) {
+                this.myurl = window.location.href
+                this.centerDialogVisible = true
+                let res = await getworksharing({ id: id })
+                this.getlist()
+            } else {
+                this.$confirm('您还没有登录，请先登录', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '请登录'
+                        })
+                        this.$router.push({ path: '/login' })
+                    })
+                    .catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消登录'
+                        })
+                    })
+            }
+        },
+        async dianzantwo(sum, id) {
+            if (this.userId) {
+                // if (sum === false) {
+                //   let res = await getcomments({ commentId: id });
+                //   if (res.data.code === 200) {
+                //     this.getlist();
+                //     this.getcommentlist();
+                //     this.$alert("点赞成功", "点赞", {
+                //       confirmButtonText: "确定"
+                //     });
+                //   } else {
+                //   }
+                // } else {
+                //   this.$alert("您已经点过赞了！", "点赞", {
+                //     confirmButtonText: "确定"
+                //   });
+                // }
+                let res = await getcomments({ commentId: id })
+                if (res.data.code === 200) {
+                    this.getlist()
+                    this.getcommentlist()
+                }
+            } else {
+                this.$confirm('您还没有登录，请先登录', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '请登录'
+                        })
+                        this.$router.push({ path: '/login' })
+                    })
+                    .catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消登录'
+                        })
+                    })
+            }
+        },
+        async getchange(id) {
+            let res = await getlistofcoursedetails({ id: id })
+            this.datas = res.data.entity
+            let commentlists = await getworkreviewlist(
+                {
+                    workId: id
+                },
+                this.pages
+            )
+            let aArr = commentlists.data.entity.resultData
+            this.commentlist = aArr
+            let bArr = []
+            aArr.forEach(async item => {
+                let data = {
+                    pId: item.id
+                }
+                let res = await getworkresponse(data, this.pages)
+
+                bArr = res.data.entity.resultData
+                item.children = bArr
+                this.$set(this.commentlist, item.children, bArr)
+            })
+        },
+        async open(id) {
+            if (this.userId) {
+                if (this.textareawork) {
+                    if (this.inputover == this.code) {
+                        let res = await getworksreview({
+                            workId: id,
+                            content: this.textareawork
+                        })
+                        if (res.data.code === 200) {
+                            this.$alert('评论成功', '评论', {
+                                confirmButtonText: '确定'
+                            })
+                            this.textareawork = ''
+                            this.inputover = ''
+                            this.refreshCode()
+                            this.getcommentlist()
+                        }
+                    } else {
+                        this.$alert('验证码不正确', '验证码', {
+                            confirmButtonText: '确定'
+                        })
+                    }
+                } else {
+                    this.$alert('评论不能为空', '评论', {
+                        confirmButtonText: '确定'
+                    })
+                }
+            } else {
+                this.$confirm('您还没有登录，请先登录', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '请登录'
+                        })
+                        this.$router.push({ path: '/login' })
+                    })
+                    .catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消登录'
+                        })
+                    })
+            }
+        },
+        async letgo(id) {
+            if (this.userId) {
+                if (this.conent) {
+                    this.dialogFormVisible = false
+                    let res = await workreviewreport({
+                        commentId: id,
+                        content: this.conent
+                    })
+                    if (res.data.code === 200) {
+                        this.$message({
+                            message: '举报成功',
+                            type: 'success'
+                        })
+                    } else {
+                        this.$message({
+                            message: '举报失败',
+                            type: 'warning'
+                        })
+                    }
+                }
+            } else {
+                this.$confirm('您还没有登录，请先登录', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '请登录'
+                        })
+                        this.$router.push({ path: '/login' })
+                    })
+                    .catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消登录'
+                        })
+                    })
+            }
+        },
+        async huifulist(id) {
+            if (this.userId) {
+                if (this.conentover) {
+                    let res = await getcommentreply({
+                        workId: this.workId,
+                        pId: id,
+                        replyCommentId: id,
+                        content: this.conentover
+                    })
+
+                    if (res.data.code === 200) {
+                        this.$message({
+                            message: '回复成功',
+                            type: 'success'
+                        })
+                    }
+                    this.getcommentlist(id)
+                    this.conentover = ''
+                }
+            } else {
+                this.$confirm('您还没有登录，请先登录', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '请登录'
+                        })
+                        this.$router.push({ path: '/login' })
+                    })
+                    .catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消登录'
+                        })
+                    })
+            }
+        },
+        async huifuthr(pId, replyCommentId) {
+            if (this.userId) {
+                let res = await getcommentreply({
+                    workId: this.workId,
+                    pId: pId,
+                    replyCommentId: replyCommentId,
+                    content: this.conentthr
+                })
+                if (res.data.code === 200) {
+                    this.$message({
+                        message: '回复成功',
+                        type: 'success'
+                    })
+                    this.getcommentlist()
+                    this.conentthr = ''
+                }
+            } else {
+                this.$confirm('您还没有登录，请先登录', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '请登录'
+                        })
+                        this.$router.push({ path: '/login' })
+                    })
+                    .catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消登录'
+                        })
+                    })
+            }
+        },
+        async dianzanthrwo(hasPraise, id) {
+            if (this.userId) {
+                if (hasPraise === false) {
+                    let res = await getcomments({ commentId: id })
+                    if (res.data.code === 200) {
+                        this.getcommentlist()
+                        this.$alert('点赞成功', '点赞', {
+                            confirmButtonText: '确定'
+                        })
+                    } else {
+                    }
+                } else {
+                    this.$alert('您已经点过赞了！', '点赞', {
+                        confirmButtonText: '确定'
+                    })
+                }
+            } else {
+                this.$confirm('您还没有登录，请先登录', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '请登录'
+                        })
+                        this.$router.push({ path: '/login' })
+                    })
+                    .catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消登录'
+                        })
+                    })
+            }
+        },
+        onCopy() {
             this.$message({
-              message: "回复成功",
-              type: "success"
-            });
-          }
-          this.getcommentlist(id);
-          this.conentover = "";
-        }
-      } else {
-        this.$confirm("您还没有登录，请先登录", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-          .then(() => {
-            this.$message({
-              type: "success",
-              message: "请登录"
-            });
-            this.$router.push({ path: "/login" });
-          })
-          .catch(() => {
-            this.$message({
-              type: "info",
-              message: "已取消登录"
-            });
-          });
-      }
-    },
-    async huifuthr(pId, replyCommentId) {
-      if (this.userId) {
-        let res = await getcommentreply({
-          workId: this.workId,
-          pId: pId,
-          replyCommentId: replyCommentId,
-          content: this.conentthr
-        });
-        if (res.data.code === 200) {
-          this.$message({
-            message: "回复成功",
-            type: "success"
-          });
-          this.getcommentlist();
-          this.conentthr = "";
-        }
-      } else {
-        this.$confirm("您还没有登录，请先登录", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-          .then(() => {
-            this.$message({
-              type: "success",
-              message: "请登录"
-            });
-            this.$router.push({ path: "/login" });
-          })
-          .catch(() => {
-            this.$message({
-              type: "info",
-              message: "已取消登录"
-            });
-          });
-      }
-    },
-    async dianzanthrwo(hasPraise, id) {
-      if (this.userId) {
-        if (hasPraise === false) {
-          let res = await getcomments({ commentId: id });
-          if (res.data.code === 200) {
-            this.getcommentlist();
-            this.$alert("点赞成功", "点赞", {
-              confirmButtonText: "确定"
-            });
-          } else {
-          }
-        } else {
-          this.$alert("您已经点过赞了！", "点赞", {
-            confirmButtonText: "确定"
-          });
-        }
-      } else {
-        this.$confirm("您还没有登录，请先登录", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-          .then(() => {
-            this.$message({
-              type: "success",
-              message: "请登录"
-            });
-            this.$router.push({ path: "/login" });
-          })
-          .catch(() => {
-            this.$message({
-              type: "info",
-              message: "已取消登录"
-            });
-          });
-      }
-    },
-    onCopy() {
-      this.$message({
-        message: `复制成功！`,
-        type: "success"
-      });
-    },
-    onError() {}
-  }
-};
+                message: `复制成功！`,
+                type: 'success'
+            })
+        },
+        onError() {}
+    }
+}
 </script>
 <style lang="scss" scoped>
 img{

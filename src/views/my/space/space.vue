@@ -38,102 +38,102 @@
 </template>
 <script>
 // 我的空间
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
-  name: "community",
-  data() {
-    return {
-      code: "",
-      navlistteach: [
-        {
-          name: "实践课堂",
-          path: "/classroom"
-        },
-        {
-          name: "作品管理",
-          path: "/agment"
-        },
-        {
-          name: "作品评分",
-          path: "/wscoring"
-        },
-        {
-          name: "学生管理",
-          path: "/mgtudent"
-        },
-        {
-          name: "基本资料",
-          path: "/bsinfor"
-        },
-        {
-          name: "头像设置",
-          path: "/avatar"
-        },
-        {
-          name: "账号安全",
-          path: "/accountsecurity"
+    name: 'community',
+    data() {
+        return {
+            code: '',
+            navlistteach: [
+                {
+                    name: '实践课堂',
+                    path: '/classroom'
+                },
+                {
+                    name: '作品管理',
+                    path: '/agment'
+                },
+                {
+                    name: '作品评分',
+                    path: '/wscoring'
+                },
+                {
+                    name: '学生管理',
+                    path: '/mgtudent'
+                },
+                {
+                    name: '基本资料',
+                    path: '/bsinfor'
+                },
+                {
+                    name: '头像设置',
+                    path: '/avatar'
+                },
+                {
+                    name: '账号安全',
+                    path: '/accountsecurity'
+                }
+            ],
+            navliststds: [
+                {
+                    name: '我的课程',
+                    path: '/mycourse'
+                },
+                {
+                    name: '我的作品',
+                    path: '/mywork'
+                },
+                {
+                    name: '自我评价',
+                    path: '/selfevaluation'
+                },
+                {
+                    name: '评价他人',
+                    path: '/evaluatingothers'
+                },
+                {
+                    name: '档案袋',
+                    path: '/archives'
+                },
+                {
+                    name: '基本资料',
+                    path: '/bsinfor'
+                },
+                {
+                    name: '头像设置',
+                    path: '/avatar'
+                },
+                {
+                    name: '账号安全',
+                    path: '/accountsecurity'
+                }
+            ]
         }
-      ],
-      navliststds: [
-        {
-          name: "我的课程",
-          path: "/mycourse"
+    },
+    created() {
+        this.code = this.$store.state.login.identity
+    },
+    computed: {
+        isok() {
+            return this.$store.state.test.isok
         },
-        {
-          name: "我的作品",
-          path: "/mywork"
+        gettitle() {
+            return this.$store.state.test.title
         },
-        {
-          name: "自我评价",
-          path: "/selfevaluation"
-        },
-        {
-          name: "评价他人",
-          path: "/evaluatingothers"
-        },
-        {
-          name: "档案袋",
-          path: "/archives"
-        },
-        {
-          name: "基本资料",
-          path: "/bsinfor"
-        },
-        {
-          name: "头像设置",
-          path: "/avatar"
-        },
-        {
-          name: "账号安全",
-          path: "/accountsecurity"
+        ...mapState('dict', {
+            subject: state => (state.subject || {}).dicList || [],
+            auditStatus: state => (state.examineStatus || {}).dicList || [],
+            lockStatus: state => (state.lockStatus || {}).dicList || []
+        })
+    },
+    methods: {
+        change(url) {
+            this.$router.push({
+                path: url
+            })
         }
-      ]
-    };
-  },
-  created() {
-    this.code = this.$store.state.login.identity;
-  },
-  computed: {
-    isok() {
-      return this.$store.state.test.isok;
-    },
-    gettitle() {
-      return this.$store.state.test.title;
-    },
-    ...mapState("dict", {
-      subject: state => (state.subject || {}).dicList || [],
-      auditStatus: state => (state.examineStatus || {}).dicList || [],
-      lockStatus: state => (state.lockStatus || {}).dicList || []
-    })
-  },
-  methods: {
-    change(url) {
-      this.$router.push({
-        path: url
-      });
     }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .community {

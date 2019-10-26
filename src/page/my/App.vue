@@ -19,53 +19,53 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters } from 'vuex'
 
 export default {
-  name: "App",
-   mounted(){
-    function checkIE(){
-      return '-ms-scroll-limit' in document.documentElement.style && '-ms-ime-align' in document.documentElement.style
-    }
-    if (checkIE()) {
-      window.addEventListener('hashchange', () => {
-        var currentPath = window.location.hash.slice(1);
-        if (this.$route.path !== currentPath) {
-        this.$router.push(currentPath)
-      }
-    }, false)
-    }
-  },
-  data() {
-    return {
-      permiss: [],
-      // 面包屑
-      breadcrumb: []
-    };
-  },
-  components: {
-    "g-header": resolve =>
-      require(["@/components/index/common/header"], resolve),
-    "g-footer": resolve =>
-      require(["@/components/index/common/footer"], resolve),
-    "side-tools": resolve =>
-      require(["@/components/common/side-tools"], resolve),
-    "aside-menu": resolve => require(["@/components/my/common/aside"], resolve)
-  },
-  computed: {
-    istrue() {
-      return this.$store.state.test.istrue;
+    name: 'App',
+    mounted() {
+        function checkIE() {
+            return '-ms-scroll-limit' in document.documentElement.style && '-ms-ime-align' in document.documentElement.style
+        }
+        if (checkIE()) {
+            window.addEventListener('hashchange', () => {
+                var currentPath = window.location.hash.slice(1)
+                if (this.$route.path !== currentPath) {
+                    this.$router.push(currentPath)
+                }
+            }, false)
+        }
     },
-    ...mapGetters("login", {
-      identity: "identityCode"
-    }),
-    ...mapState("login", {
-      // 用户信息
-      user: state => state.userInfo || {},
-      permission: state => state.permission || {}
-    })
-  },
-  watch: {
+    data() {
+        return {
+            permiss: [],
+            // 面包屑
+            breadcrumb: []
+        }
+    },
+    components: {
+        'g-header': resolve =>
+            require(['@/components/index/common/header'], resolve),
+        'g-footer': resolve =>
+            require(['@/components/index/common/footer'], resolve),
+        'side-tools': resolve =>
+            require(['@/components/common/side-tools'], resolve),
+        'aside-menu': resolve => require(['@/components/my/common/aside'], resolve)
+    },
+    computed: {
+        istrue() {
+            return this.$store.state.test.istrue
+        },
+        ...mapGetters('login', {
+            identity: 'identityCode'
+        }),
+        ...mapState('login', {
+            // 用户信息
+            user: state => state.userInfo || {},
+            permission: state => state.permission || {}
+        })
+    },
+    watch: {
     // 'user.id': {
     //     handler: function (id) {
     //         if (!id) {
@@ -74,27 +74,26 @@ export default {
     //     },
     //     immediate: true
     // },
-    identity: {
-      handler: function(identity) {
-        if (identity) {
-          this.permiss = Object.values(this.permission[identity] || {});
-          console.log("左侧导航数据：", this.permiss);
-        }
-      },
-      immediate: true
-    },
+        identity: {
+            handler: function (identity) {
+                if (identity) {
+                    this.permiss = Object.values(this.permission[identity] || {})
+                    console.log('左侧导航数据：', this.permiss)
+                }
+            },
+            immediate: true
+        },
     // $route: {
     //   handler: function(val, oldval) {
         
     //   },
     //   deep: true
     // }
-  },
-  created() {
-    console.log(this.permission)
-  },
-  methods: {}
-};
+    },
+    created() {
+    },
+    methods: {}
+}
 </script>
 
 <style lang='scss' scoped>

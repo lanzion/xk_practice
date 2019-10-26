@@ -29,31 +29,31 @@
 </template>
 <script>
 export default {
-  name: "wscoring",
-  data() {
-    return {
-      teachernamefen:'',
-      lists: [
-        {
-          name: "未评分",
-          path: "/wscoring/origs"
-        },
-        {
-          name: "已评分",
-          path: "/wscoring/heorigs"
+    name: 'wscoring',
+    data() {
+        return {
+            teachernamefen: '',
+            lists: [
+                {
+                    name: '未评分',
+                    path: '/wscoring/origs'
+                },
+                {
+                    name: '已评分',
+                    path: '/wscoring/heorigs'
+                }
+            ]
         }
-      ]
-    };
-  },
-  methods: {
-    change(url) {
-      this.$router.push({ path: url });
     },
-    getteachername() {
-      this.$store.commit("getteachername", this.teachernamefen);
+    methods: {
+        change(url) {
+            this.$router.push({ path: url })
+        },
+        getteachername() {
+            this.$store.commit('getteachername', this.teachernamefen)
+        }
     }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .classroom_h {

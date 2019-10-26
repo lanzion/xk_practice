@@ -24,34 +24,34 @@
 </template>
 <script>
 export default {
-  name: "evaluatingothers",
-  data() {
-    return {
-      newname:'',
-      lists: [
-        {
-          name: "未评分",
-          path: "/evaluatingothers/evaluateotherswithoutscoring"
-        },
-        {
-          name: "已评分",
-          path: "/evaluatingothers/evaluateothersiscores"
+    name: 'evaluatingothers',
+    data() {
+        return {
+            newname: '',
+            lists: [
+                {
+                    name: '未评分',
+                    path: '/evaluatingothers/evaluateotherswithoutscoring'
+                },
+                {
+                    name: '已评分',
+                    path: '/evaluatingothers/evaluateothersiscores'
+                }
+            ]
         }
-      ]
-    };
-  },
-  created() {
-    this.$store.commit("changetitle", "评价他人");
-  },
-  methods: {
-    change(url) {
-      this.$router.push({ path: url });
     },
-    changenew() {
-       this.$store.commit('changenewname',this.newname)
+    created() {
+        this.$store.commit('changetitle', '评价他人')
+    },
+    methods: {
+        change(url) {
+            this.$router.push({ path: url })
+        },
+        changenew() {
+            this.$store.commit('changenewname', this.newname)
+        }
     }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .classroom_h {

@@ -4,7 +4,7 @@
       <ul>
         <li @click="gotoshow(g.id)" v-for="(g,index) in datas" :key="index">
           <div class="container_img">
-            <el-image :src="g.cover" fit="cover" style="width: 246px;height:176px">
+            <!-- <el-image :src="g.cover" fit="cover" style="width: 246px;height:176px">
               <div
                 slot="error"
                 class="image-slot"
@@ -12,7 +12,8 @@
               >
                 <i class="el-icon-picture-outline"></i>
               </div>
-            </el-image>
+            </el-image> -->
+            <ov-image :src-data="getFileUrl(g.cover)"></ov-image>
           </div>
           <div class="container_conent">
             <p>{{g.title}}</p>
@@ -41,67 +42,65 @@
 </template>
 <script>
 import {
-  getaccesstobasedetails,
-  accesstobaseservicesdetails
-} from "@/api/frontstage";
+    getaccesstobasedetails,
+    accesstobaseservicesdetails
+} from '@/api/frontstage'
 export default {
-  name: "baseservices",
-  data() {
-    return {
-      datas: [],
-      lists: [],
-      nomore: false,
-      pages: {
-        pageNum: 1,
-        pageSize: 8
-      }
-    };
-  },
-  created() {
+    name: 'baseservices',
+    data() {
+        return {
+            datas: [],
+            lists: [],
+            nomore: false,
+            pages: {
+                pageNum: 1,
+                pageSize: 8
+            }
+        }
+    },
+    created() {
     // alert(1231131313)
-    this.getlist();
+        this.getlist()
     // this.lists = JSON.parse(sessionStorage.getItem("xkbase"))
     // console.log(this.lists)
-  },
-  watch: {
-    "datas.length": {
-      handler(newval, oldval) {
-        if (newval === 0 || newval==undefined ) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
-        }
-      },
-      deep: true
-    }
-  },
-  methods: {
-    async getlist() {
-      let nid = localStorage.getItem("nid");
-      let oid = this.$route.query.id;
-      let id = "";
-      if (oid) {
-        id = oid;
-      } else {
-        id = nid;
-      }
-      let res = await accesstobaseservicesdetails({ baseinfoId: id }, this.pages);
-      // console.log(res);
-      if(res.data.code != 200){
-        
-        return
-      }
-      this.datas = res.data.entity.resultData;
-      this.totalNum = res.data.entity.totalNum;
-      
     },
+    watch: {
+        'datas.length': {
+            handler(newval, oldval) {
+                if (newval === 0 || newval == undefined) {
+                    this.nomore = true
+                } else {
+                    this.nomore = false
+                }
+            },
+            deep: true
+        }
+    },
+    methods: {
+        async getlist() {
+            let nid = localStorage.getItem('nid')
+            let oid = this.$route.query.id
+            let id = ''
+            if (oid) {
+                id = oid
+            } else {
+                id = nid
+            }
+            let res = await accesstobaseservicesdetails({ baseinfoId: id }, this.pages)
+            // console.log(res);
+            if (res.data.code != 200) {
+                return
+            }
+            this.datas = res.data.entity.resultData
+            this.totalNum = res.data.entity.totalNum
+        },
 
-    gotoshow(id) {
-      localStorage.setItem("zid", id);
-      this.$router.push({ path: "/basedetails", query: { id: id } });
+        gotoshow(id) {
+            localStorage.setItem('zid', id)
+            this.$router.push({ path: '/basedetails', query: { id: id } })
+        }
     }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .container {

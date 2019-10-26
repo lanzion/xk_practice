@@ -12,7 +12,7 @@
             </div>
             <div class="container_one">
                 <div class="container_one_l">
-                    <el-image :src="datas.cover" style="width: 400px;height:240px">
+                    <!-- <el-image :src="datas.cover" style="width: 400px;height:240px">
                         <div
                             slot="error"
                             class="image-slot"
@@ -20,7 +20,8 @@
                         >
                             <i class="el-icon-picture-outline"></i>
                         </div>
-                    </el-image>
+                    </el-image> -->
+                    <ov-image :src-data="datas.cover"></ov-image>
                 </div>
                 <div class="container_one_r">
                     <div class="container_one_r_header">{{datas.schoolName}}</div>

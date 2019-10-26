@@ -42,65 +42,65 @@
   </div>
 </template>
 <script>
-import { unevaluatedlistforevaluatingothers } from "@/api/frontstage";
+import { unevaluatedlistforevaluatingothers } from '@/api/frontstage'
 export default {
-  name: "evaluateotherswithoutscoring",
-  data() {
-    return {
-      pass: true,
-      code: "",
-      datas: [],
-      nomore: false,
-      pages: {
-        pageNum: 1,
-        pageSize: 9
-      }
-    };
-  },
-  created() {
-    this.getlist();
-  },
-  computed: {
-    newname() {
-      return this.$store.state.test.newname;
-    }
-  },
-  watch: {
-    newname: {
-      handler: function() {
-        this.getlist();
-      }
-    },
-    "datas.length": {
-      handler(newval, oldval) {
-        if (newval === 0) {
-          this.nomore = true;
-        } else {
-          this.nomore = false;
+    name: 'evaluateotherswithoutscoring',
+    data() {
+        return {
+            pass: true,
+            code: '',
+            datas: [],
+            nomore: false,
+            pages: {
+                pageNum: 1,
+                pageSize: 9
+            }
         }
-      },
-      deep: true
-    }
-  },
-  methods: {
-    async getlist() {
-      let res = await unevaluatedlistforevaluatingothers(
-        { cname: this.newname },
-        this.pages
-      );
-      // console.log(res.data.entity.resultData);
-      this.datas = res.data.entity.resultData;
-      this.totalNum = res.data.entity.totalNum;
     },
-    changes(id) {
-      localStorage.setItem("busId", id);
-      this.$router.push({
-        path: "/detailsofselfevaluation",
-        query: { busId: id, type: 1, seetable: false }
-      });
+    created() {
+        this.getlist()
+    },
+    computed: {
+        newname() {
+            return this.$store.state.test.newname
+        }
+    },
+    watch: {
+        newname: {
+            handler: function () {
+                this.getlist()
+            }
+        },
+        'datas.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = true
+                } else {
+                    this.nomore = false
+                }
+            },
+            deep: true
+        }
+    },
+    methods: {
+        async getlist() {
+            let res = await unevaluatedlistforevaluatingothers(
+                { cname: this.newname },
+                this.pages
+            )
+            // console.log(res.data.entity.resultData);
+            this.datas = res.data.entity.resultData
+            this.totalNum = res.data.entity.totalNum
+        },
+        changes(id) {
+            localStorage.setItem('busId', id)
+            this.$router.push({
+                path: '/detailsofselfevaluation',
+                query: { busId: id, type: 1, seetable: false }
+            })
+        }
     }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .uploadworks {
