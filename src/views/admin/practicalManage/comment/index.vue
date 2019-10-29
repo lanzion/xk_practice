@@ -25,7 +25,7 @@
         </div>
         <el-table  ref="table" :data="listData" stripe align="center" v-loading="isLoading" border :header-cell-style="{'background-color':'#eee', 'color':'#666'}">
          
-            <el-table-column prop="activityTitle" label="活动标题" align="center"/>
+            <el-table-column prop="activityTitle" label="活动标题" align="center" sortable show-overflow-tooltip/>
             <el-table-column prop="createDate" label="分配时间" align="center"/>
             <el-table-column prop="schoolName" label="参与学校" align="center"/>
             <el-table-column prop="liaisonMan" label="联系人" align="center"/>

@@ -17,8 +17,7 @@
           >
             <a
               class="link-item"
-              @click="changes(index)"
-              :class="index==numNav?'actives':''"
+              :class="item.url.slice(9) == $route.path.slice(0,item.url.length - 9) ? 'actives':''"
               :href="item.url"
             >{{ item.name }}</a>
           </li>
@@ -99,12 +98,12 @@ export default {
         }
     },
     watch: {
-        '$route.meta.activeIndex': {
-            handler(newval) {
-                this.numNav = newval || 0
-            },
-            deep: true
-        },
+        // '$route.meta.activeIndex': {
+        //     handler(newval) {
+        //         this.numNav = newval || 0
+        //     },
+        //     deep: true
+        // },
         // "user.id": {
         //   handler: function(user) {
         //     const token = this.$cookies.get("token");
@@ -146,7 +145,7 @@ export default {
         }
     },
     created() {
-        this.numNav = this.$route.meta.activeIndex
+        // this.numNav = this.$route.meta.activeIndex
     },
     components: {
         'user-avatar': resolve =>
@@ -160,9 +159,6 @@ export default {
     },
     methods: {
     // 获取导航列表
-        changes(index) {
-            this.numNav = index
-        },
         getNavDatas() {
             requestNavList().then(res => {
                 const { code, appendInfo = {} } = res.data
@@ -186,7 +182,7 @@ export default {
                     },
                     {
                         name: '活动中心',
-                        url: '/my.html#/exercise'
+                        url: '/my.html#/actioncenter'
                     },
                     {
                         name: '通知公告',

@@ -32,8 +32,8 @@
       :header-cell-style="{'background-color':'#eee', 'color':'#666'}"
     >
       <el-table-column label="选择" align="center" type="selection" width="55"></el-table-column>
-      <el-table-column prop="account" label="帐号" align="center" />
-      <el-table-column prop="userName" label="用户名" align="center" />
+      <el-table-column prop="account" label="帐号" align="center" sortable show-overflow-tooltip/>
+      <el-table-column prop="userName" label="用户名" align="center" sortable show-overflow-tooltip/>
       <el-table-column prop="remark" label="备注" align="center" />
       <el-table-column prop="lockStatus" label="状态" align="center">
         <template slot-scope="scope">
@@ -49,8 +49,8 @@
             :index="scope.$index"
             v-bind="{
                         del: { callback: doDel },
-                        detail: { query: { id: 'id'} },
-                        edit:{query:{id:'id'}}
+                        detail: { query: { id: 'id',identity:'identity'} },
+                        edit:{query:{id:'id',identity:'identity'}}
                     }"
           />
         </template>

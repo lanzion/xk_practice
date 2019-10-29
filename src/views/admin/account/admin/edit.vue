@@ -1,12 +1,5 @@
 <template>
-  <el-form
-    ref="form"
-    class="g-form--wrap"
-    label-width="80px"
-    :model="form"
-    :rules="rules"
-  
-  >
+  <el-form ref="form" class="g-form--wrap" label-width="80px" :model="form" :rules="rules">
     <el-form-item label="帐号" prop="account">
       <el-col :span="12">
         <el-input v-model="form.account" placeholder="请输入帐号" :disabled="isReadOnly"></el-input>
@@ -14,14 +7,26 @@
     </el-form-item>
     <el-form-item label="用户名" prop="userName">
       <el-col :span="12">
-        <el-input v-model="form.userName" maxlength="12" placeholder="请输入用户名" :disabled="isReadOnly"></el-input>
+        <el-input
+          v-model="form.userName"
+          maxlength="12"
+          placeholder="请输入用户名"
+          :disabled="isReadOnly"
+        ></el-input>
       </el-col>
     </el-form-item>
-      <el-form-item label="用户头像" prop="cover">
-                <ali-upload  :limit="1" :file-list.sync="cover" :before-upload="beforeUploadCover" accept=".gif,.jpg,.png,.jpeg" :on-change="uploadCover" @remove="remove">
-                                   
-                </ali-upload>
-                 <p class="upload-list-tips">仅支持JPG、GIF、PNG、JPEG格式，文件小于 {{ imgStandardFileSize }} M。像素500 x 500比例</p>
+    <el-form-item label="用户头像" prop="cover">
+      <ali-upload
+        :limit="1"
+        :file-list.sync="cover"
+        :before-upload="beforeUploadCover"
+        accept=".gif, .jpg, .png, .jpeg"
+        :on-change="uploadCover"
+        @remove="remove"
+      ></ali-upload>
+      <p
+        class="upload-list-tips"
+      >仅支持JPG、GIF、PNG、JPEG格式，文件小于 {{ imgStandardFileSize }} M。像素500 x 500比例</p>
     </el-form-item>
     <el-form-item label="备注">
       <el-col :span="20">
@@ -66,7 +71,7 @@
     </el-form-item>
     <el-form-item class="g-operate--box">
       <el-button @click="cancel">取消</el-button>
-      <el-button type="primary" @click="submit"   :loading="isLoading">修改</el-button>
+      <el-button type="primary" @click="submit" :loading="isLoading">修改</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -78,60 +83,57 @@ import {
   validateAccount,
   validateUserName,
   validatePwd
- 
 } from "@/utils/utility/validateRule";
 import { addUser } from "@/api/newApi";
-import { selectDetailByOrgUser,getByPid,modifyUser } from "@/api/resetApi";
+import { selectDetailByOrgUser, getByPid, modifyUser } from "@/api/resetApi";
 
-
-import { uploadFileSize } from '@/mixin/uploadFileSize.js'
-import aliUpload from '@/components/common/upload.vue'
-const identiy = localStorage.getItem('xk_practice_identity');
+import { uploadFileSize } from "@/mixin/uploadFileSize.js";
+import aliUpload from "@/components/common/upload.vue";
+const identiy = localStorage.getItem("xk_practice_identity");
 
 const baseInfo = JSON.parse(localStorage.getItem("xk_practice_baseInfo"));
 
 export default {
-   mixins: [uploadFileSize],
-     components: {
-            'ali-upload': aliUpload
-        },
+  mixins: [uploadFileSize],
+  components: {
+    "ali-upload": aliUpload
+  },
   data() {
     return {
-      schoolName:'',//学校名称
+      schoolName: "", //学校名称
       isSelf: false,
-      identiy:identiy,
+      identiy: identiy,
       noPermiss: false,
       isCheckStrictly: false,
       datas: [],
-      isLoading1:false,
+      isLoading1: false,
       isReadOnly: true,
-      cover:[],
+      cover: [],
       defaultProps: {
         children: "children",
         label: "permissionName"
       },
       lockStatus: [
-       
         {
           id: "0",
           name: "开启"
-        } ,{
+        },
+        {
           id: "1",
           name: "关闭"
-        },
+        }
       ],
       form: {
-        cover:[],
+        cover: [],
         account: "",
         userName: "",
         remark: "",
         baseId: "",
-        lockStatus:'',
-        permissListChcked:[],
+        lockStatus: "",
+        permissListChcked: [],
         permissList: [] //权限列表
       },
       rules: {
-
         lockStatus: [
           {
             required: true,
@@ -142,9 +144,13 @@ export default {
         permissListChcked: [
           { required: true, message: "请选择权限", trigger: "blur" }
         ],
-        cover:[{
-             required: true, message: '请选择头像', trigger: ['change','blur']
-        }],
+        cover: [
+          {
+            required: true,
+            message: "请选择头像",
+            trigger: ["change", "blur"]
+          }
+        ]
       }
     };
   },
@@ -159,83 +165,78 @@ export default {
       deep: true
     }
   },
-  mounted() {
-   
-   
-  },
+  mounted() {},
   created() {
-    this.getDetail()
-    
+    this.getDetail();
   },
   methods: {
-    getDetail(){
-       const id = this.$route.query.id;
-            if (id) {
-               selectDetailByOrgUser({ id,identity:5 }).then(res => {
-                    const { code, entity: datas } = res.data
-                    if (code === 200 && datas) {
-                      
-                      
-                
-                      const formData = {
-                        id:datas.id,
-                        account: datas.account,
-                        userName: datas.userName,
-                        remark: datas.remark,
-                        baseId: datas.baseId,
-                        lockStatus:datas.lockStatus,
-                        permissListChcked:datas.permissList||[],
-                        permissList: datas.permissList||[]//权限列表
-                      };
-                      !datas.face?formData.cover =[]:formData.cover = [datas.face];
-                        this.cover = [{
-                            name: "2.png",
-                            size: 63600,
-                            status: "success",
-                            uploadName: "d77e555877554abab3394032b5922988-1566870608494__2.png",
-                            url: datas.face
-                        }]
-                      this.form = formData;
-                      this.getUpdateRight()
-                        
-                    }
-                }).finally(() => {
-                  
-                })
+    getDetail() {
+      const id = this.$route.query.id;
+      const identity = this.$route.query.identity;
+      if (id) {
+        selectDetailByOrgUser({ id, identity })
+          .then(res => {
+            const { code, entity: datas } = res.data;
+            if (code === 200 && datas) {
+              const formData = {
+                id: datas.id,
+                account: datas.account,
+                userName: datas.userName,
+                remark: datas.remark,
+                baseId: datas.baseId,
+                lockStatus: datas.lockStatus,
+                permissListChcked: datas.permissList || [],
+                permissList: datas.permissList || [] //权限列表
+              };
+              !datas.face
+                ? (formData.cover = [])
+                : (formData.cover = [datas.face]);
+              this.cover = [
+                {
+                  name: "2.png",
+                  size: 63600,
+                  status: "success",
+                  uploadName:
+                    "_2.png",
+                  url: datas.face
+                }
+              ];
+              this.form = formData;
+              this.getUpdateRight();
             }
-       
+          })
+          .finally(() => {});
+      }
     },
-     uploadCover ({ file } = {}) {
-             this.form.cover = this.cover.map((item,index) =>item.url)
-      },
-      remove(file){
-             this.form.cover = [];
-      },
-    getUpdateRight(){
-        this.isLoading1 = true;
-        const formData ={
-            type:'D',
-            baseId:this.form.baseId
-        }
-      
-        getByPid(formData).then(res => {
-                    
-                    const { code, entity: datas } = res.data
-                    if (code === 200 && datas) {
-                     
-                      
-                      const dataArr = datas.filter(o=>o.permissionName=='创客后台管理');
-                      this.datas = dataArr[0].children;
-                       
-                    }
-                 
-                }).finally(() => {
-                      this.isLoading1 = false;
-                })
+    uploadCover({ file } = {}) {
+      this.form.cover = this.cover.map((item, index) => item.url);
+    },
+    remove(file) {
+      this.form.cover = [];
+    },
+    getUpdateRight() {
+      this.isLoading1 = true;
+      const formData = {
+        type: "D",
+        baseId: this.form.baseId
+      };
+
+      getByPid(formData)
+        .then(res => {
+          const { code, entity: datas } = res.data;
+          if (code === 200 && datas) {
+            const dataArr = datas.filter(
+              o => o.permissionName == "创客后台管理"
+            );
+            this.datas = dataArr[0].children;
+          }
+        })
+        .finally(() => {
+          this.isLoading1 = false;
+        });
     },
     //权限勾选
     getPermiss() {
-     
       let arr = [];
       let _data = this.$refs.tree.getCheckedNodes();
       for (let i = 0; i < _data.length; i++) {
@@ -249,32 +250,30 @@ export default {
       return !(data.account.indexOf(value) === "cloud_admin");
     },
     submit() {
-      
       this.$refs.form.validate(valid => {
         if (valid) {
           this.isLoading = true;
 
-       
-           const formList = Object.assign({}, this.form);
-           const  formData={
-              id:formList.id,
-              remark: formList.remark,
-              lockStatus:formList.lockStatus,
-              permissList: formList.permissListChcked,
-              face:this.getFileUrl(formList.cover[0])
-           }
-         
+          const formList = Object.assign({}, this.form);
+          const formData = {
+            id: formList.id,
+            remark: formList.remark,
+            lockStatus: formList.lockStatus,
+            permissList: formList.permissListChcked,
+            face: this.getFileUrl(formList.cover[0])
+          };
+
           modifyUser(formData).then(
             res => {
               // console.log(res);
               if (res.data.code == 200) {
-                  this.$message({
-                        message: `修改成功`,
-                        type: 'success'
-                  })
-                  this.$router.go(-1)
-              }else if(res.data.code == 206){
-                  this.$message.error(response.data.msg)
+                this.$message({
+                  message: `修改成功`,
+                  type: "success"
+                });
+                this.$router.go(-1);
+              } else if (res.data.code == 206) {
+                this.$message.error(response.data.msg);
               }
               this.isLoading = false;
             },
@@ -289,7 +288,7 @@ export default {
     },
 
     cancel() {
-      this.$router.go(-1)
+      this.$router.go(-1);
     }
   }
 };

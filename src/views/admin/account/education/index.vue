@@ -35,8 +35,8 @@
       :header-cell-style="{'background-color':'#eee', 'color':'#666'}"
     >
       <el-table-column label="选择" align="center" type="selection" width="55"></el-table-column>
-      <el-table-column prop="account" label="帐号" align="center" />
-      <el-table-column prop="userName" label="用户名" align="center" />
+      <el-table-column prop="account" label="帐号" align="center" sortable show-overflow-tooltip />
+      <el-table-column prop="userName" label="用户名" align="center" sortable show-overflow-tooltip />
       <el-table-column prop="remark" label="备注" align="center" />
       <el-table-column prop="orgName" label="所属教育局" align="center" />
       <el-table-column prop="lockStatus" label="状态" align="center">
@@ -53,7 +53,7 @@
             :index="scope.$index"
             v-bind="{
                         del: { callback: doDel },
-                        edit:{query:{id:'id'}}
+                        edit:{query:{id:'id' ,identity:'identity'}}
                         
                     }"
           />
@@ -62,11 +62,7 @@
     </el-table>
 
     <!-- 分页 -->
-    <pagination
-      :param="pages"
-      :total="totalNum"
-      @change="getDatas"
-    ></pagination>
+    <pagination :param="pages" :total="totalNum" @change="getDatas"></pagination>
 
     <!-- 重置密码弹窗 -->
     <el-dialog width="500px" title="重置密码" :visible.sync="passwordVisible">
@@ -88,15 +84,15 @@ export default {
   data() {
     return {
       listData: [],
-    
-       form:{
-                provinceId:null,
-                cityId:null,
-                areaId:null,
-                identityList:["6", "7", "10"],
-                account:null,
-                type:"A",
-     },
+
+      form: {
+        provinceId: null,
+        cityId: null,
+        areaId: null,
+        identityList: ["6", "7", "10"],
+        account: null,
+        type: "A"
+      },
       selection: [],
       datas: [],
       detailVisible: false, // 详情弹窗是否可见
@@ -117,13 +113,11 @@ export default {
     this.getDataDict({ code: "subject" });
     this.getDatas();
   },
-  watch: {
-    
-  },
+  watch: {},
   methods: {
     ...mapActions("dict", ["getDataDict"]),
     //跳转到详情
-    
+
     // 重置搜索表单
     resetForm() {},
 
@@ -135,28 +129,27 @@ export default {
 
     // 记录表格选中项
     handleSelectionChange(val) {
-     val.forEach(o =>o.isId =1);
-        this.selection = val;
+      val.forEach(o => (o.isId = 1));
+      this.selection = val;
     },
 
     changeRegion(region) {
       // console.log(region);
-        this.form.provinceId =region[0].code||null;
-        this.form.cityId =region[1].code||null;
-        this.form.areaId =region[2].code||null;
+      this.form.provinceId = region[0].code || null;
+      this.form.cityId = region[1].code || null;
+      this.form.areaId = region[2].code || null;
     },
 
     // 获取列表数据
     async getDatas() {
       this.isLoading = true;
-      const formList = Object.assign({}, this.form)
-      const res = await selectUserList(formList, this.pages)
-    
+      const formList = Object.assign({}, this.form);
+      const res = await selectUserList(formList, this.pages);
 
       try {
         // console.log(res);
         const datas = res.data.entity;
-         this.totalNum = datas.totalNum || 0
+        this.totalNum = datas.totalNum || 0;
         this.listData = datas.resultData;
       } catch (error) {
         this.listData = [];
@@ -194,37 +187,38 @@ export default {
     // 删除操作
     doDel({ data }) {
       const items = data;
-            if (items) {
-                const params = { idList: [items.id] };
-                this.$confirm(`确认删除该数据吗?`, "提示", {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning"
-                }).then(() => {
-                    delUser(params).then(res => {
-                    const { code, msg } = res.data;
-                    if (code === 200) {
-                        this.$message({
-                        message: `删除成功`,
-                        type: "success"
-                        });
-
-                        this.getDatas();
-                    } else {
-                        this.$message({
-                        message: msg || "操作失败",
-                        type: "error"
-                        });
-                    }
-                    });
-                })
-                .catch(() => {});
-            } else {
+      if (items) {
+        const params = { idList: [items.id] };
+        this.$confirm(`确认删除该数据吗?`, "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            delUser(params).then(res => {
+              const { code, msg } = res.data;
+              if (code === 200) {
                 this.$message({
-                message: "请至少选择一条数据!",
-                type: "warning"
+                  message: `删除成功`,
+                  type: "success"
                 });
-            }
+
+                this.getDatas();
+              } else {
+                this.$message({
+                  message: msg || "操作失败",
+                  type: "error"
+                });
+              }
+            });
+          })
+          .catch(() => {});
+      } else {
+        this.$message({
+          message: "请至少选择一条数据!",
+          type: "warning"
+        });
+      }
     },
 
     doStop() {

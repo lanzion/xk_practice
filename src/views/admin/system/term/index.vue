@@ -45,11 +45,11 @@
       </el-table-column>
       <el-table-column label="操作" :width="operateWidth" v-if="listBtnGroup.length">
         <template slot-scope="scope">
-          <v-admin-operate
+          <list-operate
             :items="listBtnGroup"
             :data="scope.row"
             :index="scope.$index"
-            v-bind="{time: editItem, del: deleteItem}"
+            v-bind="{time: editItem, del: { callback: doDel }}"
           />
         </template>
       </el-table-column>
@@ -59,7 +59,7 @@
     <el-dialog title="起止日期" :visible.sync="dialogFormVisible">
       <el-form :model="addForm" label-width="100px">
         <el-form-item label="学年">
-          <el-date-picker v-model="addForm.year" type="year" placeholder="请选择学年"></el-date-picker>
+          <el-date-picker v-model="addForm.year" type="year" placeholder="请选择学年" format="yyyy" value-format="yyyy"></el-date-picker>
         </el-form-item>
         <el-form-item label="学期">
           <el-radio-group v-model="addForm.term">
@@ -68,15 +68,15 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="开始时间">
-          <el-date-picker v-model="addForm.startDate" type="date" placeholder="请选择开始时间"></el-date-picker>
+          <el-date-picker v-model="addForm.startDate" type="date" placeholder="请选择开始时间" format="yyyy-MM-dd" value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
         <el-form-item label="结束时间">
-          <el-date-picker v-model="addForm.endDate" type="date" placeholder="请选择结束时间"></el-date-picker>
+          <el-date-picker v-model="addForm.endDate" type="date" placeholder="请选择结束时间" format="yyyy-MM-dd" value-format="yyyy-MM-dd"></el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button type="primary" @click="doAddTerm">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -84,6 +84,12 @@
 
 <script>
 import permission from "@/mixin/admin-operate";
+import {
+  requestTermList,
+  addTerm,
+  editTerm,
+  deleteTerm
+} from "@/service/admin_system.js";
 export default {
   mixins: [permission],
   data() {
@@ -96,10 +102,23 @@ export default {
     };
   },
   methods: {
-    getDatas() {},
+    async getDatas() {
+      this.isLoading = true;
+      const res = await requestTermList( this.pages, { year: this.search });
+      const { data: { entity: datas = {} } } = res;
+      this.datas = datas.resultData || [];
+      this.totalNum = datas.totalNum || 0;
+      this.isLoading = false;
+    },
     resetForm() {},
     doAdd() {
       this.dialogFormVisible = true;
+    },
+    editItem({ data }){
+      console.log(data)
+    },
+    doAddTerm(){
+      console.log(this.addForm)
     },
     doDel() {
       alert(2);
@@ -107,6 +126,9 @@ export default {
     changeSelection(val) {
       this.selection = val;
     }
+  },
+  created(){
+    this.getDatas()
   }
 };
 </script>

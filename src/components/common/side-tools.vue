@@ -10,9 +10,9 @@
                 <span>关注公众号</span>
             </div>
         </li>
-        <li class="side-tool-item table-layout">
+        <!-- <li class="side-tool-item table-layout">
             <span class="icon-feedback table-cell"></span>
-        </li>
+        </li> -->
     </ul>
 </template>
 

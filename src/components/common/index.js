@@ -7,6 +7,7 @@ import Player from '@/components/common/ali-video'
 import Reader from '@/components/common/baidu-doc-reader'
 import Comment from '@/components/common/comment/comment'
 import defaultImage from '@/components/my/common/image'
+import nodata from '@/components/my/common/nodata'
 
 const components = [
     Pagination,
@@ -17,7 +18,8 @@ const components = [
     Player,
     Reader,
     Comment,
-    defaultImage
+    defaultImage,
+    nodata
 ]
 
 const install = function (Vue, opts = {}) {

@@ -34,8 +34,8 @@
             </section>
             </div>
         <el-table ref="table" :data="listData" stripe align="center" v-loading="isLoading" border :header-cell-style="{'background-color':'#eee', 'color':'#666'}">
-            <el-table-column prop="className" label="班级名称" align="center"/>
-            <el-table-column prop="gradeName" label="年级" align="center"/>
+            <el-table-column prop="className" label="班级名称" align="center" sortable/>
+            <el-table-column prop="gradeName" label="年级" align="center" sortable/>
             <el-table-column prop="teacherName" label="班主任" align="center"/>
             <el-table-column prop="schoolTypeList" label="学段" align="center"/>
             <el-table-column prop="schoolName" label="所属学校" align="center"/>

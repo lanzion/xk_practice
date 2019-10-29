@@ -28,8 +28,8 @@
         <!-- 表格数据列表 -->
         <el-table ref="table" :data="datas" stripe align="center" v-loading="isLoading" @selection-change="changeSelection">
             <el-table-column type="selection" width="45" />
-            <el-table-column prop="account" label="账号" />
-            <el-table-column prop="name" label="姓名" />
+            <el-table-column prop="account" label="账号" sortable/>
+            <el-table-column prop="name" label="姓名" sortable/>
             <el-table-column prop="teach" label="任教学科">
                 <template slot="header">
                     <th-select title="任教学科" :value.sync="search.teach" :options="technicalClassification" />

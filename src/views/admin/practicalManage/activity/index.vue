@@ -55,7 +55,7 @@
         </div>
         <!-- 表格数据列表 -->
         <el-table ref="table" :data="listData" stripe align="center" v-loading="isLoading" border :header-cell-style="{'background-color':'#eee', 'color':'#666'}">
-            <el-table-column prop="title" label="活动标题" width="500"/>
+            <el-table-column prop="title" label="活动标题" width="500" sortable show-overflow-tooltip/>
             <el-table-column prop="createDate" label="发布时间" align="center" />
              <el-table-column prop="orgName" label="发布教育局" align="center" />
             <el-table-column label="状态" align="center" v-if="userInfo.identity!=9">

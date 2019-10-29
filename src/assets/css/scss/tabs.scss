@@ -1,0 +1,104 @@
+@import './vars.scss';
+.title-header,
+.tabs-bar-header .tabs-bar-item .tabs-bar-title,
+.tabs-bar-header .tabs-btn-more,
+.tabs-bar-header .tabs-count {
+    line-height: $tabs-height;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.title-header,
+.tabs-bar-header {
+    height: $tabs-height;
+    margin-bottom: 20px;
+}
+
+.tabs-bar-header {
+    position: relative;
+    color: #999;
+
+    .tabs-title {
+        height: $tabs-height;
+        line-height: $tabs-height;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .tabs-bar-item .tabs-bar-title,
+    .tabs-btn-more {
+        cursor: pointer;
+    }
+    .tabs-bar-item {
+        display: inline-block;
+        .tabs-bar-title {
+            display: inline-block;
+            padding: 0 16px;
+            cursor: pointer;
+
+            &.active {
+                color: #3e3e3e;
+                border-bottom: 2px solid $default-color;
+                margin-bottom: -1px;
+            }
+        }
+     }
+    .tabs-right {
+        position: absolute;
+        top: 6px;
+        right: 8px;
+    }
+
+    .tabs-btn-more,
+    .tab-search,
+    .tabs-count,
+    .tab-btns {
+        margin-left: 12px;
+    }
+
+    .tabs-count {
+        font-size: 14px;
+        line-height: 40px;
+    }
+
+    .tabs-btn-more {
+        /* color: $default-color; */
+    }
+    .tab-btns {
+        a {
+            display:inline-block;
+            width: 108px;
+            height: 38px;
+            line-height: 36px;
+            text-align: center;
+            font-size: 16px;
+            color: #fff;
+            border-radius: 100px;
+        }
+    }
+}
+
+
+@each $color-key, $color-value in $color-data {
+    // .tabs-count-num-#{$color-key} {
+    //     color: $color-value;
+    // }
+    .theme-#{$color-key} {
+        .tabs-bar-header {
+            .tabs-bar-item .tabs-bar-title.active {
+                border-bottom-color: $color-value;
+            }
+            .tabs-btn-more:hover {
+            // .tabs-count .tabs-count-num {
+                color: $color-value;
+            }
+        }
+        &.single-tab .tabs-btn-more {
+            color: #3e3e3e;
+
+            &:hover {
+                color: $color-value;
+            }
+        }
+    }
+}

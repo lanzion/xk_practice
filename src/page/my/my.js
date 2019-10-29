@@ -58,7 +58,6 @@ Vue.prototype.downloadItem = function (url, name) {
         })
 }
 
-
 window.requests = []
 
 router.beforeEach((to, from, next) => {
@@ -84,10 +83,10 @@ router.beforeEach((to, from, next) => {
     const nextrouter = 'space'
     if (to.name === nextrouter) {
         if (store.state.login.identity === '1') {
-            next('/classroom')
+            next('/space/classroom')
         }
         if (store.state.login.identity === '0') {
-            next('/mycourse')
+            next('/space/mycourse')
         }
         return
     }

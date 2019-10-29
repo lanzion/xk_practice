@@ -43,8 +43,8 @@
       border
       :header-cell-style="{'background-color':'#eee', 'color':'#666'}"
     >
-      <el-table-column prop="identityCode" label="编码" align="center" />
-      <el-table-column prop="schoolName" label="学校名称" align="center" />
+      <el-table-column prop="identityCode" label="编码" align="center" sortable/>
+      <el-table-column prop="schoolName" label="学校名称" align="center" sortable/>
       <el-table-column prop="schoolTypeList" label="学段" align="center" />
       <el-table-column prop="location" label="所在地区" align="center" />
       <el-table-column prop="linkName" label="负责人" align="center" />

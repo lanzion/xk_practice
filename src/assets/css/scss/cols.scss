@@ -1,0 +1,34 @@
+$padding: 8px;
+
+.cols-list {
+
+    .cols-item+.cols-item {
+        padding-left: $padding;
+        margin-left: $padding;
+        border-left: 1px solid;
+    }
+
+    .cols-item {
+        display: inline-block;
+        font-size: 12px;
+        line-height: 1;
+        text-align: center;
+
+        .cols-item-result {
+            color: #999;
+        }
+    }
+
+    &.b-gray .cols-item {
+        border-color: #c9c9c9;
+    }
+
+    &.m-12 {
+        $m12: 12px;
+
+        .cols-item+.cols-item {
+            padding-left: $m12;
+            margin-left: $m12;
+        }
+    }
+}

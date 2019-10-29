@@ -32,9 +32,9 @@
       border
       :header-cell-style="{'background-color':'#eee', 'color':'#666'}"
     >
-      <el-table-column prop="name" label="基地名称" align="center" />
-      <el-table-column prop="address" label="基地地址" align="center" />
-      <el-table-column prop="infoTypeList" label="基地类型" align="center">
+      <el-table-column prop="name" label="基地名称" align="center" sortable show-overflow-tooltip/>
+      <el-table-column prop="address" label="基地地址" align="center" show-overflow-tooltip/>
+      <el-table-column prop="infoTypeList" label="基地类型" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
          <div class="elips-two" style="-webkit-box-orient: vertical;"> 
                        {{scope.row.infoTypeListstr}}

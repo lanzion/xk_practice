@@ -108,11 +108,11 @@ const baseManageService = () => import('@/views/admin/baseManage/baseService/ind
 const baseManageServiceDetail = () => import('@/views/admin/baseManage/baseService/detail')
 
 // 机构/基地权限2.0
-const baseAuthortySchedule = () => import('@/views/admin/baseAuthority/schedule/index')
-const baseAuthortyScheduleDetail = () => import('@/views/admin/baseAuthority/schedule/scheduleDetail')
-const serviceList = () => import('@/views/admin/baseAuthority/serviceList/index')
-const serviceDetails = () => import('@/views/admin/baseAuthority/serviceList/serviceDetails')
-const addSetvice = () => import('@/views/admin/baseAuthority/serviceList/addSetvice')
+const baseAuthortySchedule = () => import('@/views/admin/baseManage/schedule/index')
+const baseAuthortyScheduleDetail = () => import('@/views/admin/baseManage/schedule/scheduleDetail')
+const serviceList = () => import('@/views/admin/baseManage/serviceList/index')
+const serviceDetails = () => import('@/views/admin/baseManage/serviceList/serviceDetails')
+const addSetvice = () => import('@/views/admin/baseManage/serviceList/addSetvice')
 
 // 通知公告
 const noticeManage = () => import('@/views/admin/noticeManage/index')

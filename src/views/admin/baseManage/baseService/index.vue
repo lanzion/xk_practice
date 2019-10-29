@@ -38,9 +38,9 @@
       border
       :header-cell-style="{'background-color':'#eee', 'color':'#666'}"
     >
-      <el-table-column prop="title" label="服务标题" align="center" />
-      <el-table-column prop="baseinfoName" label="所属基地" align="center" />
-      <el-table-column prop="price" label="服务金额" align="center" />
+      <el-table-column prop="title" label="服务标题" align="center" sortable show-overflow-tooltip/>
+      <el-table-column prop="baseinfoName" label="所属基地" align="center" sortable show-overflow-tooltip/>
+      <el-table-column prop="price" label="服务金额" align="center" sortable show-overflow-tooltip/>
       <el-table-column prop="personInCharge" label="负责人" align="center"></el-table-column>
       <el-table-column prop="personInChargePhone" label="联系方式" align="center" />
       <el-table-column prop="auditDate" label="审核时间" align="center" />
