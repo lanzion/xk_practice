@@ -32,15 +32,7 @@
         </section>
       </el-form>
     </div>
-    <el-table
-      ref="table"
-      :data="listData"
-      stripe
-      align="center"
-      v-loading="isLoading"
-      border
-      :header-cell-style="{'background-color':'#eee', 'color':'#666'}"
-    >
+    <el-table ref="table" :data="listData" stripe align="center" v-loading="isLoading" border>
       <el-table-column prop="name" label="基地名称" align="center" />
       <el-table-column prop="address" label="基地地址" align="center" />
       <el-table-column prop="infoTypeList" label="基地类型" align="center">
@@ -125,7 +117,7 @@ export default {
   filters: {
     // 状态过滤
     formatStatus(val) {
-      return val == 'A' ? "通过" : val == 'B' ? "不通过" : '未审核';
+      return val == "A" ? "通过" : val == "B" ? "不通过" : "未审核";
     }
   },
   created() {

@@ -14,7 +14,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="keyword" placeholder="请填写服务名称" @keyup.native.enter="resetPage" ></el-input>
+          <el-input v-model="keyword" placeholder="请填写服务名称" @keyup.native.enter="resetPage"></el-input>
         </el-form-item>
         <el-button type="primary" plain @click="resetPage">搜索</el-button>
         <!-- 表头权限及统计 -->
@@ -29,18 +29,16 @@
         </section>
       </el-form>
     </div>
-    <el-table
-      ref="table"
-      :data="listData"
-      stripe
-      align="center"
-      v-loading="isLoading"
-      border
-      :header-cell-style="{'background-color':'#eee', 'color':'#666'}"
-    >
-      <el-table-column prop="title" label="服务标题" align="center" sortable show-overflow-tooltip/>
-      <el-table-column prop="baseinfoName" label="所属基地" align="center" sortable show-overflow-tooltip/>
-      <el-table-column prop="price" label="服务金额" align="center" sortable show-overflow-tooltip/>
+    <el-table ref="table" :data="listData" stripe align="center" v-loading="isLoading" border>
+      <el-table-column prop="title" label="服务标题" align="center" sortable show-overflow-tooltip />
+      <el-table-column
+        prop="baseinfoName"
+        label="所属基地"
+        align="center"
+        sortable
+        show-overflow-tooltip
+      />
+      <el-table-column prop="price" label="服务金额" align="center" sortable show-overflow-tooltip />
       <el-table-column prop="personInCharge" label="负责人" align="center"></el-table-column>
       <el-table-column prop="personInChargePhone" label="联系方式" align="center" />
       <el-table-column prop="auditDate" label="审核时间" align="center" />
@@ -61,18 +59,14 @@
             v-bind="{
                         edit: { query: { id: 'id'} }
                     }"
-          /> -->
+          />-->
           <span class="fil_btn" @click="edit(scope.row.id)">{{filterBtn(scope.row.auditStatus)}}</span>
         </template>
       </el-table-column>
     </el-table>
 
     <!-- 分页 -->
-    <pagination
-      :param="pages"
-      :total="totalNum"
-      @change="getDatas"
-    ></pagination>
+    <pagination :param="pages" :total="totalNum" @change="getDatas"></pagination>
   </div>
 </template>
 
@@ -101,30 +95,26 @@ export default {
         {
           value: "C",
           label: "未审核"
-        },
+        }
       ],
       stateValue: null
     };
   },
-  computed: {
-   
-  },
+  computed: {},
   created() {
     this.getDatas();
   },
-  watch: {
-    
-  },
+  watch: {},
   methods: {
-    filterBtn(item){
-      if(item=="A") return "详情"
-      else return "审核"
+    filterBtn(item) {
+      if (item == "A") return "详情";
+      else return "审核";
     },
-    edit(id){
+    edit(id) {
       this.$router.push({
-        path:'/baseManage/baseService/detail',
-        query:{id:id}
-      })
+        path: "/baseManage/baseService/detail",
+        query: { id: id }
+      });
     },
     // 重置分页
     resetPage() {
@@ -134,17 +124,19 @@ export default {
     // 获取列表数据
     async getDatas() {
       this.isLoading = true;
-      const res = await baseinfoList({auditStatus:this.stateValue,title:this.keyword}, this.pages);
+      const res = await baseinfoList(
+        { auditStatus: this.stateValue, title: this.keyword },
+        this.pages
+      );
 
       const { entity: datas = {} } = res.data;
 
       try {
-     
         this.listData = datas.resultData || [];
         this.totalNum = datas.totalNum || 0;
       } catch (error) {
         this.listData = [];
-        this.totalNum =0;
+        this.totalNum = 0;
       } finally {
         this.isLoading = false;
       }
@@ -183,8 +175,8 @@ export default {
     color: $--color-secondary;
   }
 }
-.fil_btn{
+.fil_btn {
   color: #00a8ff;
-  cursor:pointer;
+  cursor: pointer;
 }
 </style>

@@ -31,7 +31,6 @@
       align="center"
       v-loading="isLoading"
       border
-      :header-cell-style="{'background-color':'#eee', 'color':'#666'}"
     >
       <el-table-column prop="title" label="标题" align="center" show-overflow-tooltip/>
       <el-table-column label="描述" width="300" show-overflow-tooltip>

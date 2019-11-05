@@ -15,7 +15,7 @@
         :on-change="uploadCover"
         @remove="remove"
       ></ali-upload>
-      <div>
+      <div class="upload_tips">
         web端实践详情页的banner图, 仅支持JPG、GIF、PNG、JPEG格式，文件小于 5 M。
         建议上传的图片像素为 600 x 370
       </div>
@@ -83,9 +83,7 @@
     </el-form-item>
     <el-form-item label="课程资源" prop="resourceList">
       <upload listType="file" :file-list.sync="form.resourceList" :accept="fileType">
-        <p
-          class="m-upload--tip"
-        >不限数量，文件格式：doc / docx / ppt / pptx / xls / xlsx / zip / rar，单个文件大小不超过8M</p>
+        <p class="upload_tips">不限数量，文件格式：doc / docx / ppt / pptx / xls / xlsx / zip / rar，单个文件大小不超过8M</p>
       </upload>
     </el-form-item>
 
@@ -148,23 +146,23 @@ export default {
       isLoading: false,
       dialogVisible: false,
       form: {
-        domainModuleParent: "", // 课程一级指标分类
-        domainModuleChildren: "", // 课程二级指标分类
-        name: "", // 课程名称
-        cover: "", // 课程封面
-        synopsis: "", // 课程简介
-        target: "", // 课程目标
-        coursePreparation: "", // 课程前准备
-        activityDesign: "", // 课程活动设计
-        studyAssignments: "", // 学习任务单
-        auditStatus: "", // 审核状态：A 待审核 B审核不通过 C审核通过
-        fit: "", // 适合学段 A 小学 B 初中 C 高中
-        status: "", // 转态 1 启用 0 禁用
-        isFree: "", // 是否收费 0 免费 1 收费
-        courseType: "", // 课程类型 A 必修 B选修 C开放式
-        courseDuration: "", // 课程时长 A半天 B一天 C一天半 D两天  E两天半  F三天
-        courseDesigner: "", // 课程设计者
-        resourceList: [], // 附件
+        domainModuleParent: "", 
+        domainModuleChildren: "", 
+        name: "", 
+        cover: "", 
+        synopsis: "", 
+        target: "", 
+        coursePreparation: "",
+        activityDesign: "",
+        studyAssignments: "", 
+        auditStatus: "", 
+        fit: "", 
+        status: "", 
+        isFree: "", 
+        courseType: "", 
+        courseDuration: "",
+        courseDesigner: "",
+        resourceList: [],
         values: []
       },
 

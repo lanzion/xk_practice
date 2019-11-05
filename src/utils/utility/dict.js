@@ -17,14 +17,14 @@ export const fit = [
 
 // 状态
 export const status = [
-    {code: '1', name: '启用'},
     {code: '0', name: '禁用'},
+    {code: '1', name: '启用'},
 ]
 
 // 状态
 export const isFree = [
-    {code: '1', name: '收费'},
     {code: '0', name: '免费'},
+    {code: '1', name: '收费'},
 ]
 
 // 课程类型

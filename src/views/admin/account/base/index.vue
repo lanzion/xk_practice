@@ -32,7 +32,6 @@
       align="center"
       v-loading="isLoading"
       border
-      :header-cell-style="{'background-color':'#eee', 'color':'#666'}"
     >
       <el-table-column label="选择" align="center" type="selection" width="55"></el-table-column>
       <el-table-column prop="account" label="帐号" align="center" sortable show-overflow-tooltip />

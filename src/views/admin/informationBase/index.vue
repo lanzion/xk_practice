@@ -32,9 +32,8 @@
       v-loading="isLoading"
       @selection-change="changeSelection"
       border
-      :header-cell-style="{'background-color':'#eee', 'color':'#666'}"
     >
-      <el-table-column prop="title" label="标题" show-overflow-tooltip/>
+      <el-table-column prop="title" label="标题" show-overflow-tooltip />
       <el-table-column label="描述" width="300" show-overflow-tooltip>
         <template slot-scope="scope">
           <div class="elips-two" style="-webkit-box-orient: vertical;">{{scope.row.remark}}</div>
@@ -82,7 +81,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import { informationDel,informationEdit } from "@/api/newApi";
+import { informationDel, informationEdit } from "@/api/newApi";
 
 import permission from "@/mixin/admin-operate";
 import user from "@/mixin/admin-user";

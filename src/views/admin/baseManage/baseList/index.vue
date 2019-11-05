@@ -3,7 +3,6 @@
     <!-- 搜索表单 -->
     <div class="g-search--wrap clearfix">
       <el-form :inline="true" class="fl elFrom" @submit.native.prevent>
-        
         <el-form-item label="所在地区">
           <region type="object" @change="changeRegion" class="regions"></region>
         </el-form-item>
@@ -23,28 +22,17 @@
         </section>
       </el-form>
     </div>
-    <el-table
-      ref="table"
-      :data="listData"
-      stripe
-      align="center"
-      v-loading="isLoading"
-      border
-      :header-cell-style="{'background-color':'#eee', 'color':'#666'}"
-    >
-      <el-table-column prop="name" label="基地名称" align="center" sortable show-overflow-tooltip/>
-      <el-table-column prop="address" label="基地地址" align="center" show-overflow-tooltip/>
+    <el-table ref="table" :data="listData" stripe align="center" v-loading="isLoading" border>
+      <el-table-column prop="name" label="基地名称" align="center" sortable show-overflow-tooltip />
+      <el-table-column prop="address" label="基地地址" align="center" show-overflow-tooltip />
       <el-table-column prop="infoTypeList" label="基地类型" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
-         <div class="elips-two" style="-webkit-box-orient: vertical;"> 
-                       {{scope.row.infoTypeListstr}}
-        
-          </div> 
+          <div class="elips-two" style="-webkit-box-orient: vertical;">{{scope.row.infoTypeListstr}}</div>
         </template>
       </el-table-column>
       <el-table-column prop="liaisonMan" label="负责人" align="center" />
       <el-table-column prop="liaisonWay" label="联系方式" align="center" />
-     
+
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <list-operate
@@ -62,11 +50,7 @@
     </el-table>
 
     <!-- 分页 -->
-    <pagination
-      :param="pages"
-      :total="totalNum"
-      @change="getDatas"
-    ></pagination>
+    <pagination :param="pages" :total="totalNum" @change="getDatas"></pagination>
 
     <!-- 重置密码弹窗 -->
     <el-dialog width="500px" title="重置密码" :visible.sync="passwordVisible">
@@ -88,33 +72,28 @@ export default {
     return {
       listData: [],
       keyword: "",
-      provinceId:'',
-      cityId:'',
-      areaId:'',
+      provinceId: "",
+      cityId: "",
+      areaId: "",
       selection: [],
       datas: [],
       detailVisible: false, // 详情弹窗是否可见
       detail: {
         disabled: false,
         id: ""
-      }, // 详情组件传参
-     
+      } // 详情组件传参
     };
   },
-  computed: {
-   
-  },
+  computed: {},
   created() {
     this.getDatas();
   },
-  
+
   methods: {
-    
     changeRegion(region) {
-      
-      if(region[0].code) this.provinceId = region[0].code;
-      if(region[1].code) this.cityId = region[1].code;
-      if(region[2].code) this.areaId = region[2].code;
+      if (region[0].code) this.provinceId = region[0].code;
+      if (region[1].code) this.cityId = region[1].code;
+      if (region[2].code) this.areaId = region[2].code;
       this.resetPage();
     },
 
@@ -130,25 +109,33 @@ export default {
     // 获取列表数据
     async getDatas() {
       this.isLoading = true;
-      const res = await BaseList({ name: this.keyword,provinceId:this.provinceId,cityId:this.cityId,areaId:this.areaId }, this.pages);
+      const res = await BaseList(
+        {
+          name: this.keyword,
+          provinceId: this.provinceId,
+          cityId: this.cityId,
+          areaId: this.areaId
+        },
+        this.pages
+      );
 
       const { entity: datas = {} } = res.data;
 
       try {
-         let list = datas.resultData || [];
-          list.forEach(o=>{
-            o.infoTypeList =o.infoTypeList||[];
-            let arr =o.infoTypeList.map(j=>{
-                return `${j.dictypeName}>${j.dicdetailName}`
-             })
-             o.infoTypeListstr = arr.join('、')
-          })
+        let list = datas.resultData || [];
+        list.forEach(o => {
+          o.infoTypeList = o.infoTypeList || [];
+          let arr = o.infoTypeList.map(j => {
+            return `${j.dictypeName}>${j.dicdetailName}`;
+          });
+          o.infoTypeListstr = arr.join("、");
+        });
         this.listData = list;
         this.totalNum = datas.totalNum || 0;
       } catch (error) {
-        console.log(error)
-       this.listData = [];
-        this.totalNum =0;
+        console.log(error);
+        this.listData = [];
+        this.totalNum = 0;
       } finally {
         this.isLoading = false;
       }
@@ -199,14 +186,14 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.elips-two{
-         display: -webkit-box;
-            // text-align: left;
-            word-break: break-all;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 3;
-            overflow: hidden;
-    }
+.elips-two {
+  display: -webkit-box;
+  // text-align: left;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
 
 // .school-list-wrap{
 //   /deep/ .cell{
@@ -220,5 +207,4 @@ export default {
 .elFrom {
   width: 100%;
 }
-
 </style>

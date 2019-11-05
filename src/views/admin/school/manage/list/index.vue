@@ -34,19 +34,17 @@
         />
       </section>
     </div>
-    <el-table
-      ref="table"
-      :data="listData"
-      stripe
-      align="center"
-      v-loading="isLoading"
-      border
-      :header-cell-style="{'background-color':'#eee', 'color':'#666'}"
-    >
-      <el-table-column prop="identityCode" label="编码" align="center" sortable/>
-      <el-table-column prop="schoolName" label="学校名称" align="center" sortable/>
+    <el-table ref="table" :data="listData" stripe align="center" v-loading="isLoading" border>
+      <el-table-column prop="identityCode" label="编码" align="center" sortable />
+      <el-table-column
+        prop="schoolName"
+        label="学校名称"
+        align="center"
+        sortable
+        show-overflow-tooltip
+      />
       <el-table-column prop="schoolTypeList" label="学段" align="center" />
-      <el-table-column prop="location" label="所在地区" align="center" />
+      <el-table-column prop="location" label="所在地区" align="center" show-overflow-tooltip />
       <el-table-column prop="linkName" label="负责人" align="center" />
       <el-table-column prop="phone" label="联系方式" align="center" />
       <el-table-column label="状态" align="center">
