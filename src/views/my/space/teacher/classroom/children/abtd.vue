@@ -1,6 +1,6 @@
 <template>
     <div class="abtd">
-        <cardlist :datas="datas"></cardlist>
+        <cardlist :datas="datas" :type = 1></cardlist>
         <no-data v-if="nomore"></no-data>
         <pagination
             v-if="!nomore"

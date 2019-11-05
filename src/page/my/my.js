@@ -46,12 +46,25 @@ Vue.prototype.page = window.page
 Vue.prototype.downloadItem = function (url, name) {
     Axios.get(url, { responseType: 'blob' })
         .then(({ data }) => {
-            // 为了简单起见这里blob的mime类型 固定写死了
-            let blob = new Blob([data], { type: 'application/vnd.ms-excel' })
-            let link = document.createElement('a')
-            link.href = window.URL.createObjectURL(blob)
-            link.download = name
-            link.click()
+            var blob = new Blob([data], { type: 'application/json;charset=utf-8' })
+            var href = window.URL.createObjectURL(blob) // 创建下载的链接
+            if (window.navigator.msSaveBlob) {
+                try {
+                    window.navigator.msSaveBlob(blob, name)
+                } catch (e) {
+                    console.log(e)
+                }
+            } else {
+                // 谷歌浏览器 创建a标签 添加download属性下载
+                var downloadElement = document.createElement('a')
+                downloadElement.href = href
+                downloadElement.target = '_blank'
+                downloadElement.download = name // 下载后文件名
+                document.body.appendChild(downloadElement)
+                downloadElement.click() // 点击下载
+                document.body.removeChild(downloadElement) // 下载完成移除元素
+                window.URL.revokeObjectURL(href) // 释放掉blob对象
+            }
         })
         .catch(error => {
             console.error(error)

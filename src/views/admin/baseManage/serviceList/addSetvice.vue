@@ -467,7 +467,7 @@ export default {
     getDetailData() {
       const id = this.id || this.$route.query.id;
       if (id) {
-        this.isLoading = true;
+        this.showLoading()
         baseinfoDetail({ id: id })
           .then(res => {
             let datas = res.data;
@@ -496,16 +496,11 @@ export default {
               if (this.ruleForm.cover)
                 this.cover = [
                   {
-                    name: "u200.jpg",
-                    size: 37110,
-                    status: "success",
-                    uploadName:
-                      "d77e555877554abab3394032b5922988-1566815858361__u200.jpg",
+                    uploadName:"200.jpg",
                     url: this.ruleForm.cover[0]
                   }
                 ];
             } else {
-              this.isLoading = true;
               this.$message({
                 message: datas.msg,
                 type: "warning"
@@ -513,7 +508,7 @@ export default {
             }
           })
           .finally(() => {
-            this.isLoading = false;
+            this.hideLoading()
           });
       }
     },

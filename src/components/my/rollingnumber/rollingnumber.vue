@@ -44,8 +44,13 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .number-grow-warp{
   transform: translateZ(0);
+  .number-grow{
+      font-size: 36px;
+      color: #fff;
+  }
 }
+
 </style>

@@ -23,10 +23,10 @@
         </div>
         
         <el-table ref="table" :data="listData" stripe align="center" v-loading="isLoading" border :header-cell-style="{'background-color':'#eee', 'color':'#666'}">
-            <el-table-column prop="activityTitle" label="活动标题" align="center"/>
-            <el-table-column prop="courseName" label="课程名称" align="center"/>
+            <el-table-column prop="activityTitle" label="活动标题" align="center" show-overflow-tooltip/>
+            <el-table-column prop="courseName" label="课程名称" align="center" show-overflow-tooltip/>
           
-            <el-table-column label="课程类型" align="center" >
+            <el-table-column label="课程类型" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
                       <div v-if="scope.row.dicTypeName">{{scope.row.dicTypeName}}/{{scope.row.dicTypeName}}</div>
                 </template>

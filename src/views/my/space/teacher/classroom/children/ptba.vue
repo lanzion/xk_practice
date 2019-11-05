@@ -1,22 +1,6 @@
 <template>
     <div class="ptba">
-        <ul>
-            <li v-for="(g,index) in datas" :key="index">
-                <div @click="changes(g.courseId)">
-                    <ov-image :src-data="getFileUrl(g.cover)"></ov-image>
-                </div>
-                <h4 @click="changes(g.courseId)">{{g.name}}</h4>
-                <div class="showr">
-                    <span @click="changes(g.courseId)">{{g.className}}</span>
-                    <span
-                        class="spans"
-                        @click="guidang(g.id,g.classId)"
-                        v-text="g.isPortfolioStatus==='0'?'未归档':'已归档'"
-                    ></span>
-                </div>
-                <div class="timer">{{g.startDate}}~{{g.endDate}}</div>
-            </li>
-        </ul>
+        <cardlist :datas="datas" :type = 2></cardlist>
         <no-data v-if="nomore"></no-data>
         <pagination
             :param="pages"
@@ -43,6 +27,10 @@ export default {
                 pageSize: 9
             }
         }
+    },
+    components: {
+        cardlist: resolve =>
+            require(['@/components/my/space/cardlist'], resolve)
     },
     computed: {
         teacherworkname() {

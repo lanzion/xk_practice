@@ -2,19 +2,10 @@
     <div class="dlest">
         <div class="container">
             <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/community' }">主题活动</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/community' }">课程中心</el-breadcrumb-item>
                 <el-breadcrumb-item>{{activitytitle}}</el-breadcrumb-item>
             </el-breadcrumb>
             <div class="thrnice">
-                <!-- <el-image :src="bannerimgurl" fit="cover" style="width: 100%;height:300px">
-                  <div
-                    slot="error"
-                    class="image-slot"
-                    style="font-size: 30px;line-height: 300px;text-align: center;"
-                  >
-                    <i class="el-icon-picture-outline"></i>
-                  </div>
-                </el-image> -->
                 <ov-image :type = 2 :src-data="getFileUrl(bannerimgurl)"></ov-image>
             </div>
             <div class="nice">

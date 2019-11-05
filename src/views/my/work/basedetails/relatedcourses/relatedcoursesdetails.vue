@@ -159,15 +159,6 @@
                                 @change="getbaselist"
                             ></pagination>
                         </div>
-                        <!-- <div
-                            v-if="nomore"
-                            :style="{'width':'100%','height':'200px','background':'#fff','textAlign':'center'}"
-                        >
-                            <img src="~@assets/image/nothingData.svg" alt />
-                            <div :style="{'lineHeight':'0'}">
-                                <i :style="{'fontSize':'18px'}">暂无数据...</i>
-                            </div>
-                        </div> -->
                          <no-data v-if="nomore"></no-data>
                     </div>
                 </div>

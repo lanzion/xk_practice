@@ -1,0 +1,446 @@
+<template>
+  <el-form ref="form" class="g-form--wrap" label-width="100px" :model="form" :rules="rules">
+    <el-form-item label="课程名称" prop="name">
+      <el-input v-model="form.name" placeholder="请输入课程名称"></el-input>
+    </el-form-item>
+    <el-form-item label="课程设计者" prop="courseDesigner">
+      <el-input v-model="form.courseDesigner" placeholder="请输入课程设计者"></el-input>
+    </el-form-item>
+    <el-form-item label="课程封面" prop="cover">
+      <ali-upload
+        :limit="1"
+        :file-list.sync="cover"
+        :before-upload="beforeUploadCover"
+        accept=".gif, .jpg, .png, .jpeg"
+        :on-change="uploadCover"
+        @remove="remove"
+      ></ali-upload>
+      <div>
+        web端实践详情页的banner图, 仅支持JPG、GIF、PNG、JPEG格式，文件小于 5 M。
+        建议上传的图片像素为 600 x 370
+      </div>
+    </el-form-item>
+    <el-form-item label="课程指标" prop="values">
+      <el-cascader v-model="form.values" :options="options" :props="{ expandTrigger: 'hover' }"></el-cascader>
+    </el-form-item>
+    <el-form-item label="适合学段" prop="fit">
+      <el-radio-group v-model="form.fit">
+        <el-radio v-for="(item) in fit" :label="item.code" :key="item.code">{{ item.name }}</el-radio>
+      </el-radio-group>
+    </el-form-item>
+    <el-form-item label="课程类型" prop="courseType">
+      <el-radio-group v-model="form.courseType">
+        <el-radio v-for="(item) in courseType" :label="item.code" :key="item.code">{{ item.name }}</el-radio>
+      </el-radio-group>
+    </el-form-item>
+    <el-form-item label="课程时长" prop="courseDuration">
+      <el-select v-model="form.courseDuration" placeholder="请选择课程时长">
+        <el-option
+          v-for="item in courseDuration"
+          :key="item.value"
+          :label="item.name"
+          :value="item.code"
+        ></el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item label="是否收费" prop="isFree">
+      <el-radio-group v-model="form.isFree">
+        <el-radio
+          v-for="(item) in isFree"
+          :label="item.code"
+          :key="item.code"
+          :value="item.code"
+        >{{ item.name }}</el-radio>
+      </el-radio-group>
+    </el-form-item>
+    <el-form-item label="课程状态" prop="status">
+      <el-radio-group v-model="form.status">
+        <el-radio v-for="(item) in status" :label="item.code" :key="item.code">{{ item.name }}</el-radio>
+      </el-radio-group>
+    </el-form-item>
+    <el-form-item label="学习简介" prop="synopsis">
+      <el-input type="textarea" :rows="4" placeholder="请填写课程学习简介" v-model="form.synopsis"></el-input>
+    </el-form-item>
+    <el-form-item label="学习目标" prop="target">
+      <el-input type="textarea" :rows="4" placeholder="请填写课程学习目标" v-model="form.target"></el-input>
+    </el-form-item>
+    <el-form-item label="课程准备" prop="coursePreparation">
+      <editor-bar
+        v-model="form.coursePreparation"
+        :isClear="isClear"
+        @change="coursePreparationChange"
+      ></editor-bar>
+    </el-form-item>
+    <el-form-item label="课程活动设计" prop="activityDesign">
+      <editor-bar v-model="form.activityDesign" :isClear="isClear" @change="activityDesignChange"></editor-bar>
+    </el-form-item>
+    <el-form-item label="学习任务单" prop="studyAssignments">
+      <editor-bar
+        v-model="form.studyAssignments"
+        :isClear="isClear"
+        @change="studyAssignmentsChange"
+      ></editor-bar>
+    </el-form-item>
+    <el-form-item label="课程资源" prop="resourceList">
+      <upload listType="file" :file-list.sync="form.resourceList" :accept="fileType">
+        <p
+          class="m-upload--tip"
+        >不限数量，文件格式：doc / docx / ppt / pptx / xls / xlsx / zip / rar，单个文件大小不超过8M</p>
+      </upload>
+    </el-form-item>
+
+    <el-form-item class="g-operate--box">
+      <el-button @click="cancel">取消</el-button>
+      <el-button type="primary" @click="submit" :loading="isLoading">保存</el-button>
+    </el-form-item>
+  </el-form>
+</template>
+
+<script>
+import { mapState, mapActions } from "vuex";
+import { activityList } from "@/api/newApi";
+import {
+  courseEdit,
+  courseAdd,
+  getActivityTypeParent,
+  selectAllList,
+  courseDetail
+} from "@/api/resetApi";
+
+import {
+  validateAccount,
+  validateUserName,
+  validateIDCode,
+  validatePhone,
+  validateEmail
+} from "@/utils/utility/validateRule";
+import { upload } from "@/mixin/common";
+import { uploadFileSize } from "@/mixin/uploadFileSize.js";
+import aliUpload from "@/components/common/upload.vue";
+import EditorBar from "@/components/common/wangEnduit.vue";
+import {
+  auditStatus,
+  fit,
+  status,
+  isFree,
+  courseType,
+  courseDuration
+} from "@/utils/utility/dict.js";
+export default {
+  mixins: [upload, uploadFileSize],
+  components: {
+    "ali-upload": aliUpload,
+    EditorBar: EditorBar
+  },
+  data() {
+    return {
+      auditStatus: auditStatus,
+      fit: fit,
+      status: status,
+      isFree: isFree,
+      courseType: courseType,
+      courseDuration: courseDuration,
+      isClear: false,
+      fileType: ".doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,.rar",
+      cover: [],
+      options: [],
+      school: [],
+      isLoading: false,
+      dialogVisible: false,
+      form: {
+        domainModuleParent: "", // 课程一级指标分类
+        domainModuleChildren: "", // 课程二级指标分类
+        name: "", // 课程名称
+        cover: "", // 课程封面
+        synopsis: "", // 课程简介
+        target: "", // 课程目标
+        coursePreparation: "", // 课程前准备
+        activityDesign: "", // 课程活动设计
+        studyAssignments: "", // 学习任务单
+        auditStatus: "", // 审核状态：A 待审核 B审核不通过 C审核通过
+        fit: "", // 适合学段 A 小学 B 初中 C 高中
+        status: "", // 转态 1 启用 0 禁用
+        isFree: "", // 是否收费 0 免费 1 收费
+        courseType: "", // 课程类型 A 必修 B选修 C开放式
+        courseDuration: "", // 课程时长 A半天 B一天 C一天半 D两天  E两天半  F三天
+        courseDesigner: "", // 课程设计者
+        resourceList: [], // 附件
+        values: []
+      },
+
+      rules: {
+        cover: [
+          {
+            required: true,
+            message: "请选择封面",
+            trigger: ["change"]
+          }
+        ],
+        target: [
+          {
+            required: true,
+            message: "请填写课程学习目标",
+            trigger: ["blur"]
+          }
+        ],
+        fit: [
+          {
+            required: true,
+            message: "请选择课程学段",
+            trigger: ["change", "blur"]
+          }
+        ],
+        values: [
+          {
+            required: true,
+            message: "请选择所属领域",
+            trigger: ["change", "blur"]
+          }
+        ],
+        name: [
+          {
+            required: true,
+            message: "请填写课程名称",
+            trigger: ["blur"]
+          }
+        ],
+        courseDesigner: [
+          {
+            required: true,
+            message: "请填写课程名称",
+            trigger: ["blur"]
+          }
+        ],
+        courseType: [
+          {
+            required: true,
+            message: "请选择课程类型",
+            trigger: ["blur"]
+          }
+        ],
+        courseDuration: [
+          {
+            required: true,
+            message: "请选择课程时长",
+            trigger: ["blur"]
+          }
+        ],
+        isFree: [
+          {
+            required: true,
+            message: "课程是否收费",
+            trigger: ["blur"]
+          }
+        ],
+        status: [
+          {
+            required: true,
+            message: "请选择课程状态",
+            trigger: ["blur"]
+          }
+        ],
+        synopsis: [
+          {
+            required: true,
+            message: "请填写课程简介",
+            trigger: ["blur"]
+          }
+        ]
+      },
+      pages: {
+        pageNum: 1,
+        pageSize: 20
+      },
+      searchForm: {}
+    };
+  },
+  watch: {},
+  created() {
+    this.getActivityTypeParent();
+  },
+  methods: {
+    coursePreparationChange(val) {
+      this.form.coursePreparation = val;
+    },
+    activityDesignChange(val) {
+      this.form.activityDesign = val;
+    },
+    studyAssignmentsChange(val) {
+      this.form.studyAssignments = val;
+    },
+    resetPage(key) {
+      this.$set(this.pages, "pageNum", 1);
+      this.$set(this.pages, "pageSize", 50);
+
+      this.getSchoolList(key);
+    },
+    remoteMethod(qurey) {
+      this.resetPage(qurey);
+    },
+    async getSchoolList(key) {
+      const formList = Object.assign({}, this.searchForm);
+      if (key) {
+        formList.title = key;
+      }
+
+      const res = await activityList(formList, this.pages);
+      const { entity: datas = {} } = res.data;
+
+      try {
+        this.school = datas.resultData || [];
+      } catch (error) {
+      } finally {
+      }
+    },
+    // 获取详情
+    getDetailData() {
+      const id = this.id || this.$route.query.id;
+      if (id) {
+        this.showLoading();
+        courseDetail({ id })
+          .then(res => {
+            const { code, entity: datas } = res.data;
+            if (code === 200 && datas) {
+              this.cover = [
+                {
+                  name: "2.png",
+                  status: "success",
+                  uploadName: "_2.png",
+                  url: datas.cover
+                }
+              ];
+              datas.resourceDtoList.forEach(o => {
+                this.form.resourceList.push({
+                  name: o.resourceName,
+                  status: "success",
+                  uploadName: o.resourceName,
+                  url: o.resourceId
+                });
+              });
+              this.form = datas
+              this.form.cover = [datas.cover];
+              this.form.values = [datas.domainModuleParent, datas.domainModuleChildren];
+            } else {
+              this.$message({
+                message: res.data.msg || `加载失败`,
+                type: "error"
+              });
+            }
+          })
+          .finally(() => {
+            this.hideLoading();
+          });
+      }
+    },
+    getActivityTypeParent() {
+      getActivityTypeParent({})
+        .then(res => {
+          const datas = res.data;
+
+          if (datas) {
+            let arrBox = [];
+            datas.typelist.forEach(o => {
+              let arr = o.dicDetailList.map(k => {
+                return {
+                  value: k.code,
+                  label: k.name
+                };
+              });
+              arrBox.push({
+                value: o.code,
+                label: o.name,
+                children: arr
+              });
+            });
+
+            this.options = arrBox;
+            this.getSchoolList();
+            this.getDetailData();
+          }
+        })
+        .finally(() => {});
+    },
+    uploadCover({ file } = {}) {
+      this.form.cover = this.cover.map((item, index) => item.url);
+    },
+    remove(file) {
+      this.form.cover = [];
+    },
+    submit() {
+      let that = this;
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          let head, Text;
+          this.isLoading = true;
+          const formList = Object.assign({}, this.form);
+          let resourceList = formList.resourceList.map(v => {
+            return { resourceId: v.url, resourceName: v.name };
+          });
+          formList.resourceList = resourceList;
+          formList.cover = this.getFileUrl(formList.cover[0]);
+          formList.domainModuleParent = formList.values[0];
+          formList.domainModuleChildren = formList.values[1];
+          if (!formList.auditStatus) formList.auditStatus = "A";
+          console.log(formList);
+          if (formData.id) {
+            head = courseEdit;
+            Text = "修改";
+          } else {
+            head = courseAdd;
+            Text = "提交";
+          }
+          head(formList)
+            .then(res => {
+              if (res.data.code === 200) {
+                this.$message({
+                  message: `${Text}成功`,
+                  type: "success",
+                  onClose() {}
+                });
+                that.$router.push({ path: "/practicalManage/courseManage" });
+              } else {
+                this.isLoading = false;
+                this.$message({
+                  message: res.data.msg || `${Text}失败`,
+                  type: "error"
+                });
+              }
+            })
+            .finally(() => {});
+        } else {
+          return false;
+        }
+      });
+    },
+
+    cancel() {
+      this.$router.go(-1);
+    }
+  }
+};
+</script>
+<style lang="scss">
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+</style>

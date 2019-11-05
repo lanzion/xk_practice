@@ -67,7 +67,7 @@
             </el-menu>
 
             <!-- 主体内容 -->
-            <div class="content-box">
+            <div class="content-box loadingtext">
                 <el-breadcrumb
                     v-show="breadcrumb.length"
                     class="breadcrumb"
@@ -173,6 +173,7 @@ export default {
         },
 
         changeRoute() {
+            this.hideLoading()
             const path = this.$route.path
             const lastItem = this.permission.find(x => x.url === path)
             const breadcrumb = lastItem ? this.getSubNav([lastItem]) : []
@@ -284,6 +285,10 @@ $--user-info-height: 60px;
     .breadcrumb {
         margin: #{$--box-padding} 0 0;
         white-space: nowrap;
+    }
+
+    /deep/ .el-loading-spinner{
+        top: 20%;
     }
 }
 </style>

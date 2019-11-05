@@ -34,9 +34,9 @@
         
         <!-- 表格数据列表 -->
         <el-table ref="table" :data="listData" stripe align="center" v-loading="isLoading" border :header-cell-style="{'background-color':'#eee', 'color':'#666'}">
-            <el-table-column prop="title" label="所属活动" align="center" />
+            <el-table-column prop="title" label="所属活动" align="center" show-overflow-tooltip/>
             <el-table-column prop="name" label="课程名称" align="center" />
-             <el-table-column label="课程类型" align="center">
+             <el-table-column label="课程类型" align="center" show-overflow-tooltip>
               <template slot-scope="scope">
                     {{scope.row.courseTypeName+'>'+scope.row.courseTypeParentName}}
                 </template>
@@ -110,7 +110,7 @@ export default {
                 },
                 {
                     value: 'B',
-                    label: '非必修'
+                    label: '选修'
                 }
             ],
              fpStates: [

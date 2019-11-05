@@ -5,7 +5,7 @@
         :model="ruleForm"
         ref="ruleForm"
         :rules="rules"
-        label-width="100px"
+        label-width="150px"
         class="demo-ruleForm"
         :style="{'marginBottm':'20px'}"
       >
@@ -27,6 +27,20 @@
           <el-col :span="15">
             <el-form-item label="联系方式" prop="liaisonWay">
               <el-input v-model="ruleForm.liaisonWay" :disabled="isReadOnly"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="15">
+            <el-form-item label="负责人" prop="">
+              <el-input v-model="ruleForm.obligationMan" :disabled="isReadOnly"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="15">
+            <el-form-item label="负责人联系方式" prop="">
+              <el-input v-model="ruleForm.obligationPhone" :disabled="isReadOnly"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -466,6 +480,7 @@ export default {
     async getbaseDetail() {
       const id = this.id || this.$route.query.id;
       if (id) {
+        this.showLoading()
         const res = await adminBaseInfoDetail({ id: id });
         try {
           const _datas = res.data.entity;
@@ -546,6 +561,7 @@ export default {
         } catch (error) {
           console.log(error);
         } finally {
+          this.hideLoading()
         }
       }
     },

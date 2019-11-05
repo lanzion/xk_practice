@@ -1,3 +1,13 @@
+<template lang="html">
+  <div class="editor">
+    <div ref="toolbar" class="toolbar">
+    </div>
+    <!-- <div ref="editor" class="text">
+    </div> -->
+  </div>
+</template>
+
+<script>
 import co from 'co'
 import OSS from 'ali-oss'
 import wangEditor from 'wangEditor'
@@ -9,15 +19,54 @@ const ossConfig = {
     bucket: 'xk100-com-maker',
     cname: true
 }
-
-export const editor = {
-    data() {
-        return {
-            editor: null,
-            client: new OSS(ossConfig)
-        }
+export default {
+  name: "editoritem",
+  data() {
+    return {
+      // uploadPath,
+      editor: null,
+      info_: null,
+      client: new OSS(ossConfig)
+    };
+  },
+  model: {
+    prop: "value",
+    event: "change"
+  },
+  props: {
+    value: {
+      type: String,
+      default: ""
     },
-    methods: {
+    isClear: {
+      type: Boolean,
+      default: false
+    }
+  },
+  watch: {
+    isClear(val) {
+      // 触发清除文本域内容
+      if (val) {
+        this.editor.$txt.clear();
+        this.info_ = null;
+      }
+    },
+    value: function(value) {
+      if (value !== this.editor.$txt.html()) {
+        this.editor.$txt.html(this.value);
+      }
+    }
+    //value为编辑框输入的内容，这里我监听了一下值，当父组件调用得时候，如果给value赋值了，子组件将会显示父组件赋给的值
+  },
+  mounted() {
+    this.initEditor();
+    this.editor.$txt.html(this.value);
+    let _this = this
+    this.editor.onchange = function() {
+      _this.$emit('change', _this.editor.$txt.html())
+    };
+  },
+  methods: {
         // 初始化
         uploadInit() {
             // eslint-disable-next-line no-shadow
@@ -105,7 +154,7 @@ export const editor = {
         },
         initEditor(param) {
             // eslint-disable-next-line new-cap
-            this.editor = new wangEditor('editor-trigger')
+            this.editor = new wangEditor(this.$refs.toolbar, this.$refs.editor)
             // 配置自定义上传的开关
             this.editor.config.customUpload = true
             // 配置上传事件，uploadInit方法已经在上面定义了
@@ -139,4 +188,22 @@ export const editor = {
             this.editor.create()
         }
     }
+};
+</script>
+
+<style lang="css">
+.editor {
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  z-index: 0;
 }
+.toolbar{
+    min-height: 200px;
+    height: auto !important;
+}
+.text {
+  border: 1px solid #ccc;
+  min-height: 500px;
+}
+</style>

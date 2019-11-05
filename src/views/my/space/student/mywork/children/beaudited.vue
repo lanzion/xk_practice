@@ -12,7 +12,7 @@
               <i class="el-icon-picture-outline"></i>
             </div>
           </el-image> -->
-          <ov-image :src-data="getFileUrl(g.cover)"></ov-image>
+          <ov-image :src-data="getFileUrl(f.cover)"></ov-image>
           <div class="beaudited_li_one_p">{{f.auditStatus}}</div>
         </div>
         <div class="beaudited_li_two">

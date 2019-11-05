@@ -1,10 +1,13 @@
 <template>
-    <div class="diyt">
-        <swriper :type="numimg" />
+    <div class="home">
+        <swriper :type="numimg" class="swriper" />
         <div class="container">
-            <newactivities />
+            <statistics class="statistics" />
+            <newactivities class="newactivities" />
             <baseguide />
             <latestworks />
+            <!-- <mapvue @selectLocation="selectLocation" /> -->
+            <!-- <mapvue /> -->
         </div>
         <!-- <aside class="aside g-bg--white fl">
       <aside-menu :datas="permiss" />
@@ -16,7 +19,7 @@ export default {
     name: 'index',
     data() {
         return {
-            numimg: '1',
+            numimg: '1'
         }
     },
     components: {
@@ -27,74 +30,36 @@ export default {
         baseguide: resolve =>
             require(['@/views/my/home/baseguide/baseguide'], resolve),
         latestworks: resolve =>
-            require(['@/views/my/home/latestworks/latestworks'], resolve)
+            require(['@/views/my/home/latestworks/latestworks'], resolve),
+        statistics: resolve =>
+            require(['@/views/my/home/statistics/statistics'], resolve)
+        // mapvue: resolve => require(['@/views/my/home/mapvue/mapvue'], resolve)
     },
     computed: {},
     watch: {},
     mounted() {},
-    methods: {}
+    methods: {
+        // selectLocation(location) {
+        //     console.log(location)
+        //     console.log(parseFloat(location.lng))
+        //     console.log(parseFloat(location.lat))
+        // }
+    }
 }
 </script>
 <style lang="scss" scoped>
-// .diyt {
-//     font-size: 50px;
-// }
-// $aside-width: 200px;
-// $aside-margin: 20px;
-// .aside {
-//     width: $aside-width;
-//     margin-right: $aside-margin;
-// }
-// .tolower {
-//     position: fixed;
-//     bottom: 50px;
-//     left: 125px;
-//     width: 170px;
-//     height: 391px;
-//     overflow: hidden;
-//     z-index: 1000;
-//     ul {
-//         width: 100%;
-//         height: 100%;
-//         overflow: hidden;
-//         li {
-//             width: 100%;
-//             margin-top: 23px;
-//             height: 30px;
-//             line-height: 30px;
-//             font-size: 20px;
-//             font-weight: normal;
-//             color: #5b490c;
-//             text-align: center;
-//             cursor: pointer;
-//             &:nth-child(1) {
-//                 margin-top: 168px;
-//             }
-//         }
-//     }
-// }
-// .guang {
-//     position: fixed;
-//     left: 80px;
-//     bottom: 170px;
-//     width: 180px;
-//     a {
-//         display: block;
-//         img {
-//             display: block;
-//             width: 100%;
-//         }
-//     }
-//     .sol {
-//         font-size: 14px;
-//         padding: 2px 6px;
-//         background: rgba(0, 0, 0, 0.6);
-//         position: absolute;
-//         top: 0;
-//         right: 0;
-//         color: #fafafa;
-//         cursor: pointer;
-//         border-radius: 2px 0 0 2px;
-//     }
-// }
+.swriper{
+    margin-bottom: 180px;
+}
+.container{
+    position: relative;
+    .statistics{
+        position: absolute;
+        top: -230px;
+        z-index: 10;
+    }
+    .newactivities{
+        // margin-top: 200px;
+    }
+}
 </style>

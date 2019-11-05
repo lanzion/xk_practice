@@ -1,6 +1,6 @@
 <template>
     <div class="giss">
-        <cardlist :datas="datas"></cardlist>
+        <cardlist :datas="datas" :type = 1></cardlist>
         <no-data v-if="nomore"></no-data>
         <pagination :param="pages" :total="totalNum" @change="getlist" style="text-align: right;"></pagination>
     </div>
