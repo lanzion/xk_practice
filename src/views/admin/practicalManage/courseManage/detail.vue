@@ -1,12 +1,12 @@
 <template>
   <div class="content">
-    <!-- <div class="school-detail-main-list">
-      <span class="school-detail-list-head">所属活动</span>
-      <div class="school-detail-list-redource">{{data.title}}</div>
-    </div> -->
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">课程名称</span>
       <div class="school-detail-list-redource">{{data.name}}</div>
+    </div>
+    <div class="school-detail-main-list">
+      <span class="school-detail-list-head">课程设计者</span>
+      <div class="school-detail-list-redource">{{data.courseDesigner}}</div>
     </div>
     <div class="school-detail-list">
       <div class="school-detail-item">
@@ -22,24 +22,48 @@
       </div>
     </div>
     <div class="school-detail-main-list">
-      <span class="school-detail-list-head">课程学段</span>
-      <div class="school-detail-list-redource">
-        <span v-if="data.fit==1">小学</span>
-        <span v-else-if="data.fit==2">初中</span>
-        <span v-else-if="data.fit==3">高中</span>
-      </div>
+      <span class="school-detail-list-head">课程指标</span>
+      <div class="school-detail-list-redource">{{data.courseTypeParentName}}/{{data.courseTypeName}}</div>
+    </div>
+    <div class="school-detail-main-list">
+      <span class="school-detail-list-head">适合学段</span>
+      <div class="school-detail-list-redource">{{data.fit|filterFit(2)}}</div>
     </div>
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">课程类型</span>
-      <div class="school-detail-list-redource">{{data.courseTypeParentName}}/{{data.courseTypeName}}</div>
+      <div class="school-detail-list-redource">{{data.courseType|filterFit(5)}}</div>
+    </div>
+    <div class="school-detail-main-list">
+      <span class="school-detail-list-head">课程时长</span>
+      <div class="school-detail-list-redource">{{data.courseDuration|filterFit(6)}}</div>
+    </div>
+    <div class="school-detail-main-list">
+      <span class="school-detail-list-head">课程费用</span>
+      <div class="school-detail-list-redource">{{data.isFree|filterFit(4)}}</div>
+    </div>
+    <div class="school-detail-main-list">
+      <span class="school-detail-list-head">课程状态</span>
+      <div class="school-detail-list-redource">{{data.status|filterFit(3)}}</div>
+    </div>
+    <div class="school-detail-main-list">
+      <span class="school-detail-list-head">学习简介</span>
+      <div class="school-detail-list-title">{{data.synopsis}}</div>
     </div>
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">学习目标</span>
       <div class="school-detail-list-title">{{data.target}}</div>
     </div>
     <div class="school-detail-main-list">
-      <span class="school-detail-list-head">课程内容</span>
-      <div class="school-detail-list-title">{{data.content}}</div>
+      <span class="school-detail-list-head">课程准备</span>
+      <div class="school-detail-list-title">{{data.coursePreparation}}</div>
+    </div>
+    <div class="school-detail-main-list">
+      <span class="school-detail-list-head">课程活动设计</span>
+      <div class="school-detail-list-title">{{data.activityDesign}}</div>
+    </div>
+    <div class="school-detail-main-list">
+      <span class="school-detail-list-head">学习任务单</span>
+      <div class="school-detail-list-title">{{data.studyAssignments}}</div>
     </div>
 
     <div class="school-detail-main-list">
@@ -47,10 +71,10 @@
       <div class="school-detail-list-redource">
         <div
           class="school-detail-redource-list"
-          v-for="(item,index) in data.resourceDtoList"
+          v-for="(item) in data.resourceDtoList"
           :key="item.courseId"
         >
-          <span class="school-detail-name">附件{{index+1}}</span>
+          <!-- <span class="school-detail-name">附件{{index+1}}</span> -->
           <span class="school-detail-name-title">{{item.resourceName}}</span>
           <a
             :href="item.resourceId"
@@ -80,6 +104,14 @@
 
 <script>
 import { courseDetail } from "@/api/resetApi";
+import {
+  auditStatus,
+  fit,
+  status,
+  isFree,
+  courseType,
+  courseDuration
+} from "@/utils/utility/dict.js";
 
 export default {
   data() {
@@ -92,10 +124,28 @@ export default {
   props: {},
   computed: {},
   watch: {},
-  mounted() {},
-  created() {
+  filters: {
+    filterFit: function(val,num) {
+      let name,arr;
+      let typeArr = {
+        '1':auditStatus,
+        '2':fit,
+        '3':status,
+        '4':isFree,
+        '5':courseType,
+        '6':courseDuration,
+      }
+      arr = typeArr[num]
+      arr.forEach(v => {
+        if(v.code==val) name=v.name
+      });
+      return name
+    }
+  },
+  mounted() {
     this.getDetailData();
   },
+  created() {},
   methods: {
     prewImage() {
       this.dialogImageUrl = this.data.cover;
@@ -105,7 +155,7 @@ export default {
     getDetailData() {
       const id = this.id || this.$route.query.id;
       if (id) {
-        this.showLoading()
+        this.showLoading();
         courseDetail({ id })
           .then(res => {
             const { code, entity: datas } = res.data;
@@ -113,7 +163,9 @@ export default {
               this.data = datas || {};
             }
           })
-          .finally(() => {this.hideLoading()});
+          .finally(() => {
+            this.hideLoading();
+          });
       }
     },
     // 返回列表页
@@ -171,7 +223,7 @@ textarea.el-textarea__inner {
     margin-top: 30px;
     .school-detail-list-title {
       overflow-y: auto;
-      max-height: 150px;
+      // max-height: 150px;
       max-width: 900px;
       border-radius: 4px;
       border: solid 1px #eaeaea;
@@ -182,7 +234,7 @@ textarea.el-textarea__inner {
     .school-detail-list-redource {
       font-size: 14px;
       color: #333333;
-      margin-left: 82px;
+      margin-left: 105px;
       line-height: 20px;
       min-height: 40px;
       .school-detail-redource-list {
@@ -216,7 +268,7 @@ textarea.el-textarea__inner {
     position: absolute;
     top: 0;
     left: 0;
-    width: 82px;
+    width: 100px;
     font-size: 14px;
     line-height: 20px;
     &.list-active {
@@ -233,7 +285,7 @@ textarea.el-textarea__inner {
     line-height: 20px;
     font-size: 14px;
     color: #333333;
-    margin-left: 82px;
+    margin-left: 105px;
   }
 }
 </style>

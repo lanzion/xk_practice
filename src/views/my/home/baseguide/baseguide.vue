@@ -63,15 +63,6 @@
               @click="goto(g.id)"
             >
               <div class="aggregate_two_s_l_top">
-                <!-- <el-image :src="getFileUrl(g.cover)" fit="cover" style="width: 204px;height:278px">
-                  <div
-                    slot="error"
-                    class="image-slot"
-                    style="font-size: 30px;line-height: 278px;text-align: center;"
-                  >
-                    <i class="el-icon-picture-outline"></i>
-                  </div>
-                </el-image> -->
                  <ov-image :src-data="getFileUrl(g.cover)"></ov-image>
               </div>
               <div class="aggregate_two_s_l_box"></div>
@@ -92,15 +83,6 @@
               @click="goto(g.id)"
             >
               <div class="aggregate_two_s_l_top">
-                <!-- <el-image :src="getFileUrl(g.cover)" fit="cover" style="width: 202px;height:278px">
-                  <div
-                    slot="error"
-                    class="image-slot"
-                    style="font-size: 30px;line-height: 278px;text-align: center;"
-                  >
-                    <i class="el-icon-picture-outline"></i>
-                  </div>
-                </el-image> -->
                  <ov-image :src-data="getFileUrl(g.cover)"></ov-image>
               </div>
               <div class="aggregate_two_s_l_box"></div>
@@ -111,15 +93,6 @@
             </li>
           </ul>
         </div>
-        <!-- <div
-          v-if="nomore"
-          :style="{'width':'100%','height':'500px','background':'#fff','textAlign':'center'}"
-        >
-          <img src="~@assets/image/nothingData.svg" alt />
-          <div :style="{'lineHeight':'0'}">
-            <i :style="{'fontSize':'18px'}">暂无数据...</i>
-          </div>
-        </div> -->
         <no-data v-if="nomore"></no-data>
       </div>
     </div>

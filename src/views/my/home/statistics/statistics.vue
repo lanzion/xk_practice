@@ -109,17 +109,20 @@ export default {
     methods: {
         change(value) {
             this.select = value
+            // eslint-disable-next-line no-undef
             $('.select_u').css({ display: 'none' })
         },
         getistrue() {
             this.istrue = true
             let num = document.getElementsByClassName('select_l').length
+            // eslint-disable-next-line no-undef
             $('.select_u')
                 .css({ display: 'block' })
                 .stop()
-                .animate({ height: (num * 30) + 'px' }, 400)
+                .animate({ height: num * 30 + 'px' }, 400)
         },
         setistrue() {
+            // eslint-disable-next-line no-undef
             $('.select_u')
                 .stop()
                 .animate({ height: '0px' }, 400)

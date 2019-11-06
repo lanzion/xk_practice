@@ -16,15 +16,6 @@
               <span>{{g.browseNum}}</span>
             </li>
           </ul>
-          <!-- <div
-            v-if="nomoretwo"
-            :style="{'width':'100%','height':'500px','background':'#fff','textAlign':'center'}"
-          >
-            <img src="~@assets/image/nothingData.svg" alt />
-            <div :style="{'lineHeight':'0'}">
-              <i :style="{'fontSize':'18px'}">暂无数据...</i>
-            </div>
-          </div> -->
            <no-data v-if="nomoretwo"></no-data>
         </div>
       </div>
@@ -69,15 +60,6 @@
               :key="index"
             >
               <div class="aggregate_two_s_l_top">
-                <!-- <el-image :src="g.cover" fit="cover" style="width: 188px;height:188px">
-                  <div
-                    slot="error"
-                    class="image-slot"
-                    style="font-size: 60px;line-height: 180px;text-align: center;color:#ccc;"
-                  >
-                    <i class="el-icon-picture-outline"></i>
-                  </div>
-                </el-image> -->
                 <ov-image :src-data="getFileUrl(g.cover)"></ov-image>
               </div>
               <div class="aggregate_two_s_l_bot">
@@ -85,15 +67,6 @@
               </div>
             </li>
           </ul>
-          <!-- <div
-            v-if="nomore"
-            :style="{'width':'100%','height':'500px','background':'#fff','textAlign':'center'}"
-          >
-            <img src="~@assets/image/nothingData.svg" alt />
-            <div :style="{'lineHeight':'0'}">
-              <i :style="{'fontSize':'18px'}">暂无数据...</i>
-            </div>
-          </div> -->
            <no-data v-if="nomore"></no-data>
         </div>
 

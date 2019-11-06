@@ -35,37 +35,37 @@
 
 <script>
 export default {
-  components: {
+    components: {
     // "teacher-form": resolve =>
     //   require(["@/components/index/account/teacher-form"], resolve),
     // "student-form": resolve =>
     //   require(["@/components/index/account/student-form"], resolve)
-  },
-  data() {
-    return {
-      //   tabs: [
-      //     { name: "teacher", label: "教师", component: "teacher-form" },
-      //     { name: "student", label: "学生", component: "student-form" }
-      //   ],
-      //   active: "teacher",
-      //   component: "teacher-form"
-    };
-  },
-  computed: {
-    active() {
-      return this.$store.state.test.active;
-    }
-  },
-  methods: {
-    changeTab(item) {
-      this.active = item.name;
-      this.component = item.component;
     },
-    next() {
-      if (this.active++ > 2) this.active = 0;
+    data() {
+        return {
+            //   tabs: [
+            //     { name: "teacher", label: "教师", component: "teacher-form" },
+            //     { name: "student", label: "学生", component: "student-form" }
+            //   ],
+            //   active: "teacher",
+            //   component: "teacher-form"
+        }
+    },
+    computed: {
+        active() {
+            return this.$store.state.test.active
+        }
+    },
+    methods: {
+        changeTab(item) {
+            this.active = item.name
+            this.component = item.component
+        },
+        next() {
+            if (this.active++ > 2) this.active = 0
+        }
     }
-  }
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -15,40 +15,40 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex'
 
 export default {
-  props: {
-    menu: {
-      type: Array,
-      default() {
-        return [];
-      }
-    }
-  },
-  data() {
-    return {
-      height: "70px"
-    };
-  },
-  computed: {
-    ...mapState("login", {
-      user: state => state.userInfo || {}
-    })
-  },
-  methods: {
-    ...mapActions("login", ["logout"]),
+    props: {
+        menu: {
+            type: Array,
+            default() {
+                return []
+            }
+        }
+    },
+    data() {
+        return {
+            height: '70px'
+        }
+    },
+    computed: {
+        ...mapState('login', {
+            user: state => state.userInfo || {}
+        })
+    },
+    methods: {
+        ...mapActions('login', ['logout']),
 
-    doLogout() {
-      this.logout();
-      window.location.href = this.page.my.url;
+        doLogout() {
+            this.logout()
+            window.location.href = this.page.my.url
+        }
+    },
+    created() {
+        let url = location.href
+        if (url.indexOf('my.html') > 0) this.height = '98px'
     }
-  },
-  created() {
-    let url = location.href;
-    if (url.indexOf("my.html") > 0) this.height = "98px";
-  }
-};
+}
 </script>
 
 <style lang="scss" scoped>

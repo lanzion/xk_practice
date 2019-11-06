@@ -43,7 +43,7 @@
         ></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="是否收费" prop="isFree">
+    <el-form-item label="课程费用" prop="isFree">
       <el-radio-group v-model="form.isFree">
         <el-radio
           v-for="(item) in isFree"

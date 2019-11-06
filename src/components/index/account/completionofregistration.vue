@@ -17,15 +17,15 @@
 </template>
 <script>
 export default {
-  name: "completionofregistration",
-  data() {
-    return {
-      imgurl: require("../../../../static/img/wancheng(1).png")
-    };
-  },
-  methods: {
-  }
-};
+    name: 'completionofregistration',
+    data() {
+        return {
+            imgurl: require('../../../../static/img/wancheng(1).png')
+        }
+    },
+    methods: {
+    }
+}
 </script>
 <style lang="scss" scoped>
 .completionofregistration {

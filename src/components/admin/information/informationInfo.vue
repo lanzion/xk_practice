@@ -40,210 +40,210 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex'
 
 import {
-  informationDetail,
-  informationEdit,
-  informationAdd
-} from "@/api/newApi";
-import { editor } from "@/mixin/wangEditor.js";
-import { uploadFileSize } from "@/mixin/uploadFileSize.js";
-import aliUpload from "@/components/common/upload.vue";
+    informationDetail,
+    informationEdit,
+    informationAdd
+} from '@/api/newApi'
+import { editor } from '@/mixin/wangEditor.js'
+import { uploadFileSize } from '@/mixin/uploadFileSize.js'
+import aliUpload from '@/components/common/upload.vue'
 
 export default {
-  mixins: [uploadFileSize, editor],
-  components: {
-    "ali-upload": aliUpload
-  },
-  props:{
-    orgType:{ // B 基地 C 校园
-        type:String,
-    }  
-  },
-  data() {
-    return {
-      cover: [],
-      isLoading: false,
-      isMust: [
-        {
-          id: "A",
-          name: "是"
-        },
-        {
-          id: "B",
-          name: "否"
+    mixins: [uploadFileSize, editor],
+    components: {
+        'ali-upload': aliUpload
+    },
+    props: {
+        orgType: { // B 基地 C 校园
+            type: String,
         }
-      ],
-      isOpen: [
-        {
-          id: "A",
-          name: "开启"
-        },
-        {
-          id: "B",
-          name: "关闭"
-        }
-      ],
-      form: {
-        title: "",
-        cover: "",
-        remark: "",
-        content: "",
-        isrecommend: "",
-        status: "",
-        id: ""
-      },
-      rules: {
-        title: [
-          {
-            required: true,
-            message: "请填写资讯标题",
-            trigger: ["blur", "change"]
-          }
-        ],
-        remark: [
-          {
-            required: true,
-            message: "请填写描述",
-            trigger: ["blur", "change"]
-          }
-        ],
-        content: [
-          {
-            required: true,
-            message: "请填写资讯内容",
-            trigger: ["blur"]
-          }
-        ],
-
-        cover: [
-          {
-            required: true,
-            message: "请选择封面",
-            trigger: ["change", "blur"]
-          }
-        ],
-        isrecommend: [
-          {
-            required: true,
-            message: "请选择是否推荐",
-            trigger: ["change", "blur"]
-          }
-        ],
-        status: [
-          {
-            required: true,
-            message: "请选择开启状态",
-            trigger: ["change", "blur"]
-          }
-        ]
-      }
-    };
-  },
-  computed: {},
-  watch: {},
-  mounted() {
-    this.initEditor();
-    let self = this;
-    this.editor.onchange = function() {
-      self.form.content = this.$txt.html();
-    };
-  },
-  created() {
-    this.getDetailData();
-  },
-  methods: {
-    // 获取详情
-    getDetailData() {
-      const id = this.id || this.$route.query.id;
-      if (id) {
-        informationDetail({ id })
-          .then(res => {
-            const { code, entity: datas } = res.data;
-            if (code === 200 && datas) {
-              this.form.cover = [datas.cover];
-              this.cover = [
+    },
+    data() {
+        return {
+            cover: [],
+            isLoading: false,
+            isMust: [
                 {
-                  name: "2.png",
-                  size: 63600,
-                  status: "success",
-                  uploadName: "_2.png",
-                  url: datas.cover
+                    id: 'A',
+                    name: '是'
+                },
+                {
+                    id: 'B',
+                    name: '否'
                 }
-              ];
-              this.form.remark = datas.remark;
-              this.form.content = datas.content;
-              this.form.isrecommend = datas.isrecommend;
-              this.form.status = datas.status;
-              this.editor.$txt.html(datas.content);
-              this.form.title = datas.title;
-              this.form.id = datas.id;
-            }
-          })
-          .finally(() => {});
-      }
-    },
-    uploadCover({ file } = {}) {
-      this.form.cover = this.cover.map((item, index) => item.url);
-    },
-    remove(file) {
-      this.form.cover = [];
-    },
-    submit() {
-      let that = this;
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          this.isLoading = true;
-          let head, txt;
-          const formList = Object.assign({}, this.form);
-          const formData = {
-            cover: this.getFileUrl(formList.cover[0]), //封面
-            title: formList.title, //标题
-            content: formList.content,
-            isrecommend: formList.isrecommend,
-            status: formList.status,
-            id: formList.id,
-            remark: formList.remark,
-            orgType: this.orgType
-          };
-          if (formData.id) {
-            head = informationEdit;
-            txt = "修改成功";
-          } else {
-            head = informationAdd;
-            txt = "提交成功";
-          }
-          head(formData)
-            .then(res => {
-              if (res.data.code === 200) {
-                this.$message({
-                  message: txt,
-                  type: "success",
-                  onClose() {
-                    that.$router.go(-1);
-                  }
-                });
-              } else {
-                this.$message({
-                  message: res.data.msg || `修改失败`,
-                  type: "error"
-                });
-                this.isLoading = false;
-              }
-            })
-            .finally(() => {});
-        } else {
-          return false;
-        }
-      });
-    },
+            ],
+            isOpen: [
+                {
+                    id: 'A',
+                    name: '开启'
+                },
+                {
+                    id: 'B',
+                    name: '关闭'
+                }
+            ],
+            form: {
+                title: '',
+                cover: '',
+                remark: '',
+                content: '',
+                isrecommend: '',
+                status: '',
+                id: ''
+            },
+            rules: {
+                title: [
+                    {
+                        required: true,
+                        message: '请填写资讯标题',
+                        trigger: ['blur', 'change']
+                    }
+                ],
+                remark: [
+                    {
+                        required: true,
+                        message: '请填写描述',
+                        trigger: ['blur', 'change']
+                    }
+                ],
+                content: [
+                    {
+                        required: true,
+                        message: '请填写资讯内容',
+                        trigger: ['blur']
+                    }
+                ],
 
-    cancel() {
-      this.$router.go(-1);
+                cover: [
+                    {
+                        required: true,
+                        message: '请选择封面',
+                        trigger: ['change', 'blur']
+                    }
+                ],
+                isrecommend: [
+                    {
+                        required: true,
+                        message: '请选择是否推荐',
+                        trigger: ['change', 'blur']
+                    }
+                ],
+                status: [
+                    {
+                        required: true,
+                        message: '请选择开启状态',
+                        trigger: ['change', 'blur']
+                    }
+                ]
+            }
+        }
+    },
+    computed: {},
+    watch: {},
+    mounted() {
+        this.initEditor()
+        let self = this
+        this.editor.onchange = function () {
+            self.form.content = this.$txt.html()
+        }
+    },
+    created() {
+        this.getDetailData()
+    },
+    methods: {
+    // 获取详情
+        getDetailData() {
+            const id = this.id || this.$route.query.id
+            if (id) {
+                informationDetail({ id })
+                    .then(res => {
+                        const { code, entity: datas } = res.data
+                        if (code === 200 && datas) {
+                            this.form.cover = [datas.cover]
+                            this.cover = [
+                                {
+                                    name: '2.png',
+                                    size: 63600,
+                                    status: 'success',
+                                    uploadName: '_2.png',
+                                    url: datas.cover
+                                }
+                            ]
+                            this.form.remark = datas.remark
+                            this.form.content = datas.content
+                            this.form.isrecommend = datas.isrecommend
+                            this.form.status = datas.status
+                            this.editor.$txt.html(datas.content)
+                            this.form.title = datas.title
+                            this.form.id = datas.id
+                        }
+                    })
+                    .finally(() => {})
+            }
+        },
+        uploadCover({ file } = {}) {
+            this.form.cover = this.cover.map((item, index) => item.url)
+        },
+        remove(file) {
+            this.form.cover = []
+        },
+        submit() {
+            let that = this
+            this.$refs.form.validate(valid => {
+                if (valid) {
+                    this.isLoading = true
+                    let head, txt
+                    const formList = Object.assign({}, this.form)
+                    const formData = {
+                        cover: this.getFileUrl(formList.cover[0]), // 封面
+                        title: formList.title, // 标题
+                        content: formList.content,
+                        isrecommend: formList.isrecommend,
+                        status: formList.status,
+                        id: formList.id,
+                        remark: formList.remark,
+                        orgType: this.orgType
+                    }
+                    if (formData.id) {
+                        head = informationEdit
+                        txt = '修改成功'
+                    } else {
+                        head = informationAdd
+                        txt = '提交成功'
+                    }
+                    head(formData)
+                        .then(res => {
+                            if (res.data.code === 200) {
+                                this.$message({
+                                    message: txt,
+                                    type: 'success',
+                                    onClose() {
+                                        that.$router.go(-1)
+                                    }
+                                })
+                            } else {
+                                this.$message({
+                                    message: res.data.msg || `修改失败`,
+                                    type: 'error'
+                                })
+                                this.isLoading = false
+                            }
+                        })
+                        .finally(() => {})
+                } else {
+                    return false
+                }
+            })
+        },
+
+        cancel() {
+            this.$router.go(-1)
+        }
     }
-  }
-};
+}
 </script>
 <style lang="scss" scoped>
 .g-form--wrap {

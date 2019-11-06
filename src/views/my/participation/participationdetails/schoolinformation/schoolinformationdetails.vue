@@ -2,21 +2,11 @@
   <div class="baseinformationdetails">
     <div class="workshow">
       <div class="imgshow">
-        <!-- <img :src="imgurl" alt /> -->
          <ov-image :src-data="getFileUrl(imgurl)"></ov-image>
       </div>
       <div class="container">
         <div class="container_one">
           <div class="container_one_l">
-            <!-- <el-image :src="lists.imgurl" style="width: 400px;height:240px">
-              <div
-                slot="error"
-                class="image-slot"
-                style="font-size: 30px;line-height: 240px;text-align: center;"
-              >
-                <i class="el-icon-picture-outline"></i>
-              </div>
-            </el-image> -->
             <ov-image :src-data="getFileUrl(lists.imgurl)"></ov-image>
           </div>
           <div class="container_one_r">
@@ -98,15 +88,6 @@
             </li>
           </ul>
           <div class="conent_for_one_pos" v-if="!nomore"></div>
-          <!-- <div
-            v-if="nomore"
-            :style="{'width':'100%','height':'500px','background':'#fff','textAlign':'center'}"
-          >
-            <img src="~@assets/image/nothingData.svg" alt />
-            <div :style="{'lineHeight':'0'}">
-              <i :style="{'fontSize':'18px'}">暂无数据...</i>
-            </div>
-          </div> -->
            <no-data v-if="nomore"></no-data>
         </div>
       </div>

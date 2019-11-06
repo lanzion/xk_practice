@@ -19,17 +19,15 @@
 <script>
 import { addDictType, editDictType } from '@/api/system'
 
-
-
 export default {
     data() {
         return {
-            form:{
-                code:'',
-                name:'',
-                remark:''
+            form: {
+                code: '',
+                name: '',
+                remark: ''
             },
-            isFirst:true,
+            isFirst: true,
             rules: {
                 code: [
                     { required: true, message: '请输入代码', trigger: 'change' }
@@ -41,22 +39,22 @@ export default {
         }
     },
     props: {
-        detail:{
+        detail: {
             type: Object,
-            default:  {
-                code:'',
-                name:'',
-                remark:''
+            default: {
+                code: '',
+                name: '',
+                remark: ''
             }
         },
     },
     watch: {
         detail: {
             handler: function (detail) {
-                if (Object.keys(detail).length&&this.isFirst) {
-                     console.log(detail)
-                    this.form = Object.assign({}, detail);
-                    this.isFirst =false;
+                if (Object.keys(detail).length && this.isFirst) {
+                    console.log(detail)
+                    this.form = Object.assign({}, detail)
+                    this.isFirst = false
                     this.$nextTick(() => {
                         this.$refs.form.resetFields()
                     })
@@ -98,7 +96,6 @@ export default {
                         }
                     }).finally(() => {
                         this.isLoading = false
-                      
                     })
                 } else {
                     return false
@@ -108,27 +105,24 @@ export default {
 
         // 重置详情数据关闭弹窗
         close() {
-
-             this.form= {
-                code:'',
-                name:'',
-                remark:''
-            };
-            this.isFirst = true;
+            this.form = {
+                code: '',
+                name: '',
+                remark: ''
+            }
+            this.isFirst = true
             this.$refs.form.resetFields()
             this.$emit('close')
         },
 
         // 清空详情数据
         reset() {
-          
-           
-             this.form= {
-                code:'',
-                name:'',
-                remark:''
-            };
-            this.isFirst = true;
+            this.form = {
+                code: '',
+                name: '',
+                remark: ''
+            }
+            this.isFirst = true
             this.$refs.form.resetFields()
         }
     }

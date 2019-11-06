@@ -82,241 +82,232 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex'
 
 import {
-  validateAccount,
-  validateUserName,
-  validatePwd
+    validateAccount,
+    validateUserName,
+    validatePwd
  
-} from "@/utils/utility/validateRule";
+} from '@/utils/utility/validateRule'
 
-import { getByPid,schoolList,addUser } from "@/api/resetApi";
-
+import { getByPid, schoolList, addUser } from '@/api/resetApi'
 
 import { uploadFileSize } from '@/mixin/uploadFileSize.js'
 import aliUpload from '@/components/common/upload.vue'
-const identiy = localStorage.getItem('xk_practice_identity');
+const identiy = localStorage.getItem('xk_practice_identity')
 
-const baseInfo = JSON.parse(localStorage.getItem("xk_practice_baseInfo"));
+const baseInfo = JSON.parse(localStorage.getItem('xk_practice_baseInfo'))
 
 export default {
-   mixins: [uploadFileSize],
-     components: {
-            'ali-upload': aliUpload
-        },
-  data() {
-    return {
-      schoolName:'',//学校名称
-      isSelf: false,
-      identiy:identiy,
-      noPermiss: false,
-      isCheckStrictly: false,
-      datas: [],
-      isLoading1:false,
-      isReadOnly: false,
-      cover:[],
-      defaultProps: {
-        children: "children",
-        label: "permissionName"
-      },
-      lockStatus: [
-       
-        {
-          id: "0",
-          name: "开启"
-        } ,{
-          id: "1",
-          name: "关闭"
-        },
-      ],
-      form: {
-        cover:[],
-        account: "",
-        pwd: "",
-        userName: "",
-        remark: "",
-        baseId: "",
-        pwd1:"",
-        lockStatus:'',
-        permissListChcked:[],
-        permissList: [] //权限列表
-      },
-      rules: {
-        account: [
-          {
-            required: true,
-            message: "请填写帐号",
-            trigger: ["blur"]
-          },
-          { validator: validateAccount, trigger: ['change', 'blur'] }
-        ],
-        pwd: [
-          {
-            required: true,
-            message: "请输入密码",
-            trigger: ["blur"]
-          },
-          { validator:  validatePwd, trigger: ['change', 'blur'] }
-         
-        ],
-         pwd1: [
-           {
-            required: true,
-            message: "请输入密码",
-            trigger: ["blur"]
-          },
-          { validator:(rule, value, callback) =>{
-           
-            if (value === '') {
-                callback(new Error('请输入密码'))
-            } else if (value != this.form.pwd) {
-                callback(new Error('两次输入密码不一致！'))
-            } else {
-               callback()
-            }
-          }, trigger: ['change','blur'] }
-         
-        ],
-        userName: [
-          {
-            required: true,
-            message: "请输入用户名",
-            trigger: ["blur"]
-          },
-        
-         
-        ],
-        lockStatus: [
-          {
-            required: true,
-            message: "请选择开启状态",
-            trigger: ["change", "blur"]
-          }
-        ],
-        permissListChcked: [
-          { required: true, message: "请选择权限", trigger: "blur" }
-        ],
-        cover:[{
-             required: true, message: '请选择头像', trigger: ['change','blur']
-        }],
-      }
-    };
-  },
-  computed: {},
-  watch: {
-    form: {
-      handler: function(val, oldVal) {
-        if (val.permissList.length > 0) {
-          this.noPermiss = false;
-        }
-      },
-      deep: true
-    }
-  },
-  mounted() {
-   
-   
-  },
-  created() {
-      if(identiy==5){
-        this.form.baseId = baseInfo.admin.baseId;
-          this.getUpdateRight();
-      }
-  },
-  methods: {
-     uploadCover ({ file } = {}) {
-             this.form.cover = this.cover.map((item,index) =>item.url)
-      },
-      remove(file){
-             this.form.cover = [];
-      },
-         
-    getUpdateRight(){
-        this.isLoading1 = true;
-        const formData ={
-            type:'D',
-            baseId:this.form.baseId
-        }
-      
-        getByPid(formData).then(res => {
-                    
-                    const { code, entity: datas=[] } = res.data
-                    if (code === 200 && datas) {
-                      const dataArr = datas.filter(o=>o.permissionName=='创客后台管理');
-                      this.datas = dataArr[0].children;
-                      
-                    }
-                 
-                }).finally(() => {
-                      this.isLoading1 = false;
-                })
+    mixins: [uploadFileSize],
+    components: {
+        'ali-upload': aliUpload
     },
-    //权限勾选
-    getPermiss() {
-     
-      let arr = [];
-      let _data = this.$refs.tree.getCheckedNodes();
-      for (let i = 0; i < _data.length; i++) {
-        arr.push(_data[i].pid);
-        arr.push(_data[i].permissionId);
-      }
-      this.form.permissListChcked = [...new Set(arr)];
-    },
-    filterNode(value, data) {
-      if (!value) return true;
-      return !(data.account.indexOf(value) === "cloud_admin");
-    },
-    submit() {
-      
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          this.isLoading = true;
-
-       
-           const formList = Object.assign({}, this.form);
-           const  formData={
-              account: formList.account,
-              pwd: formList.pwd,
-              userName: formList.userName,
-              remark: formList.remark,
-              baseId: formList.baseId,
-              identiy:5,
-              type:'D',
-              lockStatus:formList.lockStatus,
-              permissList: formList.permissListChcked,
-              face:this.getFileUrl(formList.cover[0])
-           }
-         
-          addUser(formData).then(
-            res => {
-              // console.log(res);
-              if (res.data.code == 200) {
-                  this.$message({
-                        message: `添加成功`,
-                        type: 'success'
-                  })
-                  this.$router.go(-1)
-              }else if(res.data.code == 206){
-                  this.$message.error(response.data.msg)
-              }
-              this.isLoading = false;
+    data() {
+        return {
+            schoolName: '', // 学校名称
+            isSelf: false,
+            identiy: identiy,
+            noPermiss: false,
+            isCheckStrictly: false,
+            datas: [],
+            isLoading1: false,
+            isReadOnly: false,
+            cover: [],
+            defaultProps: {
+                children: 'children',
+                label: 'permissionName'
             },
-            err => {
-              console.log(err);
+            lockStatus: [
+       
+                {
+                    id: '0',
+                    name: '开启'
+                }, {
+                    id: '1',
+                    name: '关闭'
+                },
+            ],
+            form: {
+                cover: [],
+                account: '',
+                pwd: '',
+                userName: '',
+                remark: '',
+                baseId: '',
+                pwd1: '',
+                lockStatus: '',
+                permissListChcked: [],
+                permissList: [] // 权限列表
+            },
+            rules: {
+                account: [
+                    {
+                        required: true,
+                        message: '请填写帐号',
+                        trigger: ['blur']
+                    },
+                    { validator: validateAccount, trigger: ['change', 'blur'] }
+                ],
+                pwd: [
+                    {
+                        required: true,
+                        message: '请输入密码',
+                        trigger: ['blur']
+                    },
+                    { validator: validatePwd, trigger: ['change', 'blur'] }
+         
+                ],
+                pwd1: [
+                    {
+                        required: true,
+                        message: '请输入密码',
+                        trigger: ['blur']
+                    },
+                    { validator: (rule, value, callback) => {
+                        if (value === '') {
+                            callback(new Error('请输入密码'))
+                        } else if (value != this.form.pwd) {
+                            callback(new Error('两次输入密码不一致！'))
+                        } else {
+                            callback()
+                        }
+                    },
+                    trigger: ['change', 'blur'] }
+         
+                ],
+                userName: [
+                    {
+                        required: true,
+                        message: '请输入用户名',
+                        trigger: ['blur']
+                    },
+         
+                ],
+                lockStatus: [
+                    {
+                        required: true,
+                        message: '请选择开启状态',
+                        trigger: ['change', 'blur']
+                    }
+                ],
+                permissListChcked: [
+                    { required: true, message: '请选择权限', trigger: 'blur' }
+                ],
+                cover: [{
+                    required: true, message: '请选择头像', trigger: ['change', 'blur']
+                }],
             }
-          );
-        } else {
-          return false;
         }
-      });
     },
+    computed: {},
+    watch: {
+        form: {
+            handler: function (val, oldVal) {
+                if (val.permissList.length > 0) {
+                    this.noPermiss = false
+                }
+            },
+            deep: true
+        }
+    },
+    mounted() {
+   
+    },
+    created() {
+        if (identiy == 5) {
+            this.form.baseId = baseInfo.admin.baseId
+            this.getUpdateRight()
+        }
+    },
+    methods: {
+        uploadCover({ file } = {}) {
+            this.form.cover = this.cover.map((item, index) => item.url)
+        },
+        remove(file) {
+            this.form.cover = []
+        },
+         
+        getUpdateRight() {
+            this.isLoading1 = true
+            const formData = {
+                type: 'D',
+                baseId: this.form.baseId
+            }
+      
+            getByPid(formData).then(res => {
+                const { code, entity: datas = [] } = res.data
+                if (code === 200 && datas) {
+                    const dataArr = datas.filter(o => o.permissionName == '创客后台管理')
+                    this.datas = dataArr[0].children
+                }
+            }).finally(() => {
+                this.isLoading1 = false
+            })
+        },
+        // 权限勾选
+        getPermiss() {
+            let arr = []
+            let _data = this.$refs.tree.getCheckedNodes()
+            for (let i = 0; i < _data.length; i++) {
+                arr.push(_data[i].pid)
+                arr.push(_data[i].permissionId)
+            }
+            this.form.permissListChcked = [...new Set(arr)]
+        },
+        filterNode(value, data) {
+            if (!value) return true
+            return !(data.account.indexOf(value) === 'cloud_admin')
+        },
+        submit() {
+            this.$refs.form.validate(valid => {
+                if (valid) {
+                    this.isLoading = true
+       
+                    const formList = Object.assign({}, this.form)
+                    const formData = {
+                        account: formList.account,
+                        pwd: formList.pwd,
+                        userName: formList.userName,
+                        remark: formList.remark,
+                        baseId: formList.baseId,
+                        identiy: 5,
+                        type: 'D',
+                        lockStatus: formList.lockStatus,
+                        permissList: formList.permissListChcked,
+                        face: this.getFileUrl(formList.cover[0])
+                    }
+         
+                    addUser(formData).then(
+                        res => {
+                            // console.log(res);
+                            if (res.data.code == 200) {
+                                this.$message({
+                                    message: `添加成功`,
+                                    type: 'success'
+                                })
+                                this.$router.go(-1)
+                            } else if (res.data.code == 206) {
+                                this.$message.error(response.data.msg)
+                            }
+                            this.isLoading = false
+                        },
+                        err => {
+                            console.log(err)
+                        }
+                    )
+                } else {
+                    return false
+                }
+            })
+        },
 
-    cancel() {
-      this.$router.go(-1)
+        cancel() {
+            this.$router.go(-1)
+        }
     }
-  }
-};
+}
 </script>
 <style lang="scss">
 .school-input-item1 {

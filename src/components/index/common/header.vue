@@ -163,36 +163,36 @@ export default {
             requestNavList().then(res => {
                 const { code, appendInfo = {} } = res.data
                 // console.log("导航栏", appendInfo);
-                appendInfo.list[0].children = [
-                    {
-                        name: '首页',
-                        url: '/my.html#/index'
-                    },
-                    {
-                        name: '课程中心',
-                        url: '/my.html#/community'
-                    },
-                    {
-                        name: '基地/机构',
-                        url: '/my.html#/work'
-                    },
-                    {
-                        name: '学校专栏',
-                        url: '/my.html#/participation'
-                    },
-                    {
-                        name: '活动中心',
-                        url: '/my.html#/actioncenter'
-                    },
-                    {
-                        name: '通知公告',
-                        url: '/my.html#/activity'
-                    },
-                    {
-                        name: '我的大课堂',
-                        url: '/my.html#/space'
-                    },
-                ]
+                // appendInfo.list[0].children = [
+                //     {
+                //         name: '首页',
+                //         url: '/my.html#/index'
+                //     },
+                //     {
+                //         name: '课程中心',
+                //         url: '/my.html#/community'
+                //     },
+                //     {
+                //         name: '基地/机构',
+                //         url: '/my.html#/work'
+                //     },
+                //     {
+                //         name: '学校专栏',
+                //         url: '/my.html#/participation'
+                //     },
+                //     {
+                //         name: '活动中心',
+                //         url: '/my.html#/actioncenter'
+                //     },
+                //     {
+                //         name: '通知公告',
+                //         url: '/my.html#/activity'
+                //     },
+                //     {
+                //         name: '我的大课堂',
+                //         url: '/my.html#/space'
+                //     },
+                // ]
                 if (code === 200) {
                     if (
                         this.identity !== 'baseInfo' &&

@@ -1,7 +1,7 @@
 // 后台管理- 系统管理
 import xhr from 'Axios'
 
-/******************************************Banner**********************************************/
+/** ****************************************Banner**********************************************/
 // Banner列表
 let requestSystemBanner = (options = {}) => xhr.post('/admin/banner/getAllBanner', options)
 // 添加Banner
@@ -17,7 +17,7 @@ let updateBannerSort = (options = {}) => xhr.post('/admin/banner/updateSort', op
 // 设置banner轮播时间
 let updateBannerTime = (options = {}) => xhr.post('/admin/banner/updateBannerTime', options)
 
-/*******************************************Role*******************************************/
+/** *****************************************Role*******************************************/
 // 角色列表
 let requestSystemRole = (options = {}) => xhr.post(`/common/right/rolePager?pageNum=${options.pageNum}&pageSize=${options.pageSize}`, options)
 // 权限列表
@@ -27,7 +27,7 @@ let requestSystemRolePermission = (options = {}) => xhr.post('/common/right/role
 // 保存用户权限
 let addRolePermission = (options = {}) => xhr.post('/common/right/bind', options)
 
-/*******************************************Tag*******************************************/
+/** *****************************************Tag*******************************************/
 // 评价标签-列表查询
 const requestTagList = (options = {}) => xhr.post(`/maker/evaluateLabel/selectPager?pageNum=${options.pageNum}&pageSize=${options.pageSize}`, options)
 // 评价标签-列表查询
@@ -43,7 +43,7 @@ const queryLabelDetail = (options = {}) => xhr.post('/maker/evaluateLabel/select
 // 评价标签--修改
 const editTag = (options = {}) => xhr.post('/maker/evaluateLabel/modify', options)
 
-/*******************************************Term*******************************************/
+/** *****************************************Term*******************************************/
 // 分页查询学期列表
 const requestTermList = (options = {}) => xhr.post(`/maker/term/selectPager?pageNum=${options.pageNum}&pageSize=${options.pageSize}`, options)
 // 新增学期
@@ -55,7 +55,7 @@ const deleteTerm = (options = {}) => xhr.post('/maker/term/del', options)
 // 批量删除学期
 const deleteTerms = (options = {}) => xhr.post('/maker/term/delByIds', options)
 
-/*******************************************Tag*******************************************/
+/** *****************************************Tag*******************************************/
 // 评论管理 - 列表
 let commentList = (options = {}, pageParam = {}) => xhr.post(`/maker/comment/selectPager?pageNum=${pageParam.pageNum}&pageSize=${pageParam.pageSize}`, options)
 
@@ -68,45 +68,44 @@ let reportList = (options = {}, pageParam = {}) => xhr.post(`/maker/report/selec
 // 举报管理 - 属实/不属实
 let reportFunc = (options = {}, pageParam = {}) => xhr.post(`/maker/report/modify`, options)
 
-//反馈管理 - 列表
-let feedbackList = (options = {}, pageParam = {}) => xhr.post(`/maker/feedback/selectPager?pageNum=${pageParam.pageNum}&pageSize=${pageParam.pageSize}`,options)
+// 反馈管理 - 列表
+let feedbackList = (options = {}, pageParam = {}) => xhr.post(`/maker/feedback/selectPager?pageNum=${pageParam.pageNum}&pageSize=${pageParam.pageSize}`, options)
 
-//反馈管理 - 新增
-let addFeedback = (options = {}) => xhr.post(`/maker/feedback/add`,options)
+// 反馈管理 - 新增
+let addFeedback = (options = {}) => xhr.post(`/maker/feedback/add`, options)
 
-//反馈管理 - 后台回复
-let replyFeedback = (options = {}) => xhr.post(`/maker/feedback/modify`,options)
-
+// 反馈管理 - 后台回复
+let replyFeedback = (options = {}) => xhr.post(`/maker/feedback/modify`, options)
 
 export {
-  requestSystemBanner,
-  addBanner,
-  delBanner,
-  addBannerRelation,
-  delBannerRelation,
-  updateBannerSort,
-  updateBannerTime,
-  requestSystemRole,
-  requestSystemPermission,
-  requestSystemRolePermission,
-  addRolePermission,
-  requestTagList,
-  requestAdminTagList,
-  addTag,
-  deleteTag,
-  deleteTags,
-  queryLabelDetail,
-  editTag,
-  requestTermList,
-  addTerm,
-  editTerm,
-  deleteTerm,
-  deleteTerms,
-  commentList,
-  commentFunc,
-  reportList,
-  reportFunc,
-  feedbackList,
-  addFeedback,
-  replyFeedback
+    requestSystemBanner,
+    addBanner,
+    delBanner,
+    addBannerRelation,
+    delBannerRelation,
+    updateBannerSort,
+    updateBannerTime,
+    requestSystemRole,
+    requestSystemPermission,
+    requestSystemRolePermission,
+    addRolePermission,
+    requestTagList,
+    requestAdminTagList,
+    addTag,
+    deleteTag,
+    deleteTags,
+    queryLabelDetail,
+    editTag,
+    requestTermList,
+    addTerm,
+    editTerm,
+    deleteTerm,
+    deleteTerms,
+    commentList,
+    commentFunc,
+    reportList,
+    reportFunc,
+    feedbackList,
+    addFeedback,
+    replyFeedback
 }

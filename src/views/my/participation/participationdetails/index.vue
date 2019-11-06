@@ -12,15 +12,6 @@
             </div>
             <div class="container_one">
                 <div class="container_one_l">
-                    <!-- <el-image :src="datas.cover" style="width: 400px;height:240px">
-                        <div
-                            slot="error"
-                            class="image-slot"
-                            style="font-size: 30px;line-height: 240px;text-align: center;"
-                        >
-                            <i class="el-icon-picture-outline"></i>
-                        </div>
-                    </el-image> -->
                     <ov-image :src-data="getFileUrl(datas.cover)"></ov-image>
                 </div>
                 <div class="container_one_r">
@@ -54,12 +45,6 @@
                     <div class="container_one_r_min">
                         <p>{{datas.remark}}</p>
                     </div>
-                    <!-- <div class="container_one_r_eye">
-            <i>
-              <img :src="eye" alt />
-            </i>
-            <span>{{datas.browseNum}}</span>
-                    </div>-->
                 </div>
             </div>
         </div>
@@ -119,7 +104,6 @@ export default {
             }
             const res = await participationschooldetails({ id: id })
             this.datas = res.data.entity
-            console.log(res)
             let isfrom = {
                 imgurl: this.datas.cover,
                 name: this.datas.schoolName,

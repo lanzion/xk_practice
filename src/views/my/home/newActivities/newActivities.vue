@@ -57,15 +57,6 @@
               </div>
             </li>
           </ul>
-          <!-- <div
-            v-if="nomoretwo"
-            :style="{'width':'100%','height':'390px','background':'#fff','textAlign':'center'}"
-          >
-            <img src="~@assets/image/nothingData.svg" alt />
-            <div :style="{'lineHeight':'0'}">
-              <i :style="{'fontSize':'18px'}">暂无数据...</i>
-            </div>
-          </div> -->
           <no-data v-if="nomoretwo"></no-data>
         </div>
       </div>
@@ -80,15 +71,6 @@
           <ul>
             <li v-for="g in datas" :key="g.id" @click="goshow(g.id)">{{g.title}}</li>
           </ul>
-          <!-- <div
-            v-if="nomore"
-            :style="{'width':'100%','height':'380px','background':'#fff','textAlign':'center'}"
-          >
-            <img src="~@assets/image/nothingData.svg" alt />
-            <div :style="{'lineHeight':'0'}">
-              <i :style="{'fontSize':'18px'}">暂无数据...</i>
-            </div>
-          </div> -->
           <no-data v-if="nomore"></no-data>
         </div>
       </div>
