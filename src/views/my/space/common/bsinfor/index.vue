@@ -145,7 +145,7 @@
                   </div>
                 </div>
                 <div data-v-7a64b9c6 class="pdl15 el-col el-col-4">
-                  <router-link data-v-7a64b9c6 to="/imbinding" class="psn-cancel-btn">修改绑定</router-link>
+                  <router-link data-v-7a64b9c6 to="/space/accountsecurity/phone" class="psn-cancel-btn">修改绑定</router-link>
                 </div>
                 <!---->
               </div>
@@ -171,7 +171,7 @@
                   </div>
                 </div>
                 <div data-v-7a64b9c6 class="pdl15 el-col el-col-4">
-                  <router-link data-v-7a64b9c6 to="/momailbox" class="psn-cancel-btn">修改绑定</router-link>
+                  <router-link data-v-7a64b9c6 to="/space/accountsecurity/email" class="psn-cancel-btn">修改绑定</router-link>
                 </div>
                 <!---->
               </div>

@@ -3,31 +3,12 @@
     <ul>
       <li v-for="(item,index) in datas" :key="index">
         <div>
-          <!-- <img :src="item.cover" alt /> -->
-          <!-- <el-image :src="item.cover" fit="cover" style="width: 277px;height:155px">
-            <div
-              slot="error"
-              class="image-slot"
-              style="font-size: 30px;line-height: 155px;text-align: center;"
-            >
-              <i class="el-icon-picture-outline"></i>
-            </div>
-          </el-image> -->
           <ov-image :src-data="getFileUrl(item.cover)"></ov-image>
         </div>
         <h4>{{item.name}}</h4>
         <span @click="changes(item.id)" class="activeone">上传作品</span>
       </li>
     </ul>
-    <!-- <div
-      v-if="nomore"
-      :style="{'width':'100%','height':'500px','background':'#fff','textAlign':'center'}"
-    >
-      <img src="~@assets/image/nothingData.svg" alt />
-      <div :style="{'lineHeight':'0'}">
-        <i :style="{'fontSize':'18px'}">暂无数据...</i>
-      </div>
-    </div> -->
      <no-data v-if="nomore"></no-data>
     <div class="block" v-if="!nomore" :style="{'float':'right','marginRight':'30px'}">
       <pagination
@@ -93,7 +74,7 @@ export default {
         },
         changes(id) {
             this.$router.push({
-                path: '/submissionofworks',
+                path: '/space/mywork/submissionofworks',
                 query: { id: id, type: 2 }
             })
         }

@@ -1,13 +1,5 @@
 <template>
     <ul>
-        <!-- <li @click="changes(g.courseId)" v-for="(g,index) in datas" :key="index">
-            <div>
-                <ov-image :src-data="getFileUrl(g.cover)"></ov-image>
-            </div>
-            <h4>{{g.name}}</h4>
-            <span v-if="identity == 1">{{g.className}}</span>
-            <div class="timer">{{g.startDate}}~{{g.endDate}}</div>
-        </li>-->
         <li v-for="(g,index) in datas" :key="index">
             <div class="boximg" @click="changes(g.courseId)">
                 <ov-image :src-data="getFileUrl(g.cover)"></ov-image>
@@ -15,27 +7,15 @@
             <h4 @click="changes(g.courseId)">{{g.name}}</h4>
             <div class="boxtext">
                 <span @click="changes(g.courseId)">{{g.className}}</span>
-
-                <span
-                    class="spans"
-                    v-if="type === 2"
-                    @click="guidang(g.id,g.classId)"
-                    v-text="g.isPortfolioStatus==='0'?'未归档':'已归档'"
-                ></span>
-
-                <span
-                    class="spans"
-                    v-if="type === 3"
-                    @click="gotoover(g.id,g.courseTypeParent,g.courseType,g.classId)"
-                >活动评价</span>
+                <slot name="spans" :todo="g"></slot>
             </div>
             <div class="timer">{{g.startDate}}~{{g.endDate}}</div>
         </li>
     </ul>
 </template>
 <script>
-import { mapState } from 'vuex'
-import { archivesclasscoursearchives } from '@/api/frontstage'
+// import { mapState } from 'vuex'
+// import { archivesclasscoursearchives } from '@/api/frontstage'
 export default {
     name: 'cardlist',
     data() {
@@ -47,20 +27,14 @@ export default {
             default() {
                 return []
             }
-        },
-        type: {
-            type: Number,
-            default() {
-                return 1
-            }
         }
     },
     created() {},
-    computed: {
-        ...mapState('login', {
-            identity: state => state.identity || {}
-        })
-    },
+    // computed: {
+    //     ...mapState('login', {
+    //         identity: state => state.identity || {}
+    //     })
+    // },
     methods: {
         changes(courseId) {
             localStorage.setItem('courseId', courseId)
@@ -68,37 +42,6 @@ export default {
                 path: '/space/classroom/curriculumdetails',
                 query: { courseId: courseId }
             })
-        },
-        gotoover(id, courseTypeParent, courseType, classId) {
-            let goods = {
-                courseTypeParent,
-                courseType
-            }
-            localStorage.setItem('goods', JSON.stringify(goods))
-            localStorage.setItem('fid', id)
-            sessionStorage.setItem('reviewerClassId', classId)
-            this.$router.push({
-                path: '/space/classroom/curriculumevaluation',
-                query: { id: id, reviewerClassId: classId }
-            })
-        },
-        async guidang(courseClassId, classId) {
-            let res = await archivesclasscoursearchives({
-                courseClassId: courseClassId,
-                classId: classId
-            })
-            if (res.data.code === 200) {
-                this.$message({
-                    type: 'success',
-                    message: '归档成功!'
-                })
-                this.getlist()
-            } else {
-                this.$message({
-                    type: 'info',
-                    message: '归档失败!'
-                })
-            }
         }
     }
 }

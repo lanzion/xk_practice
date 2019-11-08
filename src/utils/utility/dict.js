@@ -3,9 +3,9 @@
  */
 // 审核状态
 export const auditStatus = [
-    {code: 'A', name: '待审核'},
+    {code: 'A', name: '审核通过'},
     {code: 'B', name: '审核不通过'},
-    {code: 'C', name: '审核通过'},
+    {code: 'C', name: '待审核'},
 ]
 
 // 适合学段
@@ -17,14 +17,14 @@ export const fit = [
 
 // 状态
 export const status = [
-    {code: '0', name: '禁用'},
-    {code: '1', name: '启用'},
+    {code: 0, name: '禁用'},
+    {code: 1, name: '启用'},
 ]
 
 // 状态
 export const isFree = [
-    {code: '0', name: '免费'},
-    {code: '1', name: '收费'},
+    {code: 0, name: '免费'},
+    {code: 1, name: '收费'},
 ]
 
 // 课程类型

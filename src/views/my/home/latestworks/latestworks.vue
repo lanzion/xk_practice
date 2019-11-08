@@ -140,7 +140,7 @@ export default {
             sessionStorage.setItem('listmore', JSON.stringify(listmore))
         },
         goto(id) {
-            this.$router.push({ path: '/listsdetail', query: { id: id } })
+            this.$router.push({ path: '/community/course/textworks/workdetail', query: { id: id } })
         }
     }
 }

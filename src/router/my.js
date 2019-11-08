@@ -13,6 +13,11 @@ const findpwd = () => import('@/views/index/account/findpwd')
 const home = () => import('@/views/my/home/index')
 // ---------------------------------------------------------------------------------------
 const community = () => import('@/views/my/curriculumcenter/index') // 课程中心
+const course = () => import('@/views/my/curriculumcenter/course/course') // 课程中心--课程
+const textdetail = () => import('@/views/my/curriculumcenter/course/children/textdetail') // 课程中心--课程--课程详情
+const textworks = () => import('@/views/my/curriculumcenter/course/children/textworks') // 课程中心--课程--实践作品
+const workdetail = () => import('@/views/my/curriculumcenter/course/workdetail') // 课程中心--课程--实践作品--作品详情
+const textevaluate = () => import('@/views/my/curriculumcenter/course/children/textevaluate') // 课程中心--课程--课程评论
 const coursedetails = () => import('@/views/my/curriculumcenter/coursedetails/index') // 课程详情
 const courseintroduction = () => import('@/views/my/curriculumcenter/coursedetails/courseintroduction/courseintroduction') // 课程介绍
 const participatinginstitutions = () => import('@/views/my/curriculumcenter/coursedetails/participatinginstitutions/participatinginstitutions') // 参与院校
@@ -55,30 +60,38 @@ const ptba = () => import('@/views/my/space/teacher/classroom/children/ptba') //
 const teacherstobeevaluated = () => import('@/views/my/space/teacher/classroom/children/teacherstobeevaluated') // 实践课堂（教师）--待评价
 
 const agment = () => import('@/views/my/space/teacher/agment/index') // 作品管理（教师）
+const workdetails = () => import('@/views/my/space/teacher/agment/workdetails') // 作品管理（教师）--详情
 const tbuploaded = () => import('@/views/my/space/teacher/agment/children/tbuploaded') // 作品管理（教师）--待上传
 const noaudited = () => import('@/views/my/space/teacher/agment/children/noaudited') // 作品管理（教师）--未审核
 const audited = () => import('@/views/my/space/teacher/agment/children/audited') // 作品管理（教师）--已审核
 
 const wscoring = () => import('@/views/my/space/teacher/wscoring/index') // 作品评分（教师）
+const evaluationdetails = () => import('@/views/my/space/teacher/wscoring/evaluationdetails') // 作品评分（教师）--评分详情
 const origs = () => import('@/views/my/space/teacher/wscoring/children/origs') // 作品评分（教师）--未评分
 const heorigs = () => import('@/views/my/space/teacher/wscoring/children/heorigs') // 作品评分（教师）--已评分
 
 const mgtudent = () => import('@/views/my/space/teacher/mgtudent/index') // 学生管理（教师）
+const viewworks = () => import('@/views/my/space/teacher/mgtudent/viewworks') // 学生管理--查看作品（教师）
 
 // ---------------------------------------------------------------------------------------
 
 const mycourse = () => import('@/views/my/space/student/mycourse/index') // 我的课程（学生）
+const activityevaluation = () => import('@/views/my/space/student/mycourse/activityevaluation') // 我的课程（学生）--活动评价
+const studentcoursedetails = () => import('@/views/my/space/student/mycourse/studentcoursedetails') // 我的课程（学生）--详情
 const notstarted = () => import('@/views/my/space/student/mycourse/children/notstarted') // 我的课程（学生）--未开始
 const haveinhand = () => import('@/views/my/space/student/mycourse/children/haveinhand') // 我的课程（学生）--进行中
 const completed = () => import('@/views/my/space/student/mycourse/children/completed') // 我的课程（学生）--已完成
 const coursestobeevaluated = () => import('@/views/my/space/student/mycourse/children/coursestobeevaluated') // 我的课程（学生）--待评价
 
 const mywork = () => import('@/views/my/space/student/mywork/index') // 我的作品（学生）
+const studentworkdetails = () => import('@/views/my/space/student/mywork/studentworkdetails') // 我的作品（学生）--作品详情
+const submissionofworks = () => import('@/views/my/space/student/mywork/submissionofworks') // 我的作品（学生）--上传作品--详情
 const uploadworks = () => import('@/views/my/space/student/mywork/children/uploadworks') // 我的作品（学生）--上传作品
 const beaudited = () => import('@/views/my/space/student/mywork/children/beaudited') // 我的作品（学生）--待审核
 const adopteder = () => import('@/views/my/space/student/mywork/children/adopteder') // 我的作品（学生）--已通过
 
 const selfevaluation = () => import('@/views/my/space/student/selfevaluation/index') // 自我评价（学生）
+const detailsofselfevaluation = () => import('@/views/my/space/student/selfevaluation/detailsofselfevaluation') // 自我评价（学生）--评价详情
 const ungradedstudents = () => import('@/views/my/space/student/selfevaluation/children/ungradedstudents') // 自我评价（学生）--未评分
 const studentshavebeengraded = () => import('@/views/my/space/student/selfevaluation/children/studentshavebeengraded') // 自我评价（学生）--已评分
 
@@ -140,7 +153,7 @@ export default new Router({
     },
 
         // ------------------------------------------------------------
-   
+
     {
         path: '/community', // 课程中心
         name: 'community',
@@ -168,6 +181,30 @@ export default new Router({
             name: 'activityreview',
             component: activityreview,
         }]
+    },
+    {
+        path: '/community/course', // 课程中心--课程
+        name: 'course',
+        component: course,
+        redirect: '/community/course/textdetail',
+        children: [{
+            path: '/community/course/textdetail', // 课程详情
+            name: 'textdetail',
+            component: textdetail,
+        }, {
+            path: '/community/course/textworks', // 实践作品
+            name: 'textworks',
+            component: textworks,
+        }, {
+            path: '/community/course/textevaluate', // 课程评论
+            name: 'textevaluate',
+            component: textevaluate,
+        }]
+    },
+    {
+        path: '/community/course/textworks/workdetail', // 活动详情
+        name: 'workdetail',
+        component: workdetail,
     },
         // ------------------------------------------------------------
     {
@@ -228,7 +265,7 @@ export default new Router({
             name: 'schoolinformation',
             component: schoolinformation,
         }],
-        
+
     },
     {
         path: '/participation/participationdetails/schoolinformation/schoolinformationdetails', // 学校专栏--详情（资讯--详情）
@@ -254,219 +291,251 @@ export default new Router({
         path: '/space', // 我的空间
         name: 'space',
         component: space,
-        children: [
-            {
-                path: '/space/classroom', // 实践课堂（教师）
-                name: 'classroom',
-                component: classroom,
-                redirect: '/space/classroom/abtd',
-                children: [
-                    {
-                        path: '/space/classroom/abtd', //  实践课堂（教师）--未开始
-                        name: 'abtd',
-                        component: abtd,
-                    },
-                    {
-                        path: '/space/classroom/giss', // 实践课堂（教师）--进行中
-                        name: 'giss',
-                        component: giss,
-                    },
-                    {
-                        path: '/space/classroom/ptba', // 实践课堂（教师）--已完成
-                        name: 'ptba',
-                        component: ptba,
-                    },
-                    {
-                        path: '/space/classroom/teacherstobeevaluated', // 实践课堂（教师）--待评价
-                        name: 'teacherstobeevaluated',
-                        component: teacherstobeevaluated,
-                    },
-                ]
+        children: [{
+            path: '/space/classroom', // 实践课堂（教师）
+            name: 'classroom',
+            component: classroom,
+            redirect: '/space/classroom/abtd',
+            children: [{
+                path: '/space/classroom/abtd', //  实践课堂（教师）--未开始
+                name: 'abtd',
+                component: abtd,
             },
             {
-                path: '/space/classroom/curriculumdetails', // 实践课堂（教师）--课程详情
-                name: 'curriculumdetails',
-                component: curriculumdetails,
+                path: '/space/classroom/giss', // 实践课堂（教师）--进行中
+                name: 'giss',
+                component: giss,
             },
             {
-                path: '/space/classroom/curriculumevaluation', // 实践课堂（教师）--课程评价
-                name: 'curriculumevaluation',
-                component: curriculumevaluation,
+                path: '/space/classroom/ptba', // 实践课堂（教师）--已完成
+                name: 'ptba',
+                component: ptba,
             },
             {
-                path: '/space/agment', // 作品管理（教师）
-                name: 'agment',
-                component: agment,
-                redirect: '/space/agment/tbuploaded',
-                children: [
-                    {
-                        path: '/space/agment/tbuploaded', // 作品管理（教师）--待上传
-                        name: 'tbuploaded',
-                        component: tbuploaded,
-                    },
-                    {
-                        path: '/space/agment/noaudited', // 作品管理（教师）--未审核
-                        name: 'noaudited',
-                        component: noaudited,
-                    },
-                    {
-                        path: '/space/agment/audited', // 作品管理（教师）--已审核
-                        name: 'audited',
-                        component: audited,
-                    },
-                ]
+                path: '/space/classroom/teacherstobeevaluated', // 实践课堂（教师）--待评价
+                name: 'teacherstobeevaluated',
+                component: teacherstobeevaluated,
+            },
+            ]
+        },
+        {
+            path: '/space/classroom/curriculumdetails', // 实践课堂（教师）--课程详情
+            name: 'curriculumdetails',
+            component: curriculumdetails,
+        },
+        {
+            path: '/space/classroom/curriculumevaluation', // 实践课堂（教师）--课程评价
+            name: 'curriculumevaluation',
+            component: curriculumevaluation,
+        },
+        {
+            path: '/space/agment', // 作品管理（教师）
+            name: 'agment',
+            component: agment,
+            redirect: '/space/agment/tbuploaded',
+            children: [{
+                path: '/space/agment/tbuploaded', // 作品管理（教师）--待上传
+                name: 'tbuploaded',
+                component: tbuploaded,
             },
             {
-                path: '/space/wscoring', // 作品评分（教师）
-                name: 'wscoring',
-                component: wscoring,
-                redirect: '/space/wscoring/origs',
-                children: [
-                    {
-                        path: '/space/wscoring/origs', // 作品评分（教师）--未评分
-                        name: 'origs',
-                        component: origs,
-                    },
-                    {
-                        path: '/space/wscoring/heorigs', // 作品评分（教师）--已评分
-                        name: 'heorigs',
-                        component: heorigs,
-                    },
-                ]
+                path: '/space/agment/noaudited', // 作品管理（教师）--未审核
+                name: 'noaudited',
+                component: noaudited,
             },
             {
-                path: '/space/mgtudent', // 学生管理（教师）
-                name: 'mgtudent',
-                component: mgtudent,
+                path: '/space/agment/audited', // 作品管理（教师）--已审核
+                name: 'audited',
+                component: audited,
             },
-
-            // ------------------------------------------------------------
-        
-            {
-                path: '/space/mycourse', // 我的课程（学生）
-                name: 'mycourse',
-                component: mycourse,
-                redirect: '/space/mycourse/notstarted',
-                children: [
-                    {
-                        path: '/space/mycourse/notstarted', // 我的课程（学生）--未开始
-                        name: 'notstarted',
-                        component: notstarted,
-                    },
-                    {
-                        path: '/space/mycourse/haveinhand', // 我的课程（学生）--进行中
-                        name: 'haveinhand',
-                        component: haveinhand,
-                    },
-                    {
-                        path: '/space/mycourse/completed', // 我的课程（学生）--已完成
-                        name: 'completed',
-                        component: completed,
-                    },
-                    {
-                        path: '/space/mycourse/coursestobeevaluated', // 我的课程（学生）--待评价
-                        name: 'coursestobeevaluated',
-                        component: coursestobeevaluated,
-                    },
-                ]
+            ]
+        },
+        {
+            path: '/space/agment/workdetails', // 作品管理（教师）--作品详情
+            name: 'workdetails',
+            component: workdetails,
+        },
+        {
+            path: '/space/wscoring', // 作品评分（教师）
+            name: 'wscoring',
+            component: wscoring,
+            redirect: '/space/wscoring/origs',
+            children: [{
+                path: '/space/wscoring/origs', // 作品评分（教师）--未评分
+                name: 'origs',
+                component: origs,
             },
             {
-                path: '/space/mywork', // 我的作品（学生）
-                name: 'mywork',
-                component: mywork,
-                redirect: '/space/mywork/uploadworks',
-                children: [
-                    {
-                        path: '/space/mywork/uploadworks', // 我的作品（学生）--上传作品
-                        name: 'uploadworks',
-                        component: uploadworks,
-                    },
-                    {
-                        path: '/space/mywork/beaudited', // 我的作品（学生）--待审核
-                        name: 'beaudited',
-                        component: beaudited,
-                    },
-                    {
-                        path: '/space/mywork/adopteder', // 我的作品（学生）--已通过
-                        name: 'adopteder',
-                        component: adopteder,
-                    },
-                ]
+                path: '/space/wscoring/heorigs', // 作品评分（教师）--已评分
+                name: 'heorigs',
+                component: heorigs,
             },
-            {
-                path: '/space/selfevaluation', // 自我评价（学生）
-                name: 'selfevaluation',
-                component: selfevaluation,
-                redirect: '/space/selfevaluation/ungradedstudents',
-                children: [
-                    {
-                        path: '/space/selfevaluation/ungradedstudents', // 自我评价（学生）--未评分
-                        name: 'ungradedstudents',
-                        component: ungradedstudents,
-                    },
-                    {
-                        path: '/space/selfevaluation/studentshavebeengraded', // 自我评价（学生）--已评分
-                        name: 'studentshavebeengraded',
-                        component: studentshavebeengraded,
-                    },
-                ]
-            },
-            {
-                path: '/space/evaluatingothers', // 评价他人（学生）
-                name: 'evaluatingothers',
-                component: evaluatingothers,
-                redirect: '/space/evaluatingothers/evaluateotherswithoutscoring',
-                children: [
-                    {
-                        path: '/space/evaluatingothers/evaluateotherswithoutscoring', // 评价他人（学生）--未评分
-                        name: 'evaluateotherswithoutscoring',
-                        component: evaluateotherswithoutscoring,
-                    },
-                    {
-                        path: '/space/evaluatingothers/evaluateothersiscores', // 评价他人（学生）--已评分
-                        name: 'evaluateothersiscores',
-                        component: evaluateothersiscores,
-                    },
-                ]
-            },
-            {
-                path: '/space/archives', // 档案袋（学生）
-                name: 'archives',
-                component: archives,
-            },
+            ]
+        },
+        {
+            path: '/space/wscoring/evaluationdetails', // 作品评分（教师）--评分详情
+            name: 'evaluationdetails',
+            component: evaluationdetails,
+        },
+        {
+            path: '/space/mgtudent', // 学生管理（教师）
+            name: 'mgtudent',
+            component: mgtudent,
+        },
+        {
+            path: '/space/mgtudent/viewworks', // 学生管理--查看作品（教师）
+            name: 'viewworks',
+            component: viewworks,
+        },
 
             // ------------------------------------------------------------
 
-            {
-                path: '/space/bsinfor', // 基本资料（公用）
-                name: 'bsinfor',
-                component: bsinfor,
+        {
+            path: '/space/mycourse', // 我的课程（学生）
+            name: 'mycourse',
+            component: mycourse,
+            redirect: '/space/mycourse/notstarted',
+            children: [{
+                path: '/space/mycourse/notstarted', // 我的课程（学生）--未开始
+                name: 'notstarted',
+                component: notstarted,
             },
             {
-                path: '/space/avatar', // 头像设置（公用）
-                name: 'avatar',
-                component: avatar,
+                path: '/space/mycourse/haveinhand', // 我的课程（学生）--进行中
+                name: 'haveinhand',
+                component: haveinhand,
             },
             {
-                path: '/space/accountsecurity', // 账号安全（公用）
-                name: 'accountsecurity',
-                component: accountsecurity,
+                path: '/space/mycourse/completed', // 我的课程（学生）--已完成
+                name: 'completed',
+                component: completed,
             },
             {
-                path: '/space/accountsecurity/pswd', // 账号安全（公用）--密码
-                name: 'pswd',
-                component: pswd,
+                path: '/space/mycourse/coursestobeevaluated', // 我的课程（学生）--待评价
+                name: 'coursestobeevaluated',
+                component: coursestobeevaluated,
+            },
+            ]
+        },
+        {
+            path: '/space/mycourse/studentcoursedetails', // 我的课程（学生）--课程详情
+            name: 'studentcoursedetails',
+            component: studentcoursedetails,
+        },
+        {
+            path: '/space/mycourse/activityevaluation', // 我的课程（学生）--活动评价
+            name: 'activityevaluation',
+            component: activityevaluation,
+        },
+        {
+            path: '/space/mywork', // 我的作品（学生）
+            name: 'mywork',
+            component: mywork,
+            redirect: '/space/mywork/uploadworks',
+            children: [{
+                path: '/space/mywork/uploadworks', // 我的作品（学生）--上传作品
+                name: 'uploadworks',
+                component: uploadworks,
             },
             {
-                path: '/space/accountsecurity/phone', // 账号安全（公用）--手机
-                name: 'phone',
-                component: phone,
+                path: '/space/mywork/beaudited', // 我的作品（学生）--待审核
+                name: 'beaudited',
+                component: beaudited,
             },
             {
-                path: '/space/accountsecurity/email', // 账号安全（公用）--邮箱
-                name: 'email',
-                component: email,
+                path: '/space/mywork/adopteder', // 我的作品（学生）--已通过
+                name: 'adopteder',
+                component: adopteder,
             },
+            ]
+        },
+        {
+            path: '/space/mywork/submissionofworks', // 我的作品（学生）--上传作品--详情
+            name: 'submissionofworks',
+            component: submissionofworks,
+        },
+        {
+            path: '/space/mywork/studentworkdetails', // 我的作品（学生）--作品详情
+            name: 'studentworkdetails',
+            component: studentworkdetails,
+        },
+        {
+            path: '/space/selfevaluation', // 自我评价（学生）
+            name: 'selfevaluation',
+            component: selfevaluation,
+            redirect: '/space/selfevaluation/ungradedstudents',
+            children: [{
+                path: '/space/selfevaluation/ungradedstudents', // 自我评价（学生）--未评分
+                name: 'ungradedstudents',
+                component: ungradedstudents,
+            },
+            {
+                path: '/space/selfevaluation/studentshavebeengraded', // 自我评价（学生）--已评分
+                name: 'studentshavebeengraded',
+                component: studentshavebeengraded,
+            },
+            ]
+        },
+        {
+            path: '/space/selfevaluation/detailsofselfevaluation', // 自我评价（学生）--评价详情
+            name: 'detailsofselfevaluation',
+            component: detailsofselfevaluation,
+        },
+        {
+            path: '/space/evaluatingothers', // 评价他人（学生）
+            name: 'evaluatingothers',
+            component: evaluatingothers,
+            redirect: '/space/evaluatingothers/evaluateotherswithoutscoring',
+            children: [{
+                path: '/space/evaluatingothers/evaluateotherswithoutscoring', // 评价他人（学生）--未评分
+                name: 'evaluateotherswithoutscoring',
+                component: evaluateotherswithoutscoring,
+            },
+            {
+                path: '/space/evaluatingothers/evaluateothersiscores', // 评价他人（学生）--已评分
+                name: 'evaluateothersiscores',
+                component: evaluateothersiscores,
+            },
+            ]
+        },
+        {
+            path: '/space/archives', // 档案袋（学生）
+            name: 'archives',
+            component: archives,
+        },
+
+            // ------------------------------------------------------------
+
+        {
+            path: '/space/bsinfor', // 基本资料（公用）
+            name: 'bsinfor',
+            component: bsinfor,
+        },
+        {
+            path: '/space/avatar', // 头像设置（公用）
+            name: 'avatar',
+            component: avatar,
+        },
+        {
+            path: '/space/accountsecurity', // 账号安全（公用）
+            name: 'accountsecurity',
+            component: accountsecurity,
+        },
+        {
+            path: '/space/accountsecurity/pswd', // 账号安全（公用）--密码
+            name: 'pswd',
+            component: pswd,
+        },
+        {
+            path: '/space/accountsecurity/phone', // 账号安全（公用）--手机
+            name: 'phone',
+            component: phone,
+        },
+        {
+            path: '/space/accountsecurity/email', // 账号安全（公用）--邮箱
+            name: 'email',
+            component: email,
+        },
         ]
     },
         // ------------------------------------------------------------

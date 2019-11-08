@@ -4,7 +4,17 @@
     <div class="g-search--wrap clearfix">
       <el-form :inline="true" class="fl elFrom" @submit.native.prevent>
         <el-form-item label="所在地区">
-          <region type="object" @change="changeRegion" class="regions"></region>
+          <region type="object" @change="changeRegion" class="regions" :clearable="true"></region>
+        </el-form-item>
+        <el-form-item label="审核状态">
+          <el-select v-model="auditStatus" placeholder="请选择审核状态" @change="resetPage" clearable>
+            <el-option
+              v-for="item in auditOption"
+              :key="item.code"
+              :label="item.name"
+              :value="item.code"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-input v-model="keyword" placeholder="请填写基地名称" @keyup.native.enter="resetPage"></el-input>
@@ -25,14 +35,24 @@
     <el-table ref="table" :data="listData" stripe align="center" v-loading="isLoading" border>
       <el-table-column prop="name" label="基地名称" align="center" sortable show-overflow-tooltip />
       <el-table-column prop="address" label="基地地址" align="center" show-overflow-tooltip />
-      <el-table-column prop="infoTypeList" label="基地类型" align="center" show-overflow-tooltip>
+      <el-table-column prop="linkMan" label="联系人" align="center" />
+      <el-table-column prop="linkPhone" label="联系方式" align="center" />
+      <el-table-column
+        align="center"
+        prop="auditStatus"
+        label="审核状态"
+        width="120"
+        :filters="[{ text: '审核通过', value: 'A' }, { text: '审核不通过', value: 'B' }, { text: '待审核', value: 'C' }]"
+        :filter-method="filterTag"
+        filter-placement="bottom-end"
+      >
         <template slot-scope="scope">
-          <div class="elips-two" style="-webkit-box-orient: vertical;">{{scope.row.infoTypeListstr}}</div>
+          <el-tag
+            :type="scope.row.auditStatus === 'A' ? 'success' : (scope.row.auditStatus === 'B'?'danger':'primary')"
+            disable-transitions
+          >{{scope.row.auditStatus === 'A' ? '审核通过' : (scope.row.auditStatus === 'B'?'审核不通过':'待审核')}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="liaisonMan" label="负责人" align="center" />
-      <el-table-column prop="liaisonWay" label="联系方式" align="center" />
-
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <list-operate
@@ -51,11 +71,7 @@
 
     <!-- 分页 -->
     <pagination :param="pages" :total="totalNum" @change="getDatas"></pagination>
-
-    <!-- 重置密码弹窗 -->
-    <el-dialog width="500px" title="重置密码" :visible.sync="passwordVisible">
-      <reset-password-form ref="password" :ids.sync="selection" @close="close"></reset-password-form>
-    </el-dialog>
+    
   </div>
 </template>
 
@@ -65,11 +81,14 @@ import { BaseList } from "@/api/newApi";
 
 import permission from "@/mixin/admin-operate";
 import user from "@/mixin/admin-user";
+import { auditStatus } from "@/utils/utility/dict.js";
 
 export default {
   mixins: [permission, user],
   data() {
     return {
+      auditOption: auditStatus,
+      auditStatus: "",
       listData: [],
       keyword: "",
       provinceId: "",
@@ -90,10 +109,19 @@ export default {
   },
 
   methods: {
+    filterTag(value, row) {
+      return row.auditStatus === value;
+    },
     changeRegion(region) {
-      if (region[0].code) this.provinceId = region[0].code;
-      if (region[1].code) this.cityId = region[1].code;
-      if (region[2].code) this.areaId = region[2].code;
+      if(!region.length){
+        this.provinceId = "";
+        this.cityId = "";
+        this.areaId = "";
+      }else{
+        this.provinceId = (region[0].code?region[0].code:"");
+        this.cityId = (region[1].code?region[1].code:"");
+        this.areaId = (region[2].code?region[2].code:"");
+      } 
       this.resetPage();
     },
 
@@ -101,10 +129,6 @@ export default {
     resetPage() {
       this.$set(this.pages, "pageNum", 1);
       this.getDatas();
-    },
-    // 判断是否未审
-    isnAudit(item) {
-      return Number(item.auditStatus) === 0;
     },
     // 获取列表数据
     async getDatas() {
@@ -114,7 +138,8 @@ export default {
           name: this.keyword,
           provinceId: this.provinceId,
           cityId: this.cityId,
-          areaId: this.areaId
+          areaId: this.areaId,
+          auditStatus: this.auditStatus
         },
         this.pages
       );

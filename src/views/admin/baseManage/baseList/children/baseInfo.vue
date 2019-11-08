@@ -18,29 +18,29 @@
         </el-row>
         <el-row>
           <el-col :span="15">
-            <el-form-item label="联系人" prop="liaisonMan">
-              <el-input v-model="ruleForm.liaisonMan" :disabled="isReadOnly"></el-input>
+            <el-form-item label="联系人" prop="linkMan">
+              <el-input v-model="ruleForm.linkMan" :disabled="isReadOnly"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="15">
-            <el-form-item label="联系方式" prop="liaisonWay">
-              <el-input v-model="ruleForm.liaisonWay" :disabled="isReadOnly"></el-input>
+            <el-form-item label="联系方式" prop="linkPhone">
+              <el-input v-model="ruleForm.linkPhone" :disabled="isReadOnly"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="15">
-            <el-form-item label="负责人" prop="">
-              <el-input v-model="ruleForm.obligationMan" :disabled="isReadOnly"></el-input>
+            <el-form-item label="负责人" prop="leadingCadre">
+              <el-input v-model="ruleForm.leadingCadre" :disabled="isReadOnly"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="15">
-            <el-form-item label="负责人联系方式" prop="">
-              <el-input v-model="ruleForm.obligationPhone" :disabled="isReadOnly"></el-input>
+            <el-form-item label="负责人联系方式" prop="cadrePhone">
+              <el-input v-model="ruleForm.cadrePhone" :disabled="isReadOnly"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -85,33 +85,20 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="基地类型" prop="baseinfoTypeList">
-              <el-cascader
-                :show-all-levels="false"
-                v-model="ruleForm.baseinfoTypeList"
-                :options="ActivityTypeParent"
-                :props="{ expandTrigger: 'hover',multiple: true, }"
-                :disabled="isReadOnly"
-              ></el-cascader>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="15">
-            <el-form-item label="基地描述" prop="remark">
+            <el-form-item label="基地简介" prop="remark">
               <el-input
                 v-model="ruleForm.remark"
                 type="textarea"
                 :rows="4"
-                placeholder="基地描述"
+                placeholder="基地简介"
                 :disabled="isReadOnly"
               ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="工作日期" prop="checkboxGroup">
-          <el-checkbox-group v-model="ruleForm.checkboxGroup" :disabled="isReadOnly">
+        <el-form-item label="工作日期" prop="workDate">
+          <el-checkbox-group v-model="ruleForm.workDate">
             <el-checkbox-button
               v-for="city in cities"
               :label="city"
@@ -119,42 +106,23 @@
             >{{filterCityOptions(city)}}</el-checkbox-button>
           </el-checkbox-group>
         </el-form-item>
-        <el-form-item label="上班时间" prop="startTime" style="width: 295px;display: inline-block;">
+        <el-form-item label="开馆时间" prop="startTime" style="width: 295px;display: inline-block;">
           <el-time-select
             v-model="ruleForm.startTime"
             :disabled="isReadOnly"
-            :picker-options="{
-                                    start: '08:00',
-                                    step: '00:15',
-                                    end: '18:30'
-                                }"
+            :picker-options="{start: '08:00',step: '00:15',end: '18:30'}"
             placeholder="选择时间"
           ></el-time-select>
         </el-form-item>
-        <el-form-item label="下班时间" prop="endTime" style="width: 250px;display: inline-block;">
+        <el-form-item label="闭馆时间" prop="endTime" style="width: 295px;display: inline-block;">
           <el-time-select
             :disabled="isReadOnly"
             v-model="ruleForm.endTime"
-            :picker-options="{
-                                    start: '08:30',
-                                    step: '00:15',
-                                    end: '18:30'
-                                }"
+            :picker-options="{start: '08:30',step: '00:15',end: '18:30'}"
             placeholder="选择时间"
           ></el-time-select>
         </el-form-item>
-
-        <el-form-item label="每日可举办活动次数" prop="allNum">
-          <el-input
-            @input="checkNum(ruleForm.allNum)"
-            placeholder="请输入次数"
-            v-model="ruleForm.allNum"
-            clearable
-            :style="{'width':'120px'}"
-            :disabled="isReadOnly"
-          ></el-input>
-          <span>次</span>
-        </el-form-item>
+        <br />
         <el-form-item label="LOGO" prop="cover" style="width: 49%;display: inline-block;">
           <ali-upload
             :limit="1"
@@ -309,26 +277,7 @@ export default {
       endTime: "",
       value2: "",
       ruleForm: {
-        provinceId: "",
-        cityId: "",
-        areaId: "",
-        checkboxGroup: [],
-        baseinfoTypeList: [],
-        name: "",
-        liaisonMan: "",
-        liaisonWay: "",
-        fax: "",
-        email: "",
-        address: "",
-        remark: "",
-        startTime: "",
-        startLunchHour: "",
-        endLunchHour: "",
-        endTime: "",
-        allNum: "",
-        cover: "",
-        designSpaceBackground: "",
-        designSpacePage: ""
+        workDate: [],
       },
       rules: {
         name: [
@@ -339,14 +288,14 @@ export default {
           }
         ],
 
-        liaisonMan: [
+        linkMan: [
           {
             required: true,
             message: "请填写联系人",
             trigger: ["change", "blur"]
           }
         ],
-        liaisonWay: [
+        linkPhone: [
           {
             required: true,
             validator: validatePhone,
@@ -395,15 +344,8 @@ export default {
             trigger: ["change", "blur"]
           }
         ],
-        baseinfoTypeList: [
-          {
-            required: true,
-            message: "请选择基地类型",
-            trigger: ["change", "blur"]
-          }
-        ],
-        checkboxGroup: [
-          { required: true, message: "请选择工作周期", trigger: "blur" }
+        workDate: [
+          { required: true, message: "请选择工作日期", trigger: "blur" }
         ],
         startTime: [
           {
@@ -480,11 +422,10 @@ export default {
     async getbaseDetail() {
       const id = this.id || this.$route.query.id;
       if (id) {
-        this.showLoading()
+        this.showLoading();
         const res = await adminBaseInfoDetail({ id: id });
         try {
           const _datas = res.data.entity;
-          // this.ruleForm = _datas;
           this.defaultRegion = [
             _datas.provinceId,
             _datas.cityId,
@@ -524,33 +465,12 @@ export default {
               }
             ];
           }
-
-          if (_datas.workTime) {
-            this.ruleForm.checkboxGroup = _datas.workTime.split(",");
+          if (_datas.workDate) {
+            _datas.workDate = _datas.workDate.split(",");
           } else {
-            this.ruleForm.checkboxGroup = [];
+            _datas.workDate = [];
           }
-          let arr = [];
-          _datas.infoTypeList.forEach(o => {
-            arr.push([o.specialTypeId, o.specialDetailId]);
-          });
-          this.ruleForm.id = id;
-          this.ruleForm.baseinfoTypeList = arr;
-          this.ruleForm.name = _datas.name;
-          this.ruleForm.liaisonMan = _datas.liaisonMan;
-          this.ruleForm.liaisonWay = _datas.liaisonWay;
-          this.ruleForm.fax = _datas.fax || "";
-          this.ruleForm.email = _datas.email;
-          this.ruleForm.provinceId = _datas.provinceId;
-          this.ruleForm.cityId = _datas.cityId;
-          this.ruleForm.areaId = _datas.areaId;
-          this.ruleForm.address = _datas.address;
-          this.ruleForm.remark = _datas.remark;
-          this.ruleForm.startTime = _datas.startTime;
-          this.ruleForm.startLunchHour = _datas.startLunchHour;
-          this.ruleForm.endLunchHour = _datas.endLunchHour;
-          this.ruleForm.endTime = _datas.endTime;
-          this.ruleForm.allNum = _datas.allNum;
+          this.ruleForm = _datas;
           this.ruleForm.cover = this.getFileUrl(_datas.cover);
           this.ruleForm.designSpaceBackground = this.getFileUrl(
             _datas.designSpaceBackground
@@ -561,74 +481,46 @@ export default {
         } catch (error) {
           console.log(error);
         } finally {
-          this.hideLoading()
+          this.hideLoading();
         }
       }
     },
     submitForm(formName) {
       this.$refs["ruleForm"].validate(valid => {
         if (valid) {
-          let head,Text;
+          let head, Text;
           this.isLoading = true;
           let formData = Object.assign({}, this.ruleForm);
-          const formList = {
-            id: formData.id,
-            name: formData.name,
-            liaisonMan: formData.liaisonMan,
-            liaisonWay: formData.liaisonWay,
-            fax: formData.fax || "",
-            email: formData.email,
-            provinceId: formData.provinceId,
-            cityId: formData.cityId,
-            areaId: formData.areaId,
-            address: formData.address,
-            remark: formData.remark,
-            workTime: formData.checkboxGroup.join(","),
-            startTime: formData.startTime,
-            startLunchHour: formData.startLunchHour,
-            endLunchHour: formData.endLunchHour,
-            endTime: formData.endTime,
-            allNum: formData.allNum,
-            cover: formData.cover,
-            designSpaceBackground: formData.designSpaceBackground,
-            designSpacePage: formData.designSpacePage,
-            baseinfoTypeList: []
-          };
-          formData.baseinfoTypeList.forEach(o => {
-            formList.baseinfoTypeList.push({
-              specialTypeId: o[0] || "",
-              specialDetailId: o[1] || ""
-            });
-          });
-          if (formList.id) {
-               //   修改
-              head = adminBaseInfoEdit;
-              Text = "修改成功";
-          }else{
+          formData.workDate = formData.workDate.join(',')
+          if (formData.id) {
+            //   修改
+            head = adminBaseInfoEdit;
+            Text = "修改成功";
+          } else {
             //   添加
             head = adminBaseInfoAdd;
             Text = "新增成功";
           }
-          head(formList)
-              .then(res => {
-                let data = res.data;
-                if (data.code == 200) {
-                  this.$alert(Text, {
-                    confirmButtonText: "确定",
-                    callback: action => {
-                      this.$router.push({ path: "/baseManage/baseList" });
-                    }
-                  });
-                } else {
-                  this.$message({
-                    message: data.msg,
-                    type: "warning"
-                  });
-                }
-              })
-              .finally(() => {
-                this.isLoading = false;
-              });
+          head(formData)
+            .then(res => {
+              let data = res.data;
+              if (data.code == 200) {
+                this.$alert(Text, {
+                  confirmButtonText: "确定",
+                  callback: action => {
+                    this.$router.push({ path: "/baseManage/baseList" });
+                  }
+                });
+              } else {
+                this.$message({
+                  message: data.msg,
+                  type: "warning"
+                });
+              }
+            })
+            .finally(() => {
+              this.isLoading = false;
+            });
         } else {
           console.log("error submit!!");
           return false;

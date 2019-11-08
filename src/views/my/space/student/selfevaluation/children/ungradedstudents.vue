@@ -4,30 +4,12 @@
       <ul>
         <li @click="changes(g.id)" v-for="(g,index) in datas" :key="index">
           <div>
-            <!-- <el-image :src="g.cover" style="width: 277px;height:155px">
-              <div
-                slot="error"
-                class="image-slot"
-                style="font-size: 30px;line-height: 155px;text-align: center;"
-              >
-                <i class="el-icon-picture-outline"></i>
-              </div>
-            </el-image> -->
             <ov-image :src-data="getFileUrl(g.cover)"></ov-image>
           </div>
           <h4>{{g.cname}}</h4>
           <span>{{g.workName}}</span>
         </li>
       </ul>
-      <!-- <div
-        v-if="nomore"
-        :style="{'width':'100%','height':'500px','background':'#fff','textAlign':'center'}"
-      >
-        <img src="~@assets/image/nothingData.svg" alt />
-        <div :style="{'lineHeight':'0'}">
-          <i :style="{'fontSize':'18px'}">暂无数据...</i>
-        </div>
-      </div> -->
        <no-data v-if="nomore"></no-data>
       <div class="block" v-if="!nomore" :style="{'float':'right','marginRight':'30px'}">
         <pagination
@@ -85,7 +67,7 @@ export default {
         changes(id) {
             localStorage.setItem('busId', id)
             this.$router.push({
-                path: '/detailsofselfevaluation',
+                path: '/space/selfevaluation/detailsofselfevaluation',
                 query: { busId: id, type: 3, seetable: false }
             })
         },

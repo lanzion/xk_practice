@@ -1,24 +1,23 @@
 <template>
-  <div class="haveinhand">
-    <ul>
-      <li v-for="(g,index) in datas" :key="index">
-        <div>
-          <ov-image :src-data="getFileUrl(g.cover)"></ov-image>
+    <div class="haveinhand">
+        <studentcardlist :datas="datas">
+            <span
+                slot="course"
+                slot-scope="{todo}"
+                @click="changes(todo.id,todo.cstatus)"
+                class="activeone"
+            >{{todo.cstatus}}</span>
+        </studentcardlist>
+        <no-data v-if="nomore"></no-data>
+        <div class="block" v-if="!nomore" :style="{'float':'right','marginRight':'30px'}">
+            <pagination
+                :param="pages"
+                :page-sizes="[9, 12, 15]"
+                :total="totalNum"
+                @change="getlist"
+            ></pagination>
         </div>
-        <h4>{{g.name}}</h4>
-        <span @click="changes(g.id,g.cstatus)" class="activeone">{{g.cstatus}}</span>
-      </li>
-    </ul>
-     <no-data v-if="nomore"></no-data>
-    <div class="block" v-if="!nomore" :style="{'float':'right','marginRight':'30px'}">
-      <pagination
-        :param="pages"
-        :page-sizes="[9, 12, 15]"
-        :total="totalNum"
-        @change="getlist"
-      ></pagination>
     </div>
-  </div>
 </template>
 <script>
 import { inprogresslistofstudentcourses } from '@/api/frontstage'
@@ -43,6 +42,10 @@ export default {
         workname() {
             return this.$store.state.test.workname
         }
+    },
+    components: {
+        studentcardlist: resolve =>
+            require(['@/components/my/space/studentcardlist'], resolve)
     },
     watch: {
         workname: {
@@ -81,13 +84,13 @@ export default {
             localStorage.setItem('gid', id)
             if (cstatus === '上传作品') {
                 this.$router.push({
-                    name: 'submissionofworks',
+                    name: '/space/mywork/submissionofworks',
                     query: { id: id, type: 1 }
                 })
             } else {
                 this.$router.push({
-                    name: 'detailsofstudentcourses',
-                    params: { id: id }
+                    path: '/space/mycourse/studentcoursedetails',
+                    query: { id: id }
                 })
             }
         }
@@ -96,60 +99,60 @@ export default {
 </script>
 <style lang="scss" scoped>
 .haveinhand {
-  width: 100%;
-  height: 100%;
-  padding-bottom: 80px;
-  min-height: 500px;
-  ul {
     width: 100%;
     height: 100%;
-    font-size: 0px;
-    padding: 42px 20px 0 20px;
-    box-sizing: border-box;
-    li {
-      display: inline-block;
-      width: 277px;
-      height: 220px;
-      margin-left: 28px;
-      margin-bottom: 40px;
-      cursor: pointer;
-      div {
-        width: 100%;
-        height: 155px;
-        img {
-          width: 100%;
-          height: 155px;
-        }
-      }
-      h4 {
-        margin-top: 10px;
-        margin-bottom: 7px;
-        font-size: 16px;
-        color: #333;
-        text-indent: 6px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      span {
-        height: 24px;
-        font-size: 14px;
-        display: block;
-        text-indent: 6px;
-        border-radius: 12px;
-        width: 88px;
-        text-align: center;
-        line-height: 24px;
-        &:hover {
-          background-color: #008aff;
-          color: #ffffff;
-        }
-      }
-    }
-  }
+    padding-bottom: 80px;
+    min-height: 500px;
+    // ul {
+    //     width: 100%;
+    //     height: 100%;
+    //     font-size: 0px;
+    //     padding: 42px 20px 0 20px;
+    //     box-sizing: border-box;
+    //     li {
+    //         display: inline-block;
+    //         width: 277px;
+    //         height: 220px;
+    //         margin-left: 28px;
+    //         margin-bottom: 40px;
+    //         cursor: pointer;
+    //         div {
+    //             width: 100%;
+    //             height: 155px;
+    //             img {
+    //                 width: 100%;
+    //                 height: 155px;
+    //             }
+    //         }
+    //         h4 {
+    //             margin-top: 10px;
+    //             margin-bottom: 7px;
+    //             font-size: 16px;
+    //             color: #333;
+    //             text-indent: 6px;
+    //             overflow: hidden;
+    //             text-overflow: ellipsis;
+    //             white-space: nowrap;
+    //         }
+    //         span {
+    //             height: 24px;
+    //             font-size: 14px;
+    //             display: block;
+    //             text-indent: 6px;
+    //             border-radius: 12px;
+    //             width: 88px;
+    //             text-align: center;
+    //             line-height: 24px;
+    //             &:hover {
+    //                 background-color: #008aff;
+    //                 color: #ffffff;
+    //             }
+    //         }
+    //     }
+    // }
 }
 .activeone {
-  border: 1px solid #008aff;
-  color: #008aff;
+    border: 1px solid #008aff;
+    color: #008aff;
 }
 </style>

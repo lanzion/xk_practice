@@ -1,5 +1,5 @@
 <template>
-    <img @load="imageLoad" @error="imageErr"  :src="imageSrc"  />
+    <img @load="imageLoad" @error="imageErr" :src="imageSrc" />
 </template>
  
 <script>
@@ -43,7 +43,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-img{
+img {
     width: 100%;
     height: 100%;
     object-fit: cover;

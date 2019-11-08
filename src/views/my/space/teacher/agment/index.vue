@@ -10,16 +10,16 @@
           :class="item.path === $route.path ? 'active': ''"
         ></li>
         <div class="search-wrap fl tab-search" :style="{'marginTop':'10px','marginRight':'14px'}">
-          <section data-v-89dd130e class="search clearfix">
+          <section  class="search clearfix">
             <input
               @change="getchange"
               v-model="teachernewworks"
-              data-v-89dd130e
+              
               type="text"
               placeholder="请输入姓名或作品名称"
               class="search-text"
             />
-            <div data-v-89dd130e class="el-icon-search icon-search"></div>
+            <div  class="el-icon-search icon-search"></div>
           </section>
         </div>
       </ul>
@@ -92,7 +92,7 @@ export default {
   box-sizing: border-box;
   font-size: 14px;
 }
-.search .search-text[data-v-89dd130e] {
+.search .search-text {
   width: 100%;
   height: 100%;
   border: 1px solid #ccc;
@@ -101,7 +101,7 @@ export default {
   box-sizing: border-box;
   vertical-align: top;
 }
-.search .el-icon-search[data-v-89dd130e] {
+.search .el-icon-search {
   position: absolute;
   top: 0;
   right: 0;

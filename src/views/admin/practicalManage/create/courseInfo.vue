@@ -307,17 +307,19 @@ export default {
                   url: datas.cover
                 }
               ];
-              datas.resourceDtoList.forEach(o => {
-                this.form.resourceList.push({
+              this.form = datas
+              this.form.cover = [datas.cover];
+              let _resourceList = [];
+              datas.resourceList.forEach(o => {
+                _resourceList.push({
                   name: o.resourceName,
                   status: "success",
                   uploadName: o.resourceName,
                   url: o.resourceId
                 });
               });
-              this.form = datas
-              this.form.cover = [datas.cover];
-              this.form.values = [datas.domainModuleParent, datas.domainModuleChildren];
+              this.form.resourceList = _resourceList;
+              this.form.values = [datas.classificationParent, datas.classificationChildren];
             } else {
               this.$message({
                 message: res.data.msg || `加载失败`,
@@ -376,11 +378,10 @@ export default {
           });
           formList.resourceList = resourceList;
           formList.cover = this.getFileUrl(formList.cover[0]);
-          formList.domainModuleParent = formList.values[0];
-          formList.domainModuleChildren = formList.values[1];
-          if (!formList.auditStatus) formList.auditStatus = "A";
-          console.log(formList);
-          if (formData.id) {
+          formList.classificationParent = formList.values[0];
+          formList.classificationChildren = formList.values[1];
+          if (!formList.auditStatus) formList.auditStatus = "C";
+          if (formList.id) {
             head = courseEdit;
             Text = "修改";
           } else {

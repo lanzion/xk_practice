@@ -3,15 +3,6 @@
     <ul class="beaudited_ul">
       <li class="beaudited_li" v-for="(f,index) in datas" :key="index">
         <div class="beaudited_li_one">
-          <!-- <el-image :src="f.cover" fit="cover" style="width: 277px;height:165px">
-            <div
-              slot="error"
-              class="image-slot"
-              style="font-size: 30px;line-height: 165px;text-align: center;"
-            >
-              <i class="el-icon-picture-outline"></i>
-            </div>
-          </el-image> -->
           <ov-image :src-data="getFileUrl(f.cover)"></ov-image>
           <div class="beaudited_li_one_p">{{f.auditStatus}}</div>
         </div>
@@ -45,15 +36,6 @@
         </div>
       </li>
     </ul>
-    <!-- <div
-      v-if="nomore"
-      :style="{'width':'100%','height':'500px','background':'#fff','textAlign':'center'}"
-    >
-      <img src="~@assets/image/nothingData.svg" alt />
-      <div :style="{'lineHeight':'0'}">
-        <i :style="{'fontSize':'18px'}">暂无数据...</i>
-      </div>
-    </div> -->
      <no-data v-if="nomore"></no-data>
     <div class="block" v-if="!nomore" :style="{'float':'right','marginRight':'30px'}">
       <pagination :param="pages" :page-sizes="[9, 12, 15]" :total="totalNum" @change="getlists"></pagination>
@@ -253,7 +235,7 @@ export default {
                     aideo: false,
                     methods: id => {
                         this.$router.push({
-                            path: '/detailsofstudentworks',
+                            path: '/space/mywork/studentworkdetails',
                             query: { id: id }
                         })
                     }
@@ -354,7 +336,7 @@ export default {
         },
         letgo(id) {
             localStorage.setItem('oid', id)
-            this.$router.push({ path: '/detailsofstudentworks', query: { id: id } })
+            this.$router.push({ path: '/space/mywork/studentworkdetails', query: { id: id } })
         }
     }
 }

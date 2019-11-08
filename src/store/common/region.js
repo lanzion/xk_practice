@@ -19,12 +19,14 @@ const actions = {
     async getRegionList({ state, commit }, payload = {}) {
         const { pcode = '-1' } = payload
         const items = state.region.filter(x => x.pcode === pcode)
+        let data = null
         if (items.length) {
-            return items
+            data = items
+        } else {
+            const res = await requestRegion({ pcode })
+            data = res.data.appendInfo || {}
         }
-
-        const res = await requestRegion({ pcode })
-        const datas = ((res.data.appendInfo || {}).list || []).map(x => {
+        const datas = ((data || {}).list || []).map(x => {
             const item = Object.assign({}, x)
             item.pcode = pcode
             return item

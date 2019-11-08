@@ -1,22 +1,13 @@
 <template>
-    <div class="ptba">
-        <!-- <ul>
-            <li v-for="(g,index) in datas" :key="index">
-                <div class="boximg" @click="changes(g.courseId)">
-                    <ov-image :src-data="getFileUrl(g.cover)"></ov-image>
-                </div>
-                <h4 @click="changes(g.courseId)">{{g.name}}</h4>
-                <div class="boxtext">
-                    <span @click="changes(g.courseId)">{{g.className}}</span>
-                    <span
-                        class="spans"
-                        @click="gotoover(g.id,g.courseTypeParent,g.courseType,g.classId)"
-                    >活动评价</span>
-                </div>
-                <div class="timer">{{g.startDate}}~{{g.endDate}}</div>
-            </li>
-        </ul> -->
-        <cardlist :datas="datas" :type = 3></cardlist>
+    <div class="teacherstobeevaluated">
+        <cardlist :datas="datas">
+            <span
+                class="spans"
+                slot="spans"
+                slot-scope="{todo}"
+                @click="gotoover(todo.id,todo.courseTypeParent,todo.courseType,todo.classId)"
+            >活动评价</span>
+        </cardlist>
         <no-data v-if="nomore"></no-data>
         <pagination
             v-if="!nomore"
@@ -31,7 +22,7 @@
 <script>
 import { practicalcoursestobeevaluatedlist } from '@/api/frontstage'
 export default {
-    name: 'ptba',
+    name: 'teacherstobeevaluated',
     data() {
         return {
             nomore: false,
@@ -79,7 +70,6 @@ export default {
                 this.pages
             )
             const { entity: datas = {} } = res.data
-            // console.log(res);
             try {
                 this.datas = datas.resultData || []
                 this.listData = datas.resultData || []
@@ -90,6 +80,19 @@ export default {
                 this.isLoading = false
             }
         },
+        gotoover(id, courseTypeParent, courseType, classId) {
+            let goods = {
+                courseTypeParent,
+                courseType
+            }
+            localStorage.setItem('goods', JSON.stringify(goods))
+            localStorage.setItem('fid', id)
+            sessionStorage.setItem('reviewerClassId', classId)
+            this.$router.push({
+                path: '/space/classroom/curriculumevaluation',
+                query: { id: id, reviewerClassId: classId }
+            })
+        }
     },
     created() {
         this.getlist()
@@ -97,7 +100,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.ptba {
+.teacherstobeevaluated {
     width: 100%;
     height: 100%;
     padding-bottom: 80px;

@@ -276,7 +276,7 @@ export default {
         // },
         letsgo(id) {
             localStorage.setItem('mid', id)
-            this.$router.push({ path: '/goods', query: { id: id } })
+            this.$router.push({ path: '/community/course', query: { id: id } })
         }
     }
 }

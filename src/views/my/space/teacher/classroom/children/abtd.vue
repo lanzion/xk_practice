@@ -1,6 +1,6 @@
 <template>
     <div class="abtd">
-        <cardlist :datas="datas" :type = 1></cardlist>
+        <cardlist :datas="datas"></cardlist>
         <no-data v-if="nomore"></no-data>
         <pagination
             v-if="!nomore"
@@ -63,7 +63,6 @@ export default {
         }
     },
     created() {
-        this.$store.commit('changetitle', '实践课堂')
         this.getlist()
     }
 }
@@ -75,56 +74,5 @@ export default {
     padding-bottom: 80px;
     min-height: 500px;
     overflow: hidden;
-}
-ul {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    font-size: 0px;
-    padding: 42px 20px 0 20px;
-    box-sizing: border-box;
-
-    li {
-        display: inline-block;
-        width: 277px;
-        border: 1px solid #ccc;
-        height: 232px;
-        margin-left: 28px;
-        margin-bottom: 40px;
-        cursor: pointer;
-
-        div {
-            width: 100%;
-            height: 155px;
-
-            img {
-                width: 100%;
-            }
-        }
-
-        h4 {
-            margin-top: 10px;
-            margin-bottom: 7px;
-            font-size: 16px;
-            color: #333;
-            text-indent: 6px;
-        }
-
-        span {
-            font-size: 12px;
-            display: block;
-            text-indent: 6px;
-            color: #999999;
-        }
-
-        .timer {
-            width: 100%;
-            height: 30px;
-            line-height: 30px;
-            font-size: 12px;
-            text-indent: 6px;
-            color: #999;
-        }
-    }
 }
 </style>

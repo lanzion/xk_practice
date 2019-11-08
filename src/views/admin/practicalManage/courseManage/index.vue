@@ -3,23 +3,18 @@
     <!-- 搜索表单 -->
     <div class="g-search--wrap clearfix">
       <el-form :inline="true" class="fl" @submit.native.prevent>
-        <el-form-item label="状态">
-          <el-select v-model="form.arrangeStatus" placeholder="请选择状态" @change="resetPage" clearable>
-            <el-option
-              v-for="item in fpStates"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
+        <el-form-item label="适合学段">
+          <el-select v-model="form.fit" placeholder="请选择学段" @change="resetPage" clearable>
+            <el-option v-for="item in fit" :key="item.code" :label="item.name" :value="item.code"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="课程类型">
-          <el-select v-model="form.isCompulsory" placeholder="请选择状态" @change="resetPage" clearable>
+          <el-select v-model="form.courseType" placeholder="请选择状态" @change="resetPage" clearable>
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="item in courseType"
+              :key="item.code"
+              :label="item.name"
+              :value="item.code"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -34,26 +29,41 @@
 
     <!-- 表格数据列表 -->
     <el-table ref="table" :data="listData" stripe align="center" v-loading="isLoading" border>
-      <el-table-column prop="name" label="课程名称" align="center" show-overflow-tooltip />
-      <el-table-column label="课程类型" align="center" show-overflow-tooltip>
-        <template slot-scope="scope">{{scope.row.courseTypeName+'>'+scope.row.courseTypeParentName}}</template>
+      <el-table-column prop="name" label="课程名称" align="center" sortable show-overflow-tooltip />
+      <el-table-column label="课程指标" align="center" show-overflow-tooltip>
+        <template slot-scope="scope">{{scope.row.parentName+'>'+scope.row.childrenName}}</template>
       </el-table-column>
-      <el-table-column label="适合学段" align="center">
+      <el-table-column label="适合学段" align="center" width="120" sortable sort-by="fit">
         <template slot-scope="scope">
-          <span v-if="scope.row.fit==1">小学</span>
-          <span v-else-if="scope.row.fit==2">初中</span>
-          <span v-else-if="scope.row.fit==3">高中</span>
+          <span v-if="scope.row.fit=='A'">小学</span>
+          <span v-else-if="scope.row.fit=='B'">初中</span>
+          <span v-else-if="scope.row.fit=='C'">高中</span>
         </template>
       </el-table-column>
       <el-table-column prop="createDate" align="center" label="创建时间" />
       <el-table-column prop="courseDesigner" align="center" label="课程设计者" />
-      <el-table-column prop="statusNum" align="center" label="排课状态" />
-      <el-table-column label="课程类型" align="center" width="80">
+      <!-- <el-table-column prop="statusNum" align="center" label="排课状态" /> -->
+      <el-table-column label="课程类型" align="center" width="100">
         <template slot-scope="scope">
-          <span v-if="scope.row.isCompulsory=='B'">否</span>
-          <span v-else-if="scope.row.isCompulsory=='A'">是</span>
+          <el-tag
+            :type="scope.row.courseType === 'A' ? 'success' : (scope.row.courseType === 'B'?'warning':'primary')"
+            disable-transitions
+          >{{scope.row.courseType === 'A' ? '必修' : (scope.row.courseType === 'B'?'选修':'开放式')}}</el-tag>
         </template>
       </el-table-column>
+      <!-- <el-table-column label="课程状态" align="center" width="100">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.status"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            :active-value="1"
+            :inactive-value="0"
+            @change="changeStatus(scope.row)"
+            >
+          </el-switch>
+        </template>
+      </el-table-column>-->
 
       <el-table-column label="操作" align="center" :width="operateWidth">
         <template slot-scope="scope">
@@ -78,43 +88,24 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import { courseList } from "@/api/resetApi";
+import { courseList, courseEdit } from "@/api/resetApi";
 
 import permission from "@/mixin/admin-operate";
 import user from "@/mixin/admin-user";
+import { fit, courseType } from "@/utils/utility/dict.js";
 
 export default {
   mixins: [permission, user],
   data() {
     return {
+      fit: fit,
+      courseType: courseType,
       form: {
         name: "",
-        arrangeStatus: "",
-        courseTypeParent: "",
-        isCompulsory: "",
+        fit: "",
         courseType: ""
       },
-      listData: [],
-      options: [
-        {
-          value: "A",
-          label: "必修"
-        },
-        {
-          value: "B",
-          label: "选修"
-        }
-      ],
-      fpStates: [
-        {
-          value: "A",
-          label: "已排课"
-        },
-        {
-          value: "B",
-          label: "未排课"
-        }
-      ]
+      listData: []
     };
   },
   computed: {
@@ -134,6 +125,23 @@ export default {
     resetPage() {
       this.$set(this.pages, "pageNum", 1);
       this.getDatas();
+    },
+    changeStatus(val) {
+      courseEdit(val).then(res => {
+        const datas = res.data;
+        if (datas == 200) {
+          this.$message({
+            message: "修改成功",
+            type: "success"
+          });
+        } else {
+          this.$message({
+            message: datas.msg,
+            type: "warning"
+          });
+          val.status ? (val.status = 0) : (val.status = 1);
+        }
+      });
     },
     // 获取列表数据
     async getDatas() {

@@ -3,15 +3,7 @@
     <ul>
       <li @click="changes(t.id)" v-for="(t,index) in datas" :key="index">
         <div>
-          <el-image :src="t.cover" fit="cover" style="width: 277px;height:155px">
-            <div
-              slot="error"
-              class="image-slot"
-              style="font-size: 30px;line-height: 155px;text-align: center;"
-            >
-              <i class="el-icon-picture-outline"></i>
-            </div>
-          </el-image>
+          <ov-image :src-data="getFileUrl(t.cover)"></ov-image>
         </div>
         <h4>{{t.cname}}</h4>
         <span class="spn1">{{t.createName}}</span>
@@ -19,15 +11,6 @@
         <!-- <span>七年级</span> -->
       </li>
     </ul>
-    <!-- <div
-      v-if="nomore"
-      :style="{'width':'100%','height':'500px','background':'#fff','textAlign':'center'}"
-    >
-      <img src="~@assets/image/nothingData.svg" alt />
-      <div :style="{'lineHeight':'0'}">
-        <i :style="{'fontSize':'18px'}">暂无数据...</i>
-      </div>
-    </div> -->
      <no-data v-if="nomore"></no-data>
     <pagination
       v-if="!nomore"
@@ -82,8 +65,8 @@ export default {
         changes(busId) {
             localStorage.setItem('busId', busId)
             this.$router.push({
-                name: 'scofworks',
-                params: { busId: busId, type: 2 }
+                path: '/space/wscoring/evaluationdetails',
+                query: { busId: busId, type: 2 }
             })
         },
         async getlist() {

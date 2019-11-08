@@ -3,21 +3,6 @@
         <ul v-if="studentWorkList.length">
             <li v-for="item in studentWorkList" :key="item.classId">
                 <div class="center_h">
-                    <!-- <el-avatar
-            icon="el-icon-user-solid"
-            :src="item.face"
-            :style="{'width':'100px','fontSize':'50px','lineHeight':'92px','height':'100px','margin':'12px 40px'}"
-            class="tocenter"
-                    ></el-avatar>-->
-                    <!-- <el-image :src="item.cover" fit="cover" style="width: 240px;height:125px">
-            <div
-              slot="error"
-              class="image-slot"
-              style="font-size: 30px;line-height: 125px;text-align: center;"
-            >
-              <i class="el-icon-picture-outline"></i>
-            </div>
-                    </el-image>-->
                     <ov-image :src-data="getFileUrl(item.cover)"></ov-image>
                 </div>
                 <div class="center">
@@ -34,15 +19,6 @@
                 </div>
             </li>
         </ul>
-        <!-- <div
-      v-if="nomore"
-      :style="{'width':'100%','height':'500px','background':'#fff','textAlign':'center'}"
-    >
-      <img src="~@assets/image/nothingData.svg" alt />
-      <div :style="{'lineHeight':'0'}">
-        <i :style="{'fontSize':'18px'}">暂无数据...</i>
-      </div>
-        </div>-->
         <no-data v-if="nomore"></no-data>
         <pagination
             v-if="!nomore"
@@ -96,7 +72,7 @@ export default {
     methods: {
         todetils(id) {
             this.$router.push({
-                name: 'atdetails',
+                path: '/space/agment/workdetails',
                 query: { id: id, type: 1 }
             })
         },

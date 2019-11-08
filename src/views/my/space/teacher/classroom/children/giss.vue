@@ -1,8 +1,14 @@
 <template>
     <div class="giss">
-        <cardlist :datas="datas" :type = 1></cardlist>
+        <cardlist :datas="datas"></cardlist>
         <no-data v-if="nomore"></no-data>
-        <pagination :param="pages" :total="totalNum" @change="getlist" style="text-align: right;"></pagination>
+        <pagination
+            v-if="!nomore"
+            :param="pages"
+            :total="totalNum"
+            @change="getlist"
+            style="text-align: right;"
+        ></pagination>
     </div>
 </template>
 <script>
@@ -57,7 +63,6 @@ export default {
         }
     },
     created() {
-        this.$store.commit('changetitle', '实践课堂')
         this.getlist()
     }
 }

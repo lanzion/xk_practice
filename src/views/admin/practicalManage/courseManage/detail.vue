@@ -23,7 +23,7 @@
     </div>
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">课程指标</span>
-      <div class="school-detail-list-redource">{{data.courseTypeParentName}}/{{data.courseTypeName}}</div>
+      <div class="school-detail-list-redource">{{data.parentName}}/{{data.childrenName}}</div>
     </div>
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">适合学段</span>
@@ -55,15 +55,15 @@
     </div>
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">课程准备</span>
-      <div class="school-detail-list-title">{{data.coursePreparation}}</div>
+      <div class="school-detail-list-title" v-html="data.coursePreparation"></div>
     </div>
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">课程活动设计</span>
-      <div class="school-detail-list-title">{{data.activityDesign}}</div>
+      <div class="school-detail-list-title" v-html="data.activityDesign"></div>
     </div>
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">学习任务单</span>
-      <div class="school-detail-list-title">{{data.studyAssignments}}</div>
+      <div class="school-detail-list-title" v-html="data.studyAssignments"></div>
     </div>
 
     <div class="school-detail-main-list">
@@ -71,10 +71,9 @@
       <div class="school-detail-list-redource">
         <div
           class="school-detail-redource-list"
-          v-for="(item) in data.resourceDtoList"
+          v-for="(item) in data.resourceList"
           :key="item.courseId"
         >
-          <!-- <span class="school-detail-name">附件{{index+1}}</span> -->
           <span class="school-detail-name-title">{{item.resourceName}}</span>
           <a
             :href="item.resourceId"
