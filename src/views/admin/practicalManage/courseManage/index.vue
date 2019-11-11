@@ -33,11 +33,9 @@
       <el-table-column label="课程指标" align="center" show-overflow-tooltip>
         <template slot-scope="scope">{{scope.row.parentName+'>'+scope.row.childrenName}}</template>
       </el-table-column>
-      <el-table-column label="适合学段" align="center" width="120" sortable sort-by="fit">
+      <el-table-column label="适合学段" align="center" width="120" sort-by="fit">
         <template slot-scope="scope">
-          <span v-if="scope.row.fit=='A'">小学</span>
-          <span v-else-if="scope.row.fit=='B'">初中</span>
-          <span v-else-if="scope.row.fit=='C'">高中</span>
+          {{scope.row.fit|filterFit}}
         </template>
       </el-table-column>
       <el-table-column prop="createDate" align="center" label="创建时间" />
@@ -117,6 +115,13 @@ export default {
   },
   created() {
     this.getDatas();
+  },
+  filters:{
+    filterFit(val){
+      let txt = "";
+      if(val) txt = val.replace(/A/g, "小学").replace(/B/g, "初中").replace(/C/g, "高中");
+      return txt;
+    }
   },
   watch: {},
   methods: {

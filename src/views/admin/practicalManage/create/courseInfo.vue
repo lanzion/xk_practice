@@ -24,9 +24,9 @@
       <el-cascader v-model="form.values" :options="options" :props="{ expandTrigger: 'hover' }"></el-cascader>
     </el-form-item>
     <el-form-item label="适合学段" prop="fit">
-      <el-radio-group v-model="form.fit">
-        <el-radio v-for="(item) in fit" :label="item.code" :key="item.code">{{ item.name }}</el-radio>
-      </el-radio-group>
+        <el-checkbox-group v-model="form.fit">
+        <el-checkbox v-for="(item) in fit" :label="item.code" :key="item.code">{{ item.name }}</el-checkbox>
+        </el-checkbox-group>
     </el-form-item>
     <el-form-item label="课程类型" prop="courseType">
       <el-radio-group v-model="form.courseType">
@@ -132,6 +132,7 @@ export default {
   },
   data() {
     return {
+      checkList:[],
       auditStatus: auditStatus,
       fit: fit,
       status: status,
@@ -156,7 +157,7 @@ export default {
         activityDesign: "",
         studyAssignments: "", 
         auditStatus: "", 
-        fit: "", 
+        fit: [], 
         status: "", 
         isFree: "", 
         courseType: "", 
@@ -320,6 +321,8 @@ export default {
               });
               this.form.resourceList = _resourceList;
               this.form.values = [datas.classificationParent, datas.classificationChildren];
+              if(this.form.fit.indexOf(',')) this.form.fit = this.form.fit.split(',')
+              else this.form.fit = [this.form.fit]
             } else {
               this.$message({
                 message: res.data.msg || `加载失败`,
@@ -381,6 +384,7 @@ export default {
           formList.classificationParent = formList.values[0];
           formList.classificationChildren = formList.values[1];
           if (!formList.auditStatus) formList.auditStatus = "C";
+          formList.fit = formList.fit.join(',')
           if (formList.id) {
             head = courseEdit;
             Text = "修改";

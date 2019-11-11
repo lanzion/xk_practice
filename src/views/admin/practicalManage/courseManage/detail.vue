@@ -27,23 +27,23 @@
     </div>
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">适合学段</span>
-      <div class="school-detail-list-redource">{{data.fit|filterFit(2)}}</div>
+      <div class="school-detail-list-redource">{{data.fit|filterFit}}</div>
     </div>
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">课程类型</span>
-      <div class="school-detail-list-redource">{{data.courseType|filterFit(5)}}</div>
+      <div class="school-detail-list-redource">{{data.courseType|filterCode(5)}}</div>
     </div>
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">课程时长</span>
-      <div class="school-detail-list-redource">{{data.courseDuration|filterFit(6)}}</div>
+      <div class="school-detail-list-redource">{{data.courseDuration|filterCode(6)}}</div>
     </div>
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">课程费用</span>
-      <div class="school-detail-list-redource">{{data.isFree|filterFit(4)}}</div>
+      <div class="school-detail-list-redource">{{data.isFree|filterCode(4)}}</div>
     </div>
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">课程状态</span>
-      <div class="school-detail-list-redource">{{data.status|filterFit(3)}}</div>
+      <div class="school-detail-list-redource">{{data.status|filterCode(3)}}</div>
     </div>
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">学习简介</span>
@@ -124,21 +124,26 @@ export default {
   computed: {},
   watch: {},
   filters: {
-    filterFit: function(val,num) {
-      let name,arr;
+    filterCode: function(val, num) {
+      let name, arr;
       let typeArr = {
-        '1':auditStatus,
-        '2':fit,
-        '3':status,
-        '4':isFree,
-        '5':courseType,
-        '6':courseDuration,
-      }
-      arr = typeArr[num]
+        "1": auditStatus,
+        "2": fit,
+        "3": status,
+        "4": isFree,
+        "5": courseType,
+        "6": courseDuration
+      };
+      arr = typeArr[num];
       arr.forEach(v => {
-        if(v.code==val) name=v.name
+        if (v.code == val) name = v.name;
       });
-      return name
+      return name;
+    },
+    filterFit(val) {
+      let txt = "";
+      if(val) txt = val.replace(/A/g, "小学").replace(/B/g, "初中").replace(/C/g, "高中");
+      return txt;
     }
   },
   mounted() {
