@@ -121,270 +121,270 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import { requestAdminTeacherList, delTeacher } from "@/api/base";
-import { requestDataDict } from "@/api/common.js";
-import { recommendAdd, recommendCancel } from "@/api/resetApi";
-import permission from "@/mixin/admin-operate";
-import user from "@/mixin/admin-user";
+import { mapState, mapActions } from 'vuex';
+import { requestAdminTeacherList, delTeacher } from '@/api/base';
+import { requestDataDict } from '@/api/common.js';
+import { recommendAdd, recommendCancel } from '@/api/resetApi';
+import permission from '@/mixin/admin-operate';
+import user from '@/mixin/admin-user';
 
 const search = {
-  sex: "",
-  schoolId: "",
-  teach: "",
-  provinceId: "",
-  cityId: "",
-  areaId: "440106",
-  auditStatus: "",
-  lockStatus: ""
-};
+    sex: '',
+    schoolId: '',
+    teach: '',
+    provinceId: '',
+    cityId: '',
+    areaId: '440106',
+    auditStatus: '',
+    lockStatus: ''
+}
 
 export default {
-  mixins: [permission, user],
-  data() {
-    return {
-      keyword: "",
-      search: { ...search },
-      selection: [],
-      datas: [],
-      detailVisible: false, // 详情弹窗是否可见
-      detail: {
-        disabled: false,
-        id: ""
-      } // 详情组件传参
-    };
+    mixins: [permission, user],
+    data() {
+        return {
+            keyword: '',
+            search: { ...search },
+            selection: [],
+            datas: [],
+            detailVisible: false, // 详情弹窗是否可见
+            detail: {
+                disabled: false,
+                id: ''
+            } // 详情组件传参
+        }
   },
-  computed: {
-    ...mapState("dict", {
-      technicalClassification: state =>
-        ((state.technicalClassification || {}).dicList || []).map(o => {
-          return {
-            code: o.code,
-            id: o.code,
-            name: o.name
-          };
+    computed: {
+        ...mapState('dict', {
+            technicalClassification: state =>
+                ((state.technicalClassification || {}).dicList || []).map(o => {
+                    return {
+                        code: o.code,
+                        id: o.code,
+                        name: o.name
+                    }
         }),
-      subject: state => (state.subject || {}).dicList || [],
-      auditStatus: state =>
-        (state.examineStatus || {}).dicList || [
-          { id: "0", code: 0, name: "待审核" },
-          { id: "1", code: 1, name: "通过" },
-          { id: "2", code: 2, name: "不通过" }
-        ],
-      lockStatus: state => (state.lockStatus || {}).dicList || []
-    })
+            subject: state => (state.subject || {}).dicList || [],
+            auditStatus: state =>
+                (state.examineStatus || {}).dicList || [
+                    { id: '0', code: 0, name: '待审核' },
+                    { id: '1', code: 1, name: '通过' },
+                    { id: '2', code: 2, name: '不通过' }
+                ],
+            lockStatus: state => (state.lockStatus || {}).dicList || []
+        })
+    },
+    created() {
+        this.getDataDict({ code: 'technicalClassification' })
+    this.getDatas()
   },
-  created() {
-    this.getDataDict({ code: "technicalClassification" });
-    this.getDatas();
-  },
-  watch: {
-    search: {
-      handler: function() {
-        this.$set(this.pages, "pageNum", 1);
-        this.getDatas();
+    watch: {
+        search: {
+            handler: function () {
+                this.$set(this.pages, 'pageNum', 1)
+        this.getDatas()
       },
-      deep: true
-    }
-  },
-  methods: {
-    ...mapActions("dict", ["getDataDict"]),
-    // async getDataDict(groupCode){
-    //     const res = await requestDataDict({ groupCode })
-    //     const datas = res.data.entity || {}
+            deep: true
+        }
+    },
+    methods: {
+        ...mapActions('dict', ['getDataDict']),
+        // async getDataDict(groupCode){
+        //     const res = await requestDataDict({ groupCode })
+        //     const datas = res.data.entity || {}
 
-    // },
-    // 重置搜索表单
-    resetForm() {
-      this.search = { ...search };
+        // },
+        // 重置搜索表单
+        resetForm() {
+            this.search = { ...search }
     },
 
-    // 重置分页
-    resetPage() {
-      this.$set(this.pages, "pageNum", 1);
-      this.getDatas();
+        // 重置分页
+        resetPage() {
+            this.$set(this.pages, 'pageNum', 1)
+      this.getDatas()
     },
 
-    // 记录表格选中项
-    changeSelection(val) {
-      val.forEach(o => (o.isId = 1));
-      this.selection = val;
+        // 记录表格选中项
+        changeSelection(val) {
+            val.forEach(o => (o.isId = 1))
+      this.selection = val
       // console.log(val)
     },
 
-    // 获取列表数据
-    async getDatas() {
-      this.isLoading = true;
+        // 获取列表数据
+        async getDatas() {
+            this.isLoading = true
       const res = await requestAdminTeacherList(
-        { ...this.search, name: this.keyword },
-        this.pages
-      );
+                { ...this.search, name: this.keyword },
+                this.pages
+            )
 
-      const { entity: datas = {} } = res.data;
+      const { entity: datas = {} } = res.data
 
       try {
-        this.datas = datas.resultData || [];
-        this.totalNum = datas.totalNum || 0;
+                this.datas = datas.resultData || []
+        this.totalNum = datas.totalNum || 0
       } catch (error) {
-        this.datas = [];
+                this.datas = []
       } finally {
-        this.isLoading = false;
+                this.isLoading = false
       }
+        },
+
+        // 判断是否未审
+        isnAudit(item) {
+            return Number(item.auditStatus) === 0
     },
 
-    // 判断是否未审
-    isnAudit(item) {
-      return Number(item.auditStatus) === 0;
+        // 添加/编辑/查看详情操作
+        doDetail({ model, data }) {
+            this.detail = {
+                disabled: model === 'detail',
+                id: (data && data.id) || ''
+            }
+
+      this.detailVisible = true
     },
 
-    // 添加/编辑/查看详情操作
-    doDetail({ model, data }) {
-      this.detail = {
-        disabled: model === "detail",
-        id: (data && data.id) || ""
-      };
-
-      this.detailVisible = true;
+        // 获取详情数据
+        getDetailDatas() {
+            this.$refs.detail.getDetailData()
     },
 
-    // 获取详情数据
-    getDetailDatas() {
-      this.$refs.detail.getDetailData();
+        // 重置弹窗详情
+        resetDetail(component) {
+            this.$refs[component].reset()
+      this.$set(this.detail, 'id', '')
     },
 
-    // 重置弹窗详情
-    resetDetail(component) {
-      this.$refs[component].reset();
-      this.$set(this.detail, "id", "");
-    },
-
-    recommend({ data }) {
-      const items = data ? [data] : this.selection;
+        recommend({ data }) {
+            const items = data ? [data] : this.selection
 
       if (items.length) {
-        const paramsArr = items.map(x => {
-          return x.id;
-        });
+                const paramsArr = items.map(x => {
+                    return x.id
+        })
         const params = {
-          recommendType: 2,
-          relationIds: paramsArr
-        };
-        this.$confirm(`确认推荐该数据吗?`, "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-          .then(() => {
-            recommendAdd(params).then(res => {
-              const { code, msg } = res.data;
+                    recommendType: 2,
+                    relationIds: paramsArr
+                }
+        this.$confirm(`确认推荐该数据吗?`, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        recommendAdd(params).then(res => {
+                            const { code, msg } = res.data
               if (code === 200) {
-                this.$message({
-                  message: `推荐成功`,
-                  type: "success"
-                });
-                this.$refs.table.clearSelection();
-                this.getDatas();
+                                this.$message({
+                                    message: `推荐成功`,
+                                    type: 'success'
+                                })
+                this.$refs.table.clearSelection()
+                this.getDatas()
               } else {
-                this.$message({
-                  message: msg || "操作失败",
-                  type: "error"
-                });
+                                this.$message({
+                                    message: msg || '操作失败',
+                                    type: 'error'
+                                })
               }
-            });
+                        })
           })
-          .catch(() => {});
+                    .catch(() => {})
       } else {
-        this.$message({
-          message: "请至少选择一条数据!",
-          type: "warning"
-        });
+                this.$message({
+                    message: '请至少选择一条数据!',
+                    type: 'warning'
+                })
       }
-    },
-    norecommend({ data }) {
-      const items = data ? [data] : this.selection;
+        },
+        norecommend({ data }) {
+            const items = data ? [data] : this.selection
 
       if (items.length) {
-        const paramsArr = items.map(x => {
-          return x.id;
-        });
+                const paramsArr = items.map(x => {
+                    return x.id
+        })
         const params = {
-          recommendType: 2,
-          relationIds: paramsArr
-        };
-        this.$confirm(`确认取消推荐吗?`, "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-          .then(() => {
-            recommendCancel(params).then(res => {
-              const { code, msg } = res.data;
+                    recommendType: 2,
+                    relationIds: paramsArr
+                }
+        this.$confirm(`确认取消推荐吗?`, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        recommendCancel(params).then(res => {
+                            const { code, msg } = res.data
               if (code === 200) {
-                this.$message({
-                  message: `取消推荐成功`,
-                  type: "success"
-                });
-                this.$refs.table.clearSelection();
-                this.getDatas();
+                                this.$message({
+                                    message: `取消推荐成功`,
+                                    type: 'success'
+                                })
+                this.$refs.table.clearSelection()
+                this.getDatas()
               } else {
-                this.$message({
-                  message: msg || "操作失败",
-                  type: "error"
-                });
+                                this.$message({
+                                    message: msg || '操作失败',
+                                    type: 'error'
+                                })
               }
-            });
+                        })
           })
-          .catch(() => {});
+                    .catch(() => {})
       } else {
-        this.$message({
-          message: "请至少选择一条数据!",
-          type: "warning"
-        });
+                this.$message({
+                    message: '请至少选择一条数据!',
+                    type: 'warning'
+                })
       }
-    },
-    // 删除操作
-    doDel({ data }) {
-      const items = data ? [data] : this.selection;
+        },
+        // 删除操作
+        doDel({ data }) {
+            const items = data ? [data] : this.selection
 
       if (items.length) {
-        const params = items.map(x => {
-          return {
-            id: x.id
-          };
-        });
-        this.$confirm(`确认删除该数据吗?`, "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
+                const params = items.map(x => {
+                    return {
+                        id: x.id
+                    }
         })
-          .then(() => {
-            delTeacher(params).then(res => {
-              const { code, msg } = res.data;
+        this.$confirm(`确认删除该数据吗?`, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        delTeacher(params).then(res => {
+                            const { code, msg } = res.data
               if (code === 200) {
-                this.$message({
-                  message: `删除成功`,
-                  type: "success"
-                });
-                this.$refs.table.clearSelection();
-                this.getDatas();
+                                this.$message({
+                                    message: `删除成功`,
+                                    type: 'success'
+                                })
+                this.$refs.table.clearSelection()
+                this.getDatas()
               } else {
-                this.$message({
-                  message: msg || "操作失败",
-                  type: "error"
-                });
+                                this.$message({
+                                    message: msg || '操作失败',
+                                    type: 'error'
+                                })
               }
-            });
+                        })
           })
-          .catch(() => {});
+                    .catch(() => {})
       } else {
-        this.$message({
-          message: "请至少选择一条数据!",
-          type: "warning"
-        });
+                this.$message({
+                    message: '请至少选择一条数据!',
+                    type: 'warning'
+                })
       }
+        }
     }
-  }
-};
+}
 </script>
 
 <style lang='scss' scoped>

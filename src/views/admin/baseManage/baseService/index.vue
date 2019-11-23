@@ -71,78 +71,78 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import { baseinfoList } from "@/api/newApi";
+import { mapState, mapActions } from 'vuex'
+import { baseinfoList } from '@/api/newApi'
 
-import permission from "@/mixin/admin-operate";
-import user from "@/mixin/admin-user";
+import permission from '@/mixin/admin-operate'
+import user from '@/mixin/admin-user'
 
 export default {
-  mixins: [permission, user],
-  data() {
-    return {
-      listData: [],
-      keyword: null,
-      fpStates: [
-        {
-          value: "A",
-          label: "通过"
-        },
-        {
-          value: "B",
-          label: "不通过"
-        },
-        {
-          value: "C",
-          label: "未审核"
+    mixins: [permission, user],
+    data() {
+        return {
+            listData: [],
+            keyword: null,
+            fpStates: [
+                {
+                    value: 'A',
+                    label: '通过'
+                },
+                {
+                    value: 'B',
+                    label: '不通过'
+                },
+                {
+                    value: 'C',
+                    label: '未审核'
+                }
+            ],
+            stateValue: null
         }
-      ],
-      stateValue: null
-    };
-  },
-  computed: {},
-  created() {
-    this.getDatas();
-  },
-  watch: {},
-  methods: {
-    filterBtn(item) {
-      if (item == "A") return "详情";
-      else return "审核";
     },
-    edit(id) {
-      this.$router.push({
-        path: "/baseManage/baseService/detail",
-        query: { id: id }
-      });
+    computed: {},
+    created() {
+        this.getDatas()
     },
-    // 重置分页
-    resetPage() {
-      this.$set(this.pages, "pageNum", 1);
-      this.getDatas();
-    },
-    // 获取列表数据
-    async getDatas() {
-      this.isLoading = true;
-      const res = await baseinfoList(
-        { auditStatus: this.stateValue, title: this.keyword },
-        this.pages
-      );
+    watch: {},
+    methods: {
+        filterBtn(item) {
+            if (item == 'A') return '详情'
+            else return '审核'
+        },
+        edit(id) {
+            this.$router.push({
+                path: '/baseManage/baseService/detail',
+                query: { id: id }
+            })
+        },
+        // 重置分页
+        resetPage() {
+            this.$set(this.pages, 'pageNum', 1)
+            this.getDatas()
+        },
+        // 获取列表数据
+        async getDatas() {
+            this.isLoading = true
+            const res = await baseinfoList(
+                { auditStatus: this.stateValue, title: this.keyword },
+                this.pages
+            )
 
-      const { entity: datas = {} } = res.data;
+            const { entity: datas = {} } = res.data
 
-      try {
-        this.listData = datas.resultData || [];
-        this.totalNum = datas.totalNum || 0;
-      } catch (error) {
-        this.listData = [];
-        this.totalNum = 0;
-      } finally {
-        this.isLoading = false;
-      }
+            try {
+                this.listData = datas.resultData || []
+                this.totalNum = datas.totalNum || 0
+            } catch (error) {
+                this.listData = []
+                this.totalNum = 0
+            } finally {
+                this.isLoading = false
+            }
+        }
     }
-  }
-};
+}
 </script>
 
 <style lang='scss' scoped>

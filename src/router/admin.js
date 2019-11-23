@@ -66,6 +66,12 @@ const practicalComment = () => import('@/views/admin/practicalManage/comment/ind
 const practicalCommentDetail = () => import('@/views/admin/practicalManage/comment/detail')
 const practicalCommentAdd = () => import('@/views/admin/practicalManage/comment/add')
 
+// -----------------------------------------------------------------------------------------------
+const practicalStart = () => import('@/views/admin/practicalManage/start/index')
+const practicalList = () => import('@/views/admin/practicalManage/list/index')
+const practicalSure = () => import('@/views/admin/practicalManage/sure/index')
+// ------------------------------------------------------------------------------------------------
+
 // 评分管理2.0
 const evaluteManage = () => import('@/views/admin/evaluteManage/record/index')
 const evaluteModel = () => import('@/views/admin/evaluteManage/model/index')
@@ -490,6 +496,41 @@ export default new Router({
                     ]
 
                 },
+                // ------------------------------------------
+                {
+                    path: 'practicalStart',
+                    component: container,
+                    children: [
+                        {
+                            path: '/',
+                            component: practicalStart
+                        }
+                    ]
+
+                },
+                {
+                    path: 'practicalList',
+                    component: container,
+                    children: [
+                        {
+                            path: '/',
+                            component: practicalList
+                        }
+                    ]
+
+                },
+                {
+                    path: 'practicalSure',
+                    component: container,
+                    children: [
+                        {
+                            path: '/',
+                            component: practicalSure
+                        }
+                    ]
+
+                },
+                // ------------------------------------------
                 {
                     path: 'baseAuthortySchedule',
                     component: container,

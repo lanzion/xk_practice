@@ -89,152 +89,152 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex'
 import {
-  baseinfoList,
-  delBaseInfo,
-  baseinfoEdit,
-  BaseList
-} from "@/api/newApi";
+    baseinfoList,
+    delBaseInfo,
+    baseinfoEdit,
+    BaseList
+} from '@/api/newApi'
 
-import permission from "@/mixin/admin-operate";
-import user from "@/mixin/admin-user";
-import { log } from "util";
+import permission from '@/mixin/admin-operate'
+import user from '@/mixin/admin-user'
+import { log } from 'util'
 
 export default {
-  mixins: [permission, user],
-  data() {
-    return {
-      listData: [],
-      baseList: [],
-      keyword: "",
-      fpStates: [
-        {
-          value: "A",
-          label: "通过"
-        },
-        {
-          value: "B",
-          label: "不通过"
-        },
-        {
-          value: "C",
-          label: "未审核"
+    mixins: [permission, user],
+    data() {
+        return {
+            listData: [],
+            baseList: [],
+            keyword: '',
+            fpStates: [
+                {
+                    value: 'A',
+                    label: '通过'
+                },
+                {
+                    value: 'B',
+                    label: '不通过'
+                },
+                {
+                    value: 'C',
+                    label: '未审核'
+                }
+            ],
+            stateValue: '',
+            baseId: ''
         }
-      ],
-      stateValue: "",
-      baseId: ""
-    };
-  },
-  computed: {
+    },
+    computed: {
     // ...mapState('dict', {
     //     subject: state => (state.subject || {}).dicList || [],
     //     auditStatus: state => (state.examineStatus || {}).dicList || [],
     //     lockStatus: state => (state.lockStatus || {}).dicList || []
     // })
-  },
-  created() {
-    this.getDatas();
-    this.getBaseList();
-  },
+    },
+    created() {
+        this.getDatas()
+        this.getBaseList()
+    },
 
-  methods: {
+    methods: {
     // 重置分页
-    resetPage() {
-      this.$set(this.pages, "pageNum", 1);
-      this.getDatas();
-    },
-    // 获取列表数据
-    async getDatas() {
-      this.isLoading = true;
-      const res = await baseinfoList(
-        {
-          auditStatus: this.stateValue,
-          title: this.keyword,
-          baseId: this.baseId
+        resetPage() {
+            this.$set(this.pages, 'pageNum', 1)
+            this.getDatas()
         },
-        this.pages
-      );
+        // 获取列表数据
+        async getDatas() {
+            this.isLoading = true
+            const res = await baseinfoList(
+                {
+                    auditStatus: this.stateValue,
+                    title: this.keyword,
+                    baseId: this.baseId
+                },
+                this.pages
+            )
 
-      const { entity: datas = {} } = res.data;
+            const { entity: datas = {} } = res.data
 
-      try {
-        this.datas = datas.resultData || [];
-        this.listData = datas.resultData || [];
-        this.totalNum = datas.totalNum || 0;
-      } catch (error) {
-        this.listData = [];
-        this.totalNum = 0;
-      } finally {
-        this.isLoading = false;
-      }
-    },
-    // 获取基地列表
-    async getBaseList() {
-      const res = await BaseList({}, { pageNum: 1, pageSize: 9999 });
-      const { entity: datas = {} } = res.data;
-      try {
-        this.baseList = datas.resultData || [];
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    // 删除操作
-    doDel({ data }) {
-      const items = data;
-      if (items) {
-        const params = { id: items.id };
-        this.$confirm(`确认删除该数据吗?`, "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-          .then(() => {
-            delBaseInfo(params).then(res => {
-              const { code, msg } = res.data;
-              if (code === 200) {
+            try {
+                this.datas = datas.resultData || []
+                this.listData = datas.resultData || []
+                this.totalNum = datas.totalNum || 0
+            } catch (error) {
+                this.listData = []
+                this.totalNum = 0
+            } finally {
+                this.isLoading = false
+            }
+        },
+        // 获取基地列表
+        async getBaseList() {
+            const res = await BaseList({}, { pageNum: 1, pageSize: 9999 })
+            const { entity: datas = {} } = res.data
+            try {
+                this.baseList = datas.resultData || []
+            } catch (err) {
+                console.log(err)
+            }
+        },
+        // 删除操作
+        doDel({ data }) {
+            const items = data
+            if (items) {
+                const params = { id: items.id }
+                this.$confirm(`确认删除该数据吗?`, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        delBaseInfo(params).then(res => {
+                            const { code, msg } = res.data
+                            if (code === 200) {
+                                this.$message({
+                                    message: `删除成功`,
+                                    type: 'success'
+                                })
+
+                                this.getDatas()
+                            } else {
+                                this.$message({
+                                    message: msg || '操作失败',
+                                    type: 'error'
+                                })
+                            }
+                        })
+                    })
+                    .catch(() => {})
+            } else {
                 this.$message({
-                  message: `删除成功`,
-                  type: "success"
-                });
-
-                this.getDatas();
-              } else {
-                this.$message({
-                  message: msg || "操作失败",
-                  type: "error"
-                });
-              }
-            });
-          })
-          .catch(() => {});
-      } else {
-        this.$message({
-          message: "请至少选择一条数据!",
-          type: "warning"
-        });
-      }
-    },
-    // 修改状态
-    changeStatus(val) {
-      baseinfoEdit(val).then(res => {
-        const datas = res.data;
-        if (datas.code == 200) {
-          this.$message({
-            message: "修改成功",
-            type: "warning"
-          });
-        } else {
-          this.$message({
-            message: datas.msg,
-            type: "warning"
-          });
-          val.status == "A" ? (val.status = "B") : (val.status = "A");
+                    message: '请至少选择一条数据!',
+                    type: 'warning'
+                })
+            }
+        },
+        // 修改状态
+        changeStatus(val) {
+            baseinfoEdit(val).then(res => {
+                const datas = res.data
+                if (datas.code == 200) {
+                    this.$message({
+                        message: '修改成功',
+                        type: 'warning'
+                    })
+                } else {
+                    this.$message({
+                        message: datas.msg,
+                        type: 'warning'
+                    })
+                    val.status == 'A' ? (val.status = 'B') : (val.status = 'A')
+                }
+            })
         }
-      });
     }
-  }
-};
+}
 </script>
 
 <style lang='scss' scoped>

@@ -1,11 +1,20 @@
 <template>
   <el-form ref="form" class="g-form--wrap" label-width="100px" :model="form" :rules="rules">
+    <div class="title">课程基本信息</div>
+    <el-form-item label="基地/机构" prop="baseinfoId">
+      <el-select v-model="form.baseinfoId" filterable placeholder="请选择基地/机构" v-el-select-loadmore="loadmore">
+        <el-option v-for="item in beasList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+      </el-select>
+    </el-form-item>
+
+    <el-form-item label="课程分类" prop="values">
+      <el-cascader v-model="form.values" :options="options" :props="{ expandTrigger: 'hover' }" placeholder="请选择课程分类"></el-cascader>
+    </el-form-item>
+
     <el-form-item label="课程名称" prop="name">
       <el-input v-model="form.name" placeholder="请输入课程名称"></el-input>
     </el-form-item>
-    <el-form-item label="课程设计者" prop="courseDesigner">
-      <el-input v-model="form.courseDesigner" placeholder="请输入课程设计者"></el-input>
-    </el-form-item>
+
     <el-form-item label="课程封面" prop="cover">
       <ali-upload
         :limit="1"
@@ -20,30 +29,20 @@
         建议上传的图片像素为 600 x 370
       </div>
     </el-form-item>
-    <el-form-item label="课程指标" prop="values">
-      <el-cascader v-model="form.values" :options="options" :props="{ expandTrigger: 'hover' }"></el-cascader>
-    </el-form-item>
+
     <el-form-item label="适合学段" prop="fit">
-        <el-checkbox-group v-model="form.fit">
+      <el-checkbox-group v-model="form.fit">
         <el-checkbox v-for="(item) in fit" :label="item.code" :key="item.code">{{ item.name }}</el-checkbox>
-        </el-checkbox-group>
+      </el-checkbox-group>
     </el-form-item>
-    <el-form-item label="课程类型" prop="courseType">
+
+    <el-form-item label="选修类型">
       <el-radio-group v-model="form.courseType">
         <el-radio v-for="(item) in courseType" :label="item.code" :key="item.code">{{ item.name }}</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="课程时长" prop="courseDuration">
-      <el-select v-model="form.courseDuration" placeholder="请选择课程时长">
-        <el-option
-          v-for="item in courseDuration"
-          :key="item.value"
-          :label="item.name"
-          :value="item.code"
-        ></el-option>
-      </el-select>
-    </el-form-item>
-    <el-form-item label="课程费用" prop="isFree">
+
+    <el-form-item label="是否收费" prop="isFree">
       <el-radio-group v-model="form.isFree">
         <el-radio
           v-for="(item) in isFree"
@@ -52,16 +51,42 @@
           :value="item.code"
         >{{ item.name }}</el-radio>
       </el-radio-group>
+      <el-input :style="{'width':'100px'}" v-if="form.isFree==1" v-model="form.price"></el-input>
+      <span v-if="form.isFree==1">元</span>
     </el-form-item>
-    <el-form-item label="课程状态" prop="status">
-      <el-radio-group v-model="form.status">
-        <el-radio v-for="(item) in status" :label="item.code" :key="item.code">{{ item.name }}</el-radio>
-      </el-radio-group>
+
+    <el-form-item label="课程时长" prop="courseDuration">
+      <el-select v-model="form.courseDuration" placeholder="请选择课程时长" :style="{'width':'200px'}">
+        <el-option
+          v-for="item in courseDuration"
+          :key="item.value"
+          :label="item.name"
+          :value="item.code"
+        ></el-option>
+      </el-select>
     </el-form-item>
-    <el-form-item label="学习简介" prop="synopsis">
+
+    <el-form-item label="最大承载量">
+      <el-input
+        v-model="form.maxCarryingCapacity"
+        :style="{'width':'100px'}"
+        placeholder
+        oninput="value=value.replace(/[^\d]/g,'')"
+      ></el-input>
+      <span>人</span>
+      <span class="tips">*不填写默认不限制人数</span>
+    </el-form-item>
+
+    <el-form-item label="课程设计者" prop="courseDesigner">
+      <el-input v-model="form.courseDesigner" placeholder="请输入课程设计者单位及名称"></el-input>
+    </el-form-item>
+
+    <div class="title">课程内容</div>
+
+    <el-form-item label="课程简介" prop="synopsis">
       <el-input type="textarea" :rows="4" placeholder="请填写课程学习简介" v-model="form.synopsis"></el-input>
     </el-form-item>
-    <el-form-item label="学习目标" prop="target">
+    <el-form-item label="课程目标" prop="target">
       <el-input type="textarea" :rows="4" placeholder="请填写课程学习目标" v-model="form.target"></el-input>
     </el-form-item>
     <el-form-item label="课程准备" prop="coursePreparation">
@@ -74,6 +99,7 @@
     <el-form-item label="课程活动设计" prop="activityDesign">
       <editor-bar v-model="form.activityDesign" :isClear="isClear" @change="activityDesignChange"></editor-bar>
     </el-form-item>
+
     <el-form-item label="学习任务单" prop="studyAssignments">
       <editor-bar
         v-model="form.studyAssignments"
@@ -81,22 +107,25 @@
         @change="studyAssignmentsChange"
       ></editor-bar>
     </el-form-item>
-    <el-form-item label="课程资源" prop="resourceList">
+
+    <el-form-item label="课程配套资源" prop="resourceList">
       <upload listType="file" :file-list.sync="form.resourceList" :accept="fileType">
-        <p class="upload_tips">不限数量，文件格式：doc / docx / ppt / pptx / xls / xlsx / zip / rar，单个文件大小不超过8M</p>
+        <p
+          class="upload_tips"
+        >不限数量，文件格式：doc / docx / ppt / pptx / xls / xlsx / zip / rar，单个文件大小不超过8M</p>
       </upload>
     </el-form-item>
 
     <el-form-item class="g-operate--box">
       <el-button @click="cancel">取消</el-button>
-      <el-button type="primary" @click="submit" :loading="isLoading">保存</el-button>
+      <el-button type="primary" @click="submit" :loading="isLoading">发布课程</el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script>
 import { mapState, mapActions } from "vuex";
-import { activityList } from "@/api/newApi";
+import { activityList,BaseList } from "@/api/newApi";
 import {
   courseEdit,
   courseAdd,
@@ -130,9 +159,21 @@ export default {
     "ali-upload": aliUpload,
     EditorBar: EditorBar
   },
+  directives: {
+    'el-select-loadmore': {
+      bind(el, binding) {
+        const SELECTWRAP_DOM = el.querySelector('.el-select-dropdown .el-select-dropdown__wrap');
+        SELECTWRAP_DOM.addEventListener('scroll', function () {
+          const condition = this.scrollHeight - this.scrollTop <= this.clientHeight;
+          if (condition) {
+            binding.value();
+          }
+        });
+      }
+    }
+  },
   data() {
     return {
-      checkList:[],
       auditStatus: auditStatus,
       fit: fit,
       status: status,
@@ -143,31 +184,42 @@ export default {
       fileType: ".doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,.rar",
       cover: [],
       options: [],
-      school: [],
       isLoading: false,
-      dialogVisible: false,
       form: {
-        domainModuleParent: "", 
-        domainModuleChildren: "", 
-        name: "", 
-        cover: "", 
-        synopsis: "", 
-        target: "", 
+        domainModuleParent: "",
+        domainModuleChildren: "",
+        name: "",
+        cover: "",
+        synopsis: "",
+        target: "",
         coursePreparation: "",
         activityDesign: "",
-        studyAssignments: "", 
-        auditStatus: "", 
-        fit: [], 
-        status: "", 
-        isFree: "", 
-        courseType: "", 
+        studyAssignments: "",
+        auditStatus: "",
+        fit: "",
+        status: "",
+        isFree: "",
+        courseType: "",
         courseDuration: "",
         courseDesigner: "",
         resourceList: [],
         values: []
       },
-
       rules: {
+        baseinfoId: [
+          {
+            required: true,
+            message: "请填写基地/机构名称",
+            trigger: ["change"]
+          }
+        ],
+        bureauEducation: [
+          {
+            required: true,
+            message: "请填写教育局名称",
+            trigger: ["change"]
+          }
+        ],
         cover: [
           {
             required: true,
@@ -178,37 +230,33 @@ export default {
         target: [
           {
             required: true,
-            message: "请填写课程学习目标",
+            message: "请填写课程目标",
             trigger: ["blur"]
           }
         ],
         fit: [
           {
             required: true,
-            message: "请选择课程学段",
-            trigger: ["change", "blur"]
+            message: "请选择合适学段",
+            trigger: ["change"]
           }
         ],
         values: [
           {
             required: true,
-            message: "请选择所属领域",
+            message: "请选择课程分类",
             trigger: ["change", "blur"]
-          }
-        ],
-        name: [
-          {
-            required: true,
-            message: "请填写课程名称",
-            trigger: ["blur"]
           }
         ],
         courseDesigner: [
           {
             required: true,
-            message: "请填写课程名称",
+            message: "请填写课程设计者单位及名称",
             trigger: ["blur"]
           }
+        ],
+        name: [
+          { required: true, message: "请填写课程名称", trigger: ["blur"] }
         ],
         courseType: [
           {
@@ -228,7 +276,7 @@ export default {
           {
             required: true,
             message: "课程是否收费",
-            trigger: ["blur"]
+            trigger: ["change", "blur"]
           }
         ],
         status: [
@@ -246,18 +294,33 @@ export default {
           }
         ]
       },
-      pages: {
-        pageNum: 1,
-        pageSize: 20
+      baseData:{
+        pageIndex: 1,
+        pageSize: 20,
       },
-      searchForm: {}
+      beasList:[]
     };
   },
   watch: {},
   created() {
     this.getActivityTypeParent();
+    this.getDetailData();
+  },
+  mounted () {
+    this.getBaseList(this.baseData);
   },
   methods: {
+    loadmore() {
+      this.baseData.pageIndex++;
+      this.getBaseList(this.baseData);
+    },
+    getBaseList(baseData){
+      BaseList({},baseData).then(res=>{
+        const { entity: datas = {} } = res.data;
+        let _list = datas.resultData || [];
+        this.beasList = [...this.beasList,..._list]
+      })
+    },
     coursePreparationChange(val) {
       this.form.coursePreparation = val;
     },
@@ -266,30 +329,6 @@ export default {
     },
     studyAssignmentsChange(val) {
       this.form.studyAssignments = val;
-    },
-    resetPage(key) {
-      this.$set(this.pages, "pageNum", 1);
-      this.$set(this.pages, "pageSize", 50);
-
-      this.getSchoolList(key);
-    },
-    remoteMethod(qurey) {
-      this.resetPage(qurey);
-    },
-    async getSchoolList(key) {
-      const formList = Object.assign({}, this.searchForm);
-      if (key) {
-        formList.title = key;
-      }
-
-      const res = await activityList(formList, this.pages);
-      const { entity: datas = {} } = res.data;
-
-      try {
-        this.school = datas.resultData || [];
-      } catch (error) {
-      } finally {
-      }
     },
     // 获取详情
     getDetailData() {
@@ -308,9 +347,8 @@ export default {
                   url: datas.cover
                 }
               ];
-              this.form = datas
-              this.form.cover = [datas.cover];
-              let _resourceList = [];
+              this.form = datas;
+              let _resourceList = []
               datas.resourceList.forEach(o => {
                 _resourceList.push({
                   name: o.resourceName,
@@ -320,9 +358,13 @@ export default {
                 });
               });
               this.form.resourceList = _resourceList;
-              this.form.values = [datas.classificationParent, datas.classificationChildren];
-              if(this.form.fit.indexOf(',')) this.form.fit = this.form.fit.split(',')
-              else this.form.fit = [this.form.fit]
+              this.form.cover = [datas.cover];
+              this.form.values = [
+                datas.classificationParent,
+                datas.classificationChildren
+              ];
+              this.form.fit = datas.fit.split(',')
+              console.log(this.form);
             } else {
               this.$message({
                 message: res.data.msg || `加载失败`,
@@ -339,7 +381,6 @@ export default {
       getActivityTypeParent({})
         .then(res => {
           const datas = res.data;
-
           if (datas) {
             let arrBox = [];
             datas.typelist.forEach(o => {
@@ -357,8 +398,7 @@ export default {
             });
 
             this.options = arrBox;
-            this.getSchoolList();
-            this.getDetailData();
+            
           }
         })
         .finally(() => {});
@@ -383,8 +423,9 @@ export default {
           formList.cover = this.getFileUrl(formList.cover[0]);
           formList.classificationParent = formList.values[0];
           formList.classificationChildren = formList.values[1];
-          if (!formList.auditStatus) formList.auditStatus = "C";
+          if (!formList.auditStatus) formList.auditStatus = "A";
           formList.fit = formList.fit.join(',')
+          console.log(formList);
           if (formList.id) {
             head = courseEdit;
             Text = "修改";
@@ -400,7 +441,9 @@ export default {
                   type: "success",
                   onClose() {}
                 });
-                that.$router.push({ path: "/practicalManage/courseManage" });
+                that.$router.push({
+                  path: "/practicalManage/courseManage"
+                });
               } else {
                 this.isLoading = false;
                 this.$message({
@@ -422,7 +465,10 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.tips {
+  color: #7f7f7f;
+}
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
@@ -445,5 +491,14 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
+}
+.g-form--wrap {
+  margin-top: 0px;
+}
+.title {
+  height: 60px;
+  line-height: 60px;
+  font-size: 16px;
+  color: #000;
 }
 </style>

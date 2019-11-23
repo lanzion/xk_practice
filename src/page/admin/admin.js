@@ -24,7 +24,8 @@ import '@/assets/css/index.scss'
 import '@/assets/css/theme/reset-ele-admin.scss'
 import '@/assets/css/common/admin-common.scss'
 import { showLoading, hideLoading } from '@/assets/js/loading.js'
-
+import Print from 'vue-print-nb'
+Vue.use(Print)
 window.OSS = OSS
 
 Vue.config.productionTip = false

@@ -106,133 +106,133 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import { activityList } from "@/api/newApi";
+import { mapState, mapActions } from 'vuex'
+import { activityList } from '@/api/newApi'
 
-import { activityDel } from "@/api/resetApi";
-import permission from "@/mixin/admin-operate";
-import user from "@/mixin/admin-user";
+import { activityDel } from '@/api/resetApi'
+import permission from '@/mixin/admin-operate'
+import user from '@/mixin/admin-user'
 
 export default {
-  mixins: [permission, user],
-  data() {
-    return {
-      activityTime: "", // 时间
-      form: {
-        title: null,
+    mixins: [permission, user],
+    data() {
+        return {
+            activityTime: '', // 时间
+            form: {
+                title: null,
 
-        startDateStr: null,
-        endDateStr: null
-      },
-      listData: [],
-      options: [
-        {
-          value: "A",
-          label: "已查看"
-        },
-        {
-          value: "B",
-          label: "未查看"
+                startDateStr: null,
+                endDateStr: null
+            },
+            listData: [],
+            options: [
+                {
+                    value: 'A',
+                    label: '已查看'
+                },
+                {
+                    value: 'B',
+                    label: '未查看'
+                }
+            ],
+            fpStates: [
+                {
+                    value: '1',
+                    label: '开启'
+                },
+                {
+                    value: '0',
+                    label: '关闭'
+                }
+            ]
         }
-      ],
-      fpStates: [
-        {
-          value: "1",
-          label: "开启"
-        },
-        {
-          value: "0",
-          label: "关闭"
-        }
-      ]
-    };
-  },
-  computed: {
-    ...mapState({
-      // 用户信息
-      userInfo: state => state.login.userInfo || {}
-    }),
-    ...mapState("dict", {
-      sex: state => (state.sex || {}).dicList || [],
-      auditStatus: state => (state.examineStatus || {}).dicList || [],
-      lockStatus: state => (state.lockStatus || {}).dicList || []
-    })
-  },
-  created() {
-    this.getDatas();
-  },
-  watch: {},
-
-  methods: {
-    ...mapActions("dict", ["getDataDict"]),
-    // 重置分页
-    resetPage() {
-      this.$set(this.pages, "pageNum", 1);
-      this.getDatas();
     },
-    // 获取列表数据
-    async getDatas() {
-      this.isLoading = true;
-      const formList = Object.assign({}, this.form);
-      if (!this.activityTime) {
-      } else {
-        formList.startDateStr = this.activityTime[0] || "";
-        formList.endDateStr = this.activityTime[1] || "";
-      }
-
-      const res = await activityList(formList, this.pages);
-
-      const { entity: datas = {} } = res.data;
-
-      try {
-        this.listData = datas.resultData || [];
-        this.totalNum = datas.totalNum || 0;
-      } catch (error) {
-        this.listData = [];
-        this.totalNum = 0;
-      } finally {
-        this.isLoading = false;
-      }
-    },
-
-    // 删除操作
-    doDel({ data }) {
-      const items = data;
-      if (items) {
-        const params = { id: items.id };
-        this.$confirm(`确认删除该数据吗?`, "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
+    computed: {
+        ...mapState({
+            // 用户信息
+            userInfo: state => state.login.userInfo || {}
+        }),
+        ...mapState('dict', {
+            sex: state => (state.sex || {}).dicList || [],
+            auditStatus: state => (state.examineStatus || {}).dicList || [],
+            lockStatus: state => (state.lockStatus || {}).dicList || []
         })
-          .then(() => {
-            activityDel(params).then(res => {
-              const { code, msg } = res.data;
-              if (code === 200) {
-                this.$message({
-                  message: `删除成功`,
-                  type: "success"
-                });
+    },
+    created() {
+        this.getDatas()
+    },
+    watch: {},
 
-                this.getDatas();
-              } else {
+    methods: {
+        ...mapActions('dict', ['getDataDict']),
+        // 重置分页
+        resetPage() {
+            this.$set(this.pages, 'pageNum', 1)
+            this.getDatas()
+        },
+        // 获取列表数据
+        async getDatas() {
+            this.isLoading = true
+            const formList = Object.assign({}, this.form)
+            if (!this.activityTime) {
+            } else {
+                formList.startDateStr = this.activityTime[0] || ''
+                formList.endDateStr = this.activityTime[1] || ''
+            }
+
+            const res = await activityList(formList, this.pages)
+
+            const { entity: datas = {} } = res.data
+
+            try {
+                this.listData = datas.resultData || []
+                this.totalNum = datas.totalNum || 0
+            } catch (error) {
+                this.listData = []
+                this.totalNum = 0
+            } finally {
+                this.isLoading = false
+            }
+        },
+
+        // 删除操作
+        doDel({ data }) {
+            const items = data
+            if (items) {
+                const params = { id: items.id }
+                this.$confirm(`确认删除该数据吗?`, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        activityDel(params).then(res => {
+                            const { code, msg } = res.data
+                            if (code === 200) {
+                                this.$message({
+                                    message: `删除成功`,
+                                    type: 'success'
+                                })
+
+                                this.getDatas()
+                            } else {
+                                this.$message({
+                                    message: msg || '操作失败',
+                                    type: 'error'
+                                })
+                            }
+                        })
+                    })
+                    .catch(() => {})
+            } else {
                 this.$message({
-                  message: msg || "操作失败",
-                  type: "error"
-                });
-              }
-            });
-          })
-          .catch(() => {});
-      } else {
-        this.$message({
-          message: "请至少选择一条数据!",
-          type: "warning"
-        });
-      }
+                    message: '请至少选择一条数据!',
+                    type: 'warning'
+                })
+            }
+        }
     }
-  }
-};
+}
 </script>
 
 <style lang='scss' scoped>

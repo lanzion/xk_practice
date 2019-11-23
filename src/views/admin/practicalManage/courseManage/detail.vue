@@ -1,12 +1,16 @@
 <template>
   <div class="content">
     <div class="school-detail-main-list">
-      <span class="school-detail-list-head">课程名称</span>
-      <div class="school-detail-list-redource">{{data.name}}</div>
+      <span class="school-detail-list-head">基地/机构</span>
+      <div class="school-detail-list-redource">{{data.baseinfoName}}</div>
     </div>
     <div class="school-detail-main-list">
-      <span class="school-detail-list-head">课程设计者</span>
-      <div class="school-detail-list-redource">{{data.courseDesigner}}</div>
+      <span class="school-detail-list-head">课程分类</span>
+      <div class="school-detail-list-redource">{{data.parentName}}/{{data.childrenName}}</div>
+    </div>
+    <div class="school-detail-main-list">
+      <span class="school-detail-list-head">课程名称</span>
+      <div class="school-detail-list-redource">{{data.name}}</div>
     </div>
     <div class="school-detail-list">
       <div class="school-detail-item">
@@ -22,25 +26,30 @@
       </div>
     </div>
     <div class="school-detail-main-list">
-      <span class="school-detail-list-head">课程指标</span>
-      <div class="school-detail-list-redource">{{data.parentName}}/{{data.childrenName}}</div>
-    </div>
-    <div class="school-detail-main-list">
       <span class="school-detail-list-head">适合学段</span>
       <div class="school-detail-list-redource">{{data.fit|filterFit}}</div>
     </div>
     <div class="school-detail-main-list">
-      <span class="school-detail-list-head">课程类型</span>
+      <span class="school-detail-list-head">选修类型</span>
       <div class="school-detail-list-redource">{{data.courseType|filterCode(5)}}</div>
+    </div>
+    <div class="school-detail-main-list">
+      <span class="school-detail-list-head">课程费用</span>
+      <div class="school-detail-list-redource">{{data.isFree|filterCode(4)}}</div>
     </div>
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">课程时长</span>
       <div class="school-detail-list-redource">{{data.courseDuration|filterCode(6)}}</div>
     </div>
     <div class="school-detail-main-list">
-      <span class="school-detail-list-head">课程费用</span>
-      <div class="school-detail-list-redource">{{data.isFree|filterCode(4)}}</div>
+      <span class="school-detail-list-head">最大承载量</span>
+      <div class="school-detail-list-redource">{{data.maxCarryingCapacity}}人</div>
     </div>
+    <div class="school-detail-main-list">
+      <span class="school-detail-list-head">课程设计者</span>
+      <div class="school-detail-list-redource">{{data.courseDesigner}}</div>
+    </div>
+
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">课程状态</span>
       <div class="school-detail-list-redource">{{data.status|filterCode(3)}}</div>
@@ -142,7 +151,12 @@ export default {
     },
     filterFit(val) {
       let txt = "";
-      if(val) txt = val.replace(/A/g, "小学").replace(/B/g, "初中").replace(/C/g, "高中");
+      if (val)
+        txt = val
+          .replace(/primarySchool_L/g, "小学低年级")
+          .replace(/primarySchool_H/g, "小学高年级")
+          .replace(/middleSchool/g, "初中")
+          .replace(/highSchool/g, "高中");
       return txt;
     }
   },

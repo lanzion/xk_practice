@@ -5,7 +5,7 @@ const requestBannerList = (options = {}) => xhr.post('/maker/banner/getBannerImg
 
 // 获取省/市/区县
 // const requestRegion = (options = {}) => xhr.post('/admin/sysArea/currentLocal', options)
-const requestRegion = (options = {}) => xhr.post('/maker/sysArea/currentLocal', options)
+const requestRegion = (options = {}) => xhr.post('/practice/sysArea/currentLocal', options)
 
 // 获取数据字典
 const requestDataDict = (options = {}) => xhr.post('/common/getDictComb', options)

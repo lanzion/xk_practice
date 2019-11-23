@@ -89,12 +89,10 @@ export default {
             this.getDatas()
         },
 
-       
-
         // 获取列表数据
         async getDatas() {
             this.isLoading = true
-            const res = await requestAdminTeacherList({  name:'' }, this.pages)
+            const res = await requestAdminTeacherList({ name: '' }, this.pages)
 
             const { entity: datas = {} } = res.data
 
@@ -108,14 +106,10 @@ export default {
             }
         },
 
-
-      
-
         // 获取详情数据
         getDetailDatas() {
             this.$refs.detail.getDetailData()
         },
-
        
     }
 }
@@ -155,7 +149,7 @@ export default {
         line-height: 40px;
         font-size: 14px;
         color: #606266;
-        padding:30px 0 14px 0;               
+        padding:30px 0 14px 0;
     }
     
 </style>

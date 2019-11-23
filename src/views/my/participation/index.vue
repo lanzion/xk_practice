@@ -11,7 +11,7 @@
         </div>
         <div class="aggregate_one_q">
           <ul class="aggregate_one_t_w" v-if="!nomoretwo">
-            <li @click="letgoone(g.id)" v-for="(g,index) in goods" :key="index">
+            <li @click="letgo(g.id)" v-for="(g,index) in goods" :key="index">
               <span>{{g.schoolName}}</span>
               <span>{{g.browseNum}}</span>
             </li>
@@ -179,10 +179,6 @@ export default {
             this.goods = res.data.entity.resultData
         },
         letgo(id) {
-            localStorage.setItem('sid', id)
-            this.$router.push({ path: '/participation/participationdetails', query: { id: id } })
-        },
-        letgoone(id) {
             localStorage.setItem('sid', id)
             this.$router.push({ path: '/participation/participationdetails', query: { id: id } })
         }

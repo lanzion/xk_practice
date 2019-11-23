@@ -69,83 +69,83 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import { commentList } from "@/api/resetApi";
+import { mapState, mapActions } from 'vuex'
+import { commentList } from '@/api/resetApi'
 
-import permission from "@/mixin/admin-operate";
-import user from "@/mixin/admin-user";
+import permission from '@/mixin/admin-operate'
+import user from '@/mixin/admin-user'
 
 export default {
-  mixins: [permission, user],
-  data() {
-    return {
-      form: {
-        activityTitle: "",
-        commentStatus: "",
-        schoolName: ""
-      },
-      listData: [],
-      fpStates: [
-        {
-          value: "B",
-          label: "未点评"
-        },
-        {
-          value: "A",
-          label: "已点评"
+    mixins: [permission, user],
+    data() {
+        return {
+            form: {
+                activityTitle: '',
+                commentStatus: '',
+                schoolName: ''
+            },
+            listData: [],
+            fpStates: [
+                {
+                    value: 'B',
+                    label: '未点评'
+                },
+                {
+                    value: 'A',
+                    label: '已点评'
+                }
+            ]
         }
-      ]
-    };
-  },
-  computed: {},
-  created() {
-    this.getDatas();
-  },
-  watch: {},
-  methods: {
-    goDetail(row, key) {
-      if (key == "add") {
-        this.$router.push({
-          path: `/practicalManage/practicalComment/${key}`,
-          query: {
-            id: row.id,
-            schoolName: row.schoolName,
-            activityId: row.activityId,
-            schoolId: row.schoolId
-          }
-        });
-      } else {
-        this.$router.push({
-          path: `/practicalManage/practicalComment/${key}`,
-          query: { id: row.id }
-        });
-      }
     },
-    // 重置分页
-    resetPage() {
-      this.$set(this.pages, "pageNum", 1);
-      this.getDatas();
+    computed: {},
+    created() {
+        this.getDatas()
     },
-    // 获取列表数据
-    async getDatas() {
-      this.isLoading = true;
+    watch: {},
+    methods: {
+        goDetail(row, key) {
+            if (key == 'add') {
+                this.$router.push({
+                    path: `/practicalManage/practicalComment/${key}`,
+                    query: {
+                        id: row.id,
+                        schoolName: row.schoolName,
+                        activityId: row.activityId,
+                        schoolId: row.schoolId
+                    }
+                })
+            } else {
+                this.$router.push({
+                    path: `/practicalManage/practicalComment/${key}`,
+                    query: { id: row.id }
+                })
+            }
+        },
+        // 重置分页
+        resetPage() {
+            this.$set(this.pages, 'pageNum', 1)
+            this.getDatas()
+        },
+        // 获取列表数据
+        async getDatas() {
+            this.isLoading = true
 
-      const formList = Object.assign({}, this.form);
-      const res = await commentList(formList, this.pages);
+            const formList = Object.assign({}, this.form)
+            const res = await commentList(formList, this.pages)
 
-      const { entity: datas = {} } = res.data;
+            const { entity: datas = {} } = res.data
 
-      try {
-        this.listData = datas.resultData || [];
-        this.totalNum = datas.totalNum || 0;
-      } catch (error) {
-        this.listData = [];
-      } finally {
-        this.isLoading = false;
-      }
+            try {
+                this.listData = datas.resultData || []
+                this.totalNum = datas.totalNum || 0
+            } catch (error) {
+                this.listData = []
+            } finally {
+                this.isLoading = false
+            }
+        }
     }
-  }
-};
+}
 </script>
 
 <style lang='scss' scoped>

@@ -5,17 +5,17 @@
 </template>
 
 <script>
-import courseinfo from "./courseInfo"
-  export default {
+import courseinfo from './courseInfo'
+export default {
     components: {
-      courseinfo:courseinfo
+        courseinfo: courseinfo
     },
-    data(){
-      return{
+    data() {
+        return {
 
-      }
+        }
     }
-  }
+}
 </script>
 
 <style lang="scss" scoped>

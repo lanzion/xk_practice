@@ -43,30 +43,30 @@
     </div>
 </template>
 <script>
-import { listofpracticalcourses } from '@/api/frontstage'
+import { listofpracticalcourses } from "@/api/frontstage";
 export default {
-    name: 'schoolpracticecourse',
+    name: "schoolpracticecourse",
     data() {
         return {
             datas: [],
-            arr: ['小学', '初中', '高中'],
+            arr: ["小学", "初中", "高中"],
             nomore: false,
             pages: {
                 pageNum: 1,
                 pageSize: 12
             }
-        }
+        };
     },
     created() {
-        this.getlist()
+        this.getlist();
     },
     watch: {
-        'datas.length': {
+        "datas.length": {
             handler(newval, oldval) {
                 if (newval === 0) {
-                    this.nomore = true
+                    this.nomore = true;
                 } else {
-                    this.nomore = false
+                    this.nomore = false;
                 }
             },
             deep: true
@@ -74,29 +74,29 @@ export default {
     },
     methods: {
         async getlist() {
-            let uid = this.$route.query.id
-            let sid = localStorage.getItem('sid')
-            let id = ''
+            let uid = this.$route.query.id;
+            let sid = localStorage.getItem("sid");
+            let id = "";
             if (uid) {
-                id = uid
+                id = uid;
             } else {
-                id = sid
+                id = sid;
             }
             let res = await listofpracticalcourses(
                 { schoolId: id },
                 this.pages
-            )
-            this.datas = res.data.entity.resultData
-            this.totalNum = res.data.entity.totalNum || 0
-            this.pageSize = 12
+            );
+            this.datas = res.data.entity.resultData;
+            this.totalNum = res.data.entity.totalNum || 0;
+            this.pageSize = 12;
         },
 
         goone(id) {
-            localStorage.setItem('mid', id)
-            this.$router.push({ path: '/goods', qurey: { id: id } })
+            localStorage.setItem("mid", id);
+            this.$router.push({ path: "/goods", qurey: { id: id } });
         }
     }
-}
+};
 </script>
 <style lang="scss" scoped>
 .container {

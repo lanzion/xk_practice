@@ -230,299 +230,299 @@
 
 <script>
 import {
-  selectCourse,
-  getClassAndNum,
-  baseinfoProject,
-  comfirCourse,
-  baseprojectCourseTime
-} from "@/api/resetApi";
+    selectCourse,
+    getClassAndNum,
+    baseinfoProject,
+    comfirCourse,
+    baseprojectCourseTime
+} from '@/api/resetApi'
 export default {
-  data() {
-    return {
-      pickerOptions0: {
-        disabledDate(time) {
-          return time.getTime() < Date.now(); //- 8.64e7;如果没有后面的-8.64e7就是不可以选择今天的
+    data() {
+        return {
+            pickerOptions0: {
+                disabledDate(time) {
+                    return time.getTime() < Date.now() // - 8.64e7;如果没有后面的-8.64e7就是不可以选择今天的
+                }
+            },
+            datas: {},
+            form: {
+                classId: '', // 班级id
+                gradeId: '',
+                courseId: '', // 课程id
+                baseinfoId: '', // 基地id
+                projectId: '', // 服务id
+                attendClassDateStr: '', // 开始日期
+                startDateTxt: '',
+                endDateTxt: '',
+                activityId: '' // 活动id
+            },
+            fpStates: [],
+            options: [],
+            gadeList: [],
+            stateValue: '',
+            stateValue1: '',
+            dialogVisible: false,
+            list: [],
+
+            activityTime: '',
+            activeIndex: 0,
+            first: 1,
+            weeks: [
+                '星期日',
+                '星期一',
+                '星期二',
+                '星期三',
+                '星期四',
+                '星期五',
+                '星期六'
+            ],
+            week: '',
+            time: [],
+            timeIndex: '',
+            changIndex: '',
+            checkTime: [],
+            rules: {}
         }
-      },
-      datas: {},
-      form: {
-        classId: "", //班级id
-        gradeId: "",
-        courseId: "", //课程id
-        baseinfoId: "", //基地id
-        projectId: "", //服务id
-        attendClassDateStr: "", //开始日期
-        startDateTxt: "",
-        endDateTxt: "",
-        activityId: "" //活动id
-      },
-      fpStates: [],
-      options: [],
-      gadeList: [],
-      stateValue: "",
-      stateValue1: "",
-      dialogVisible: false,
-      list: [],
-
-      activityTime: "",
-      activeIndex: 0,
-      first: 1,
-      weeks: [
-        "星期日",
-        "星期一",
-        "星期二",
-        "星期三",
-        "星期四",
-        "星期五",
-        "星期六"
-      ],
-      week: "",
-      time: [],
-      timeIndex: "",
-      changIndex: "",
-      checkTime: [],
-      rules: {}
-    };
-  },
-  computed: {},
-  watch: {
-    stateValue: {
-      handler: function() {
-        this.changeValue();
-      },
-      deep: true
     },
-    activityTime: {
-      handler: function() {
-        this.getDate();
-      },
-      deep: true
-    }
-  },
-  mounted() {},
-  created() {
-    this.getDetailData();
-  },
-  methods: {
-    submit() {
-      let that = this;
-      const formList = Object.assign({}, this.form);
-
-      formList.classId = this.options[this];
-      if (formList.projectId === "") {
-        this.$message({
-          message: `请选择服务项`,
-          type: "warning"
-        });
-        return false;
-      }
-      if (this.stateValue === "") {
-        this.$message({
-          message: `请选择年级`,
-          type: "warning"
-        });
-        return false;
-      }
-      formList.gradeId = this.fpStates[this.stateValue].id;
-      if (this.stateValue1 === "") {
-        this.$message({
-          message: `请选择班级`,
-          type: "warning"
-        });
-        return false;
-      }
-      formList.classId = this.options[this.stateValue1].id;
-      if (!this.activityTime) {
-        this.$message({
-          message: `请选择上课日期`,
-          type: "warning"
-        });
-        return false;
-      }
-      formList.attendClassDateStr = this.activityTime;
-      if (this.timeIndex === "") {
-        this.$message({
-          message: `请选择上课时间`,
-          type: "warning"
-        });
-        return false;
-      }
-      formList.timecodetxt = this.timeIndex;
-      this.isLoading = true;
-      comfirCourse(formList)
-        .then(res => {
-          if (res.data.code === 200) {
-            this.$message({
-              message: `提交成功`,
-              type: "success",
-              onClose() {
-                that.$router.go(-1);
-              }
-            });
-          } else {
-            this.$message({
-              message: res.data.msg || `提交失败`,
-              type: "error"
-            });
-          }
-        })
-        .finally(() => {
-          this.isLoading = false;
-        });
-    },
-    changeItem(row, index) {
-      //选择服务项
-      if (this.changIndex === index) {
-        this.form.projectId = "";
-        this.changIndex = "";
-        this.time = [];
-      } else {
-        this.form.projectId = row.id;
-
-        baseprojectCourseTime({ projectId: row.id })
-          .then(res => {
-            const { code, appendInfo: datas } = res.data;
-            if (code === 200 && datas) {
-              console.log(datas);
-              this.time = datas.allList;
-            }
-          })
-          .finally(() => {});
-
-        this.changIndex = index;
-      }
-
-      this.timeIndex = "";
-    },
-    changeTime(item, index) {
-      //选择排课时间
-      if (this.form.projectId === "") {
-        this.$message({
-          message: `请选择基地服务`,
-          type: "warning"
-        });
-      } else {
-        this.timeIndex === item.timeCode
-          ? (this.timeIndex = "")
-          : (this.timeIndex = item.timeCode);
-      }
-    },
-
-    changeValue() {
-      //选择年级
-
-      if (this.stateValue !== "") {
-        this.options = this.fpStates[this.stateValue].classDtoList;
-      } else {
-        this.options = [];
-      }
-      this.stateValue1 = "";
-    },
-    getDate() {
-      if (this.activityTime && this.activityTime != "") {
-        let now = new Date(this.activityTime);
-        let day = now.getDay();
-        this.week = this.weeks[day];
-        this.form.attendClassDateStr = this.activityTime;
-      } else {
-        this.week = "";
-        this.form.attendClassDateStr = "";
-      }
-    },
-    getDate1(time) {
-      //转换时间
-      let now = new Date(time);
-      return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
-    },
-    openDetail() {
-      this.$router.push({
-        path:
-          "/practicalManage/baseAuthortySchedule/baseAuthortyScheduleDetail",
-        query: {
-          baseinfoId: this.form.baseinfoId,
-          day: this.getDate1(this.activityTime)
+    computed: {},
+    watch: {
+        stateValue: {
+            handler: function () {
+                this.changeValue()
+            },
+            deep: true
+        },
+        activityTime: {
+            handler: function () {
+                this.getDate()
+            },
+            deep: true
         }
-      });
     },
-    // 获取详情
-    getDetailData() {
-      const id = this.id || this.$route.query.id;
-      if (id) {
-        selectCourse({ id })
-          .then(res => {
-            const { code, entity: datas } = res.data;
-            if (code === 200 && datas) {
-              this.datas = datas || {};
-              this.form.courseId = datas.id;
-              this.form.activityId = datas.activityId;
+    mounted() {},
+    created() {
+        this.getDetailData()
+    },
+    methods: {
+        submit() {
+            let that = this
+            const formList = Object.assign({}, this.form)
+
+            formList.classId = this.options[this]
+            if (formList.projectId === '') {
+                this.$message({
+                    message: `请选择服务项`,
+                    type: 'warning'
+                })
+                return false
             }
-          })
-          .finally(() => {});
-      }
-    },
-    // 返回列表页
-    cancel() {
-      this.$router.go(-1);
-    },
-    closeEs(index, type) {
-      if (type === "close") {
-        this.activeIndex = -1;
-      } else {
-        this.activeIndex == index
-          ? (this.activeIndex = -1)
-          : (this.activeIndex = index);
-      }
-    },
-    openDialog(row) {
-      if (this.first == 1) {
-        getClassAndNum({}).then(res => {
-          const { code, entity: datas } = res.data;
-          if (code === 200 && datas) {
-            this.first = 2;
+            if (this.stateValue === '') {
+                this.$message({
+                    message: `请选择年级`,
+                    type: 'warning'
+                })
+                return false
+            }
+            formList.gradeId = this.fpStates[this.stateValue].id
+            if (this.stateValue1 === '') {
+                this.$message({
+                    message: `请选择班级`,
+                    type: 'warning'
+                })
+                return false
+            }
+            formList.classId = this.options[this.stateValue1].id
+            if (!this.activityTime) {
+                this.$message({
+                    message: `请选择上课日期`,
+                    type: 'warning'
+                })
+                return false
+            }
+            formList.attendClassDateStr = this.activityTime
+            if (this.timeIndex === '') {
+                this.$message({
+                    message: `请选择上课时间`,
+                    type: 'warning'
+                })
+                return false
+            }
+            formList.timecodetxt = this.timeIndex
+            this.isLoading = true
+            comfirCourse(formList)
+                .then(res => {
+                    if (res.data.code === 200) {
+                        this.$message({
+                            message: `提交成功`,
+                            type: 'success',
+                            onClose() {
+                                that.$router.go(-1)
+                            }
+                        })
+                    } else {
+                        this.$message({
+                            message: res.data.msg || `提交失败`,
+                            type: 'error'
+                        })
+                    }
+                })
+                .finally(() => {
+                    this.isLoading = false
+                })
+        },
+        changeItem(row, index) {
+            // 选择服务项
+            if (this.changIndex === index) {
+                this.form.projectId = ''
+                this.changIndex = ''
+                this.time = []
+            } else {
+                this.form.projectId = row.id
 
-            this.fpStates = datas.detlist;
-          }
-        });
-      } else {
-      }
-      baseinfoProject({ baseinfoId: row.baseInfoId, auditStatus: "A" })
-        .then(res => {
-          const { code, entity: datas } = res.data;
-          if (code === 200 && datas) {
-            datas.list.forEach(o => {
-              o.checked = "A";
-            });
-            this.list = datas.list;
+                baseprojectCourseTime({ projectId: row.id })
+                    .then(res => {
+                        const { code, appendInfo: datas } = res.data
+                        if (code === 200 && datas) {
+                            console.log(datas)
+                            this.time = datas.allList
+                        }
+                    })
+                    .finally(() => {})
 
-            this.form.baseinfoId = row.baseInfoId;
-            this.dialogVisible = true;
-          } else {
-            this.$message({
-              message: res.data.msg,
-              type: "warning"
-            });
-          }
-        })
-        .finally(() => {});
-    },
-    closeDialog() {
-      this.form.baseinfoId = "";
-      this.form.classId = "";
-      this.form.projectId = "";
-      this.form.endDateTxt = "";
-      this.form.startDateTxt = "";
-      this.form.gradeId = "";
-      this.dialogVisible = false;
-      this.stateValue = "";
-      this.stateValue1 = "";
-      this.activityTime = "";
-      this.activeIndex = 0;
-      this.changIndex = "";
-      this.timeIndex = "";
-      this.time = [];
+                this.changIndex = index
+            }
+
+            this.timeIndex = ''
+        },
+        changeTime(item, index) {
+            // 选择排课时间
+            if (this.form.projectId === '') {
+                this.$message({
+                    message: `请选择基地服务`,
+                    type: 'warning'
+                })
+            } else {
+                this.timeIndex === item.timeCode
+                    ? (this.timeIndex = '')
+                    : (this.timeIndex = item.timeCode)
+            }
+        },
+
+        changeValue() {
+            // 选择年级
+
+            if (this.stateValue !== '') {
+                this.options = this.fpStates[this.stateValue].classDtoList
+            } else {
+                this.options = []
+            }
+            this.stateValue1 = ''
+        },
+        getDate() {
+            if (this.activityTime && this.activityTime != '') {
+                let now = new Date(this.activityTime)
+                let day = now.getDay()
+                this.week = this.weeks[day]
+                this.form.attendClassDateStr = this.activityTime
+            } else {
+                this.week = ''
+                this.form.attendClassDateStr = ''
+            }
+        },
+        getDate1(time) {
+            // 转换时间
+            let now = new Date(time)
+            return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`
+        },
+        openDetail() {
+            this.$router.push({
+                path:
+          '/practicalManage/baseAuthortySchedule/baseAuthortyScheduleDetail',
+                query: {
+                    baseinfoId: this.form.baseinfoId,
+                    day: this.getDate1(this.activityTime)
+                }
+            })
+        },
+        // 获取详情
+        getDetailData() {
+            const id = this.id || this.$route.query.id
+            if (id) {
+                selectCourse({ id })
+                    .then(res => {
+                        const { code, entity: datas } = res.data
+                        if (code === 200 && datas) {
+                            this.datas = datas || {}
+                            this.form.courseId = datas.id
+                            this.form.activityId = datas.activityId
+                        }
+                    })
+                    .finally(() => {})
+            }
+        },
+        // 返回列表页
+        cancel() {
+            this.$router.go(-1)
+        },
+        closeEs(index, type) {
+            if (type === 'close') {
+                this.activeIndex = -1
+            } else {
+                this.activeIndex == index
+                    ? (this.activeIndex = -1)
+                    : (this.activeIndex = index)
+            }
+        },
+        openDialog(row) {
+            if (this.first == 1) {
+                getClassAndNum({}).then(res => {
+                    const { code, entity: datas } = res.data
+                    if (code === 200 && datas) {
+                        this.first = 2
+
+                        this.fpStates = datas.detlist
+                    }
+                })
+            } else {
+            }
+            baseinfoProject({ baseinfoId: row.baseInfoId, auditStatus: 'A' })
+                .then(res => {
+                    const { code, entity: datas } = res.data
+                    if (code === 200 && datas) {
+                        datas.list.forEach(o => {
+                            o.checked = 'A'
+                        })
+                        this.list = datas.list
+
+                        this.form.baseinfoId = row.baseInfoId
+                        this.dialogVisible = true
+                    } else {
+                        this.$message({
+                            message: res.data.msg,
+                            type: 'warning'
+                        })
+                    }
+                })
+                .finally(() => {})
+        },
+        closeDialog() {
+            this.form.baseinfoId = ''
+            this.form.classId = ''
+            this.form.projectId = ''
+            this.form.endDateTxt = ''
+            this.form.startDateTxt = ''
+            this.form.gradeId = ''
+            this.dialogVisible = false
+            this.stateValue = ''
+            this.stateValue1 = ''
+            this.activityTime = ''
+            this.activeIndex = 0
+            this.changIndex = ''
+            this.timeIndex = ''
+            this.time = []
+        }
     }
-  }
-};
+}
 </script>
 
 <style lang='scss' module>
