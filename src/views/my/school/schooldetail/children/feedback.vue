@@ -1,6 +1,6 @@
 <template>
     <div class="feedback">
-        <div class="feedback-fl-evaluate">
+        <div class="feedback-fl-evaluate" v-if="nomore">
             <div class="feedback-fl-evaluate-header">
                 <span class="feedback-fl-evaluate-header-one">评分</span>
                 <span class="feedback-fl-evaluate-header-two">({{totalNum}}条)</span>
@@ -39,7 +39,7 @@
                 </li>
             </ul>
         </div>
-        <no-data></no-data>
+        <no-data v-if="!nomore"></no-data>
     </div>
 </template>
 
@@ -50,11 +50,24 @@ export default {
     data() {
         return {
             govers: [],
-            scoreAvg: 0
+            scoreAvg: 0,
+            nomore: false
         }
     },
     created() {
         this.getBaseevaluation()
+    },
+    watch: {
+        'govers.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = false
+                } else {
+                    this.nomore = true
+                }
+            },
+            deep: true
+        }
     },
     methods: {
         async getBaseevaluation() {
