@@ -35,10 +35,12 @@
     <el-table ref="table" :data="listData" stripe align="center" v-loading="isLoading" border>
       <el-table-column prop="name" label="课程名称" align="center" show-overflow-tooltip />
       <el-table-column label="课程分类" align="center" show-overflow-tooltip>
-        <template slot-scope="scope">{{scope.row.parentName+'>'+scope.row.childrenName}}</template>
+        <template
+          slot-scope="scope"
+        >{{scope.row.classificationParentName+'>'+scope.row.classificationChildrenName}}</template>
       </el-table-column>
-      <el-table-column prop="title" label="基地/机构" align="center" show-overflow-tooltip />
-      <el-table-column prop="courseDesigner" label="发布教育局" align="center" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="baseInstName" label="基地/机构" align="center" show-overflow-tooltip />
+      <el-table-column prop="eduName" label="发布教育局" align="center" show-overflow-tooltip></el-table-column>
       <el-table-column label="课程封面" align="center">
         <template slot-scope="scope">
           <div>
@@ -80,21 +82,21 @@
     <pagination :param="pages" :total="totalNum" @change="getDatas"></pagination>
 
     <!-- -------------------------------------------------------------------------------------------------- -->
-    <el-dialog title="发起课程活动" :visible.sync="centerDialogVisible" width="60%" center>
+    <el-dialog title="发起课程活动" :visible.sync="centerDialogVisible" width="1070px" center>
       <div class="start-stups">
         <div class="start-stups-col">
-          <span :class="active > 0 ? 'start-stups-num active':'start-stups-num' ">1</span>
-          <span :class="active > 0 ? 'start-stups-rows active':'start-stups-rows' ">学校选择课程</span>
-          <span :class="active > 0 ? 'start-stups-width active':'start-stups-width' "></span>
+          <span class="start-stups-num active">1</span>
+          <span class="start-stups-rows active">学校选择课程</span>
+          <span class="start-stups-width active"></span>
         </div>
         <div class="start-stups-col">
-          <span :class="active > 1 ? 'start-stups-num active':'start-stups-num' ">2</span>
-          <span :class="active > 1 ? 'start-stups-rows active':'start-stups-rows' ">填写活动信息</span>
-          <span :class="active > 1 ? 'start-stups-width active':'start-stups-width' "></span>
+          <span :class="'start-stups-num active'">2</span>
+          <span :class="'start-stups-rows active' ">填写活动信息</span>
+          <span :class="'start-stups-width active'"></span>
         </div>
         <div class="start-stups-col">
-          <span :class="active > 2 ? 'start-stups-num active':'start-stups-num' ">3</span>
-          <span :class="active > 2 ? 'start-stups-rows active':'start-stups-rows' ">生成活动确认书</span>
+          <span :class="'start-stups-num' ">3</span>
+          <span :class="'start-stups-rows' ">生成活动确认书</span>
         </div>
       </div>
 
@@ -104,7 +106,7 @@
         <el-row :gutter="20">
           <el-col :span="8">
             <span>课程分类:</span>
-            <span>{{courseinfo.parentName+'>'+courseinfo.childrenName}}</span>
+            <span>{{courseinfo.classificationParentName+'>'+courseinfo.classificationChildrenName}}</span>
           </el-col>
           <el-col :span="8">
             <span>适合学段:</span>
@@ -112,7 +114,7 @@
           </el-col>
           <el-col :span="8">
             <span>基地/机构:</span>
-            <span>{{courseinfo.baseinfoId}}</span>
+            <span>{{courseinfo.baseInstName}}</span>
           </el-col>
         </el-row>
 
@@ -153,15 +155,15 @@
         <el-row :gutter="20">
           <el-col :span="8">
             <span>学校名称:</span>
-            <span>{{baseInfo.baseInfo.schoolName}}</span>
+            <span>{{courseinfo.schoolName}}</span>
           </el-col>
           <el-col :span="8">
             <span>学校联系人:</span>
-            <span>{{baseInfo.baseInfo.linkName}}</span>
+            <span>{{courseinfo.schoolContactName}}</span>
           </el-col>
           <el-col :span="8">
             <span>联系人电话:</span>
-            <span>{{baseInfo.baseInfo.phone}}</span>
+            <span>{{courseinfo.schoolContactPhone}}</span>
           </el-col>
         </el-row>
 
@@ -170,13 +172,14 @@
             <el-input v-model="form.name" placeholder="请输入学校指导教师"></el-input>
           </el-form-item>
           <el-form-item label="带队教师电话:" prop="phone">
-            <el-input v-model="form.phone" placeholder="请输入选修类型"></el-input>
+            <el-input v-model="form.phone" placeholder="请输入带队教师电话"></el-input>
           </el-form-item>
-          <el-form-item label="活动时间" required>
+          <el-form-item label="活动开始时间" required>
             <el-col :span="11">
               <el-form-item prop="date">
                 <el-date-picker
                   type="date"
+                  value-format="yyyy-MM-dd hh:MM:ss"
                   placeholder="选择日期"
                   v-model="form.date"
                   style="width: 100%;"
@@ -186,15 +189,32 @@
             <el-col :span="11" :offset="1" v-if="istrue">
               <el-form-item label prop="resource">
                 <el-radio-group v-model="form.resource">
-                  <el-radio label="上午"></el-radio>
-                  <el-radio label="下午"></el-radio>
+                  <el-radio label="1">上午</el-radio>
+                  <el-radio label="2">下午</el-radio>
                 </el-radio-group>
               </el-form-item>
             </el-col>
           </el-form-item>
 
           <el-form-item label="参与学生" required>
-            <el-input v-model="input" @focus="gettwo" placeholder="请输入内容"></el-input>
+            <!-- <el-input v-model="input" @focus="gettwo" placeholder="请输入内容"></el-input> -->
+            <div class="stu_list" @click="gettwo">
+              <el-tag
+                v-for="tag in stu_id_list.gradeList"
+                :key="tag.gradeId"
+                closable
+                type="info"
+              >{{tag.gradeName}}({{tag.studentNums}}人)</el-tag>
+              <el-tag
+                v-for="tag in stu_id_list.stuIdList"
+                :key="tag.studentId"
+                closable
+                type="info"
+              >{{tag.ShowGradeName+tag.gradeName+tag.studentName}}</el-tag>
+            </div>
+            <div
+              class="stu_tips"
+            >已选学生人数/最大承载量：{{selectStuNum}}人 / {{courseinfo.maxCarryingCapacity}}人</div>
           </el-form-item>
 
           <el-form-item>
@@ -204,8 +224,38 @@
         </el-form>
       </div>
     </el-dialog>
+
+    <el-dialog title="发起课程活动" :visible.sync="confirmDialogVisible" width="1070px" center>
+      <div class="start-stups">
+        <div class="start-stups-col">
+          <span :class="'start-stups-num active' ">1</span>
+          <span :class="'start-stups-rows active' ">学校选择课程</span>
+          <span :class="'start-stups-width active' "></span>
+        </div>
+        <div class="start-stups-col">
+          <span :class="'start-stups-num active' ">2</span>
+          <span :class="'start-stups-rows active' ">填写活动信息</span>
+          <span :class="'start-stups-width active' "></span>
+        </div>
+        <div class="start-stups-col">
+          <span :class="'start-stups-num active'">3</span>
+          <span :class="'start-stups-rows active'">生成活动确认书</span>
+        </div>
+      </div>
+      <div class="confirm_center">
+        <p>恭喜成功发起活动，请等待基地/机构确认。</p>
+        <p>
+          您可在
+          <router-link :to="{path:'/practicalManage/practicalList'}">课程活动列表</router-link>随时查看活动进度。
+        </p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="confirmDialogVisible = false" plain>继续发起课程活动</el-button>
+        <el-button type="primary" @click="sayBooks">查看活动确认书</el-button>
+      </span>
+    </el-dialog>
     <!-- -------------------------------------------------------------------------------------------------- -->
-    <el-dialog title :visible.sync="middleDialogVisible" width="60%" center>
+    <el-dialog title :visible.sync="middleDialogVisible" width="1070px" center>
       <el-row :gutter="100">
         <el-col :span="13">
           <span>请选择参加学生</span>
@@ -219,7 +269,10 @@
       </el-row>
       <el-row :gutter="10">
         <el-button type="info" @click="quxiao">取消</el-button>
-        <el-button type="primary">确定</el-button>
+        <el-button
+          type="primary"
+          @click="middleDialogVisible = false"
+        >确定({{selectStuNum}}/{{courseinfo.maxCarryingCapacity}})</el-button>
       </el-row>
     </el-dialog>
     <!-- -------------------------------------------------------------------------------------------- -->
@@ -229,9 +282,16 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import { courseList, getActivityTypeParent } from "@/api/resetApi";
+import {
+  activityCourseList,
+  activityCourseDetail,
+  activityPublish
+} from "@/api/newApi.js";
 
 import permission from "@/mixin/admin-operate";
 import user from "@/mixin/admin-user";
+
+import { validatePhone } from "@/utils/utility/validateRule.js";
 
 import {
   auditStatus,
@@ -245,10 +305,13 @@ export default {
   mixins: [permission, user],
   data() {
     return {
-      courseinfo:{},
+      selectStuNum: 0,
+      stu_id_list: {},
+      courseinfo: {},
       input: "",
       istrue: false,
       centerDialogVisible: false,
+      confirmDialogVisible: false,
       middleDialogVisible: false,
       active: 1,
       form: {
@@ -269,27 +332,32 @@ export default {
         name: [
           {
             required: true,
-            message: "请填写学校指导教师",
+            message: "请填写学校带队教师",
             trigger: ["blur"]
           }
         ],
         phone: [
           {
             required: true,
-            message: "请填写指导教师电话",
-            trigger: ["blur"]
+            message: "请填写带队教师电话",
+            trigger: ["blur"],
+            validator: validatePhone
           }
         ],
         date: [
           {
-            type: "date",
+            type: "string",
             required: true,
             message: "请选择日期",
             trigger: "change"
           }
         ],
         resource: [{ required: true, message: "请选择时段", trigger: "change" }]
-      }
+      },
+      classIdInActs: [],
+      gradeIdInActs: [],
+      studentIdInActs: [],
+      activityId: ""
     };
   },
   filters: {
@@ -325,21 +393,40 @@ export default {
       require(["@/views/admin/practicalManage/start/TreeSelect.vue"], resolve)
   },
   computed: {
+    stuidlist() {
+      return this.$store.state.test.stu_id_list;
+    },
     ...mapState("dict", {
       sex: state => (state.sex || {}).dicList || [],
       auditStatus: state => (state.examineStatus || {}).dicList || [],
       lockStatus: state => (state.lockStatus || {}).dicList || [],
       ...mapState("login", {
-      baseInfo: state => state.baseInfo || {}
-    })
+        baseInfo: state => state.baseInfo || {}
+      })
     })
   },
   created() {
     this.getDatas();
     this.getActivityTypeParent();
-    console.log(this.baseInfo);
   },
   watch: {
+    stuidlist: {
+      handler: function(n) {
+        if (this.centerDialogVisible) this.selectStu(n);
+      }
+    },
+    centerDialogVisible: {
+      handler(n) {
+        if (!n) {
+          this.selectStuNum = 0;
+          this.stu_id_list = {};
+          this.classIdInActs = [];
+          this.gradeIdInActs = [];
+          this.studentIdInActs = [];
+          this.$store.commit("changeastu_id_list", null);
+        }
+      }
+    },
     "form.date": {
       handler(newval) {
         if (newval) {
@@ -362,10 +449,8 @@ export default {
     async getDatas() {
       this.isLoading = true;
       const formList = Object.assign({}, this.form);
-      const res = await courseList(formList, this.pages);
-
+      const res = await activityCourseList(formList, this.pages);
       const { entity: datas = {} } = res.data;
-
       try {
         this.listData = datas.resultData || [];
         this.totalNum = datas.totalNum || 0;
@@ -402,19 +487,63 @@ export default {
         .finally(() => {});
     },
     min(res) {
-      this.courseinfo = res.data
-      this.centerDialogVisible = true;
-      this.active++;
+      let id = res.data.id;
+      // 获取课程详情
+      activityCourseDetail({ id }).then(res => {
+        let _data = res.data;
+        if (_data.code == 200) {
+          this.courseinfo = _data.entity;
+          this.centerDialogVisible = true;
+          // this.active = 1;
+        } else {
+          this.$message({
+            message: res.data.msg || `加载失败`,
+            type: "error"
+          });
+        }
+      });
     },
     max() {},
-    // canle() {
-    //     this.centerDialogVisible = false;
-    //     this.active--;
-    // },
     submitForm(form) {
       this.$refs[form].validate(valid => {
         if (valid) {
-          alert("submit!");
+          if (!this.selectStuNum) {
+            this.$message.error("请选择参与学生");
+            return;
+          } else if (this.selectStuNum > this.courseinfo.maxCarryingCapacity) {
+            this.$message.error("参与学生超过最大承载量");
+            return;
+          }
+          let data = {
+            courseId: this.courseinfo.id,
+            schoolContactPersName: this.courseinfo.schoolContactName,
+            schoolContactPersPhone: this.courseinfo.schoolContactPhone,
+            schoolGuideTeacherName: this.form.name,
+            schoolGuideTeacherPhone: this.form.phone,
+            gmtStDate: this.form.date,
+            stDayAmOrPm: this.form.resource,
+            studentIdInActs: this.studentIdInActs,
+            gradeIdInActs: this.gradeIdInActs,
+            classIdInActs: this.classIdInActs
+          };
+          activityPublish(data).then(res => {
+            try {
+              let data = res.data;
+              console.log(res);
+              if (data.code == 200) {
+                this.activityId = data.appendInfo.id;
+                this.confirmDialogVisible = true;
+                this.centerDialogVisible = false;
+              } else {
+                this.$message({
+                  message: res.data.msg || `发起活动失败`,
+                  type: "error"
+                });
+              }
+            } catch (err) {
+              console.log(err);
+            }
+          });
         } else {
           console.log("error submit!!");
           return false;
@@ -426,20 +555,39 @@ export default {
       this.$refs[form].resetFields();
       this.centerDialogVisible = false;
     },
-    popoverHide(checkedIds, checkedData) {
-      console.log(checkedIds);
-      console.log(checkedData);
-    },
     gettwo() {
       this.middleDialogVisible = true;
     },
     getchild(data) {
       console.log(data);
-      // this.getchilds = data.typelist
       this.getchilds.push(data.typelist);
     },
     quxiao() {
       this.middleDialogVisible = false;
+    },
+    sayBooks() {
+      this.$router.push({
+        path: "/practicalManage/practicalList",
+        query: { activityId: this.activityId }
+      });
+    },
+    selectStu(data) {
+      this.selectStuNum = 0;
+      this.classIdInActs = [];
+      this.gradeIdInActs = [];
+      this.studentIdInActs = [];
+      let list = sessionStorage.getItem("stu_id_list");
+      this.stu_id_list = data;
+      this.stu_id_list.gradeList.forEach(v => {
+        this.selectStuNum += v.studentNums;
+        if (v.showStu) this.classIdInActs.push(v.gradeId);
+        else this.gradeIdInActs.push(v.gradeId);
+      });
+      this.stu_id_list.stuIdList.forEach(v => {
+        this.studentIdInActs.push(v.studentId);
+      });
+      this.selectStuNum += this.stu_id_list.stuIdList.length;
+      // this.middleDialogVisible = false;
     }
   }
 };
@@ -518,5 +666,23 @@ export default {
   border: 1px solid #ccc;
   padding: 20px;
   box-sizing: border-box;
+}
+.stu_list {
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 0 5px;
+  min-height: 35px;
+}
+.stu_tips {
+  color: #ccc;
+}
+.confirm_center {
+  text-align: center;
+  padding: 80px 0;
+  line-height: 30px;
+  a {
+    color: #008aff;
+    text-decoration: underline;
+  }
 }
 </style>

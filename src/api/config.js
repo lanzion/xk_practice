@@ -14,13 +14,13 @@ const delLink = (options = {}) => xhr.post('/maker/link/delByIds', options)
 /* 导航管理
 -------------------------- */
 // 导航管理 - 树形列表
-const requestNavTreeList = (options = {}, page = {}) => xhr.post(`/maker/portalNavigation/selectTreeList`, options)
+const requestNavTreeList = (options = {}, page = {}) => xhr.post(`/practice/portalNavigation/selectTreeList`, options)
 // 导航管理 - 添加
-const addNav = (options = {}) => xhr.post('/maker/portalNavigation/add', options)
+const addNav = (options = {}) => xhr.post('/practice/portalNavigation/add', options)
 // 导航管理 - 修改
-const editNav = (options = {}) => xhr.post('/maker/portalNavigation/modify', options)
+const editNav = (options = {}) => xhr.post('/practice/portalNavigation/modify', options)
 // 导航管理 - 删除
-const delNav = (options = {}) => xhr.post('/maker/portalNavigation/delByIds', options)
+const delNav = (options = {}) => xhr.post('/practice/portalNavigation/delByIds', options)
 
 /* Banner图管理
 -------------------------- */

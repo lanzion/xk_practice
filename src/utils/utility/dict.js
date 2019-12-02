@@ -51,4 +51,10 @@ export const activityState = [
     {code: 'C', name: '进行中'},
     {code: 'D', name: '已结束'},
 ]
+
+export const Courselevel = [
+    {code: 'A', name: '省级'},
+    {code: 'B', name: '市级'},
+    {code: 'C', name: '区级'},
+]
 // -------------------------------------------

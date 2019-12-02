@@ -196,7 +196,7 @@ export default {
         activityDesign: "",
         studyAssignments: "",
         auditStatus: "",
-        fit: "",
+        fit: [],
         status: "",
         isFree: "",
         courseType: "",

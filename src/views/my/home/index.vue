@@ -3,9 +3,11 @@
         <swriper :type="numimg" class="swriper" />
         <div class="container">
             <statistics class="statistics" />
-            <newactivities class="newactivities" />
+            <curriculumcenter />
+            <!-- <baseguide /> -->
+            <!-- <newactivities class="newactivities" />
             <baseguide />
-            <latestworks />
+            <latestworks />-->
             <!-- <mapvue @selectLocation="selectLocation" /> -->
             <!-- <mapvue /> -->
         </div>
@@ -25,12 +27,16 @@ export default {
     components: {
         swriper: resolve =>
             require(['@/components/my/swriper/swriper'], resolve),
-        newactivities: resolve =>
-            require(['@/views/my/home/newActivities/newActivities'], resolve),
-        baseguide: resolve =>
-            require(['@/views/my/home/baseguide/baseguide'], resolve),
-        latestworks: resolve =>
-            require(['@/views/my/home/latestworks/latestworks'], resolve),
+        curriculumcenter: resolve =>
+            require([
+                '@/views/my/home/curriculumcenter/curriculumcenter'
+            ], resolve),
+        // newactivities: resolve =>
+        //     require(['@/views/my/home/newActivities/newActivities'], resolve),
+        // baseguide: resolve =>
+        //     require(['@/views/my/home/baseguide/baseguide'], resolve),
+        // latestworks: resolve =>
+        //     require(['@/views/my/home/latestworks/latestworks'], resolve),
         statistics: resolve =>
             require(['@/views/my/home/statistics/statistics'], resolve)
         // mapvue: resolve => require(['@/views/my/home/mapvue/mapvue'], resolve)
@@ -48,17 +54,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.swriper{
+.swriper {
     margin-bottom: 180px;
 }
-.container{
+.container {
     position: relative;
-    .statistics{
+    .statistics {
         position: absolute;
         top: -230px;
         z-index: 10;
     }
-    .newactivities{
+    .newactivities {
         // margin-top: 200px;
     }
 }

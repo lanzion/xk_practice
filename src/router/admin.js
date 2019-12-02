@@ -44,23 +44,21 @@ const schoolGrade = () => import('@/views/admin/school/manage/grade/index')
 const schoolGradeAdd = () => import('@/views/admin/school/manage/grade/add')
 const schoolGradeEdit = () => import('@/views/admin/school/manage/grade/edit')
 const schoolGradeDetail = () => import('@/views/admin/school/manage/grade/detail')
+
+const schoolinfo = () => import('@/views/admin/school/schoolinfo/index')
+
 // 学生管理
 const schoolStudent = () => import('@/views/admin/school/manage/student/index')
 const schoolStudentAdd = () => import('@/views/admin/school/manage/student/form')
 const schoolTeacher = () => import('@/views/admin/school/manage/teacher/index')
 const schoolTeacherAdd = () => import('@/views/admin/school/manage/teacher/form')
 // 实践管理2.0
-const practicalActivity = () => import('@/views/admin/practicalManage/activity/index')
-const practicalActivityDetail = () => import('@/views/admin/practicalManage/activity/detail')
-const practicalActivityAdd = () => import('@/views/admin/practicalManage/activity/add')
-const practicalActivityEdit = () => import('@/views/admin/practicalManage/activity/edit')
 const createActivity = () => import('@/views/admin/practicalManage/create/index')
 const courseManage = () => import('@/views/admin/practicalManage/courseManage/index')
 const courseRecord = () => import('@/views/admin/practicalManage/courseManage/record')
 const courseDetail = () => import('@/views/admin/practicalManage/courseManage/detail')
 const courseEdit = () => import('@/views/admin/practicalManage/create/eidt')
 const courseSchedule = () => import('@/views/admin/practicalManage/courseManage/schedule')
-const courseManageRecord = () => import('@/views/admin/practicalManage/courseRecord/index')
 const courseEvalute = () => import('@/views/admin/practicalManage/courseEvalute/index')
 const practicalComment = () => import('@/views/admin/practicalManage/comment/index')
 const practicalCommentDetail = () => import('@/views/admin/practicalManage/comment/detail')
@@ -112,6 +110,8 @@ const baseManageAudit = () => import('@/views/admin/baseManage/baseAudit/index')
 const baseManageAuditDetail = () => import('@/views/admin/baseManage/baseAudit/detail')
 const baseManageService = () => import('@/views/admin/baseManage/baseService/index')// 基地审核
 const baseManageServiceDetail = () => import('@/views/admin/baseManage/baseService/detail')
+// 基地基本信息
+const baseInfo = () => import('@/views/admin/baseManage/baseInfo/index')
 
 // 机构/基地权限2.0
 const baseAuthortySchedule = () => import('@/views/admin/baseManage/schedule/index')
@@ -135,12 +135,20 @@ const educationDetail = () => import('@/views/admin/educationBorad/detail')
 const educationAdd = () => import('@/views/admin/educationBorad/add')
 const educationEdit = () => import('@/views/admin/educationBorad/edit')
 
+const educationInfo = () => import('@/views/admin/educationBorad/EducationInfo')
+
 // 类型管理
 const typeManage = () => import('@/views/admin/typeManage/list')
 const typeManageAdd = () => import('@/views/admin/typeManage/add')
 const typeManageEdit = () => import('@/views/admin/typeManage/edit')
 const typeManageAddType = () => import('@/views/admin/typeManage/addType')
 const typeManageTypeEdit = () => import('@/views/admin/typeManage/typeEdit')
+
+// 活动成果管理
+const publishActivityfruit = () => import('@/views/admin/activityfruit/publishActivityfruit.vue')
+const activityfruitList = () => import('@/views/admin/activityfruit/activityfruitList.vue')
+const wtAuditList = () => import('@/views/admin/activityfruit/wtAuditList.vue')
+
 Vue.use(Router)
 
 export default new Router({
@@ -363,6 +371,10 @@ export default new Router({
 
                     ]
                 },
+                {
+                    path: 'schoolinfo',
+                    component: schoolinfo
+                }
 
             ]
         },
@@ -373,28 +385,6 @@ export default new Router({
             component: container,
             children: [
                 {
-                    path: 'practicalActivity',
-                    component: container,
-                    children: [
-                        {
-                            path: '/',
-                            component: practicalActivity,
-
-                        }, {
-                            path: 'practicalActivityDetail',
-                            component: practicalActivityDetail
-                        }, {
-                            path: 'add',
-                            component: practicalActivityAdd
-                        },
-                        {
-                            path: 'edit',
-                            component: practicalActivityEdit
-                        }
-
-                    ]
-                },
-                {
                     path: 'createActivity',
                     component: container,
                     children: [
@@ -404,7 +394,6 @@ export default new Router({
 
                         }
                     ]
-
                 },
                 {
                     path: 'courseManage',
@@ -461,15 +450,6 @@ export default new Router({
                 },
 
                 {
-                    path: 'courseManageRecord',
-                    component: container,
-                    children: [
-                        {
-                            path: '/',
-                            component: courseManageRecord
-                        }
-                    ]
-                }, {
                     path: 'courseEvalute',
                     component: container,
                     children: [
@@ -772,6 +752,10 @@ export default new Router({
                         component: baseManageServiceDetail,
                     }
                 ]
+            },
+            {
+                path: 'baseInfo',
+                component: baseInfo,
             }
 
             ]
@@ -864,6 +848,10 @@ export default new Router({
             {
                 path: 'edit',
                 component: educationEdit
+            },
+            {
+                path: 'educationInfo',
+                component: educationInfo
             }]
         },
         {
@@ -892,6 +880,25 @@ export default new Router({
                 component: typeManageTypeEdit
             }]
 
+        },
+        {
+            name: 'activityfruit',
+            path: '/activityfruit',
+            component: container,
+            children: [
+                {
+                    path: 'publishActivityfruit',
+                    component: publishActivityfruit
+                },
+                {
+                    path: 'activityfruitList',
+                    component: activityfruitList
+                },
+                {
+                    path: 'wtAuditList',
+                    component: wtAuditList
+                },
+            ]
         }
 
     ]

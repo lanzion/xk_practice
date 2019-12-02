@@ -1,21 +1,21 @@
 <template>
-  <div class="wrap">
-    <!-- 头部 -->
-    <g-header theme="light" />
-    <!-- 主体内容 -->
-    <!-- <div class="container clearfix"> -->
-    <!-- 左侧导航 -->
-    <!-- <aside class="aside g-bg--white fl">
+    <div class="wrap" :style="{paddingTop:bmap ? '68px' :'0px'}">
+        <!-- 头部 -->
+        <g-header theme="light" v-if="bmap" />
+        <!-- 主体内容 -->
+        <!-- <div class="container clearfix"> -->
+        <!-- 左侧导航 -->
+        <!-- <aside class="aside g-bg--white fl">
                 <aside-menu :datas="permiss" />
-    </aside>-->
+        </aside>-->
 
-    <router-view />
+        <router-view />
 
-    <!-- 尾部 -->
-    <g-footer />
-    <!-- 侧边工具栏 -->
-    <side-tools />
-  </div>
+        <!-- 尾部 -->
+        <g-footer v-if="bmap" />
+        <!-- 侧边工具栏 -->
+        <side-tools v-if="bmap"/>
+    </div>
 </template>
 
 <script>
@@ -25,22 +25,30 @@ export default {
     name: 'App',
     mounted() {
         function checkIE() {
-            return '-ms-scroll-limit' in document.documentElement.style && '-ms-ime-align' in document.documentElement.style
+            return (
+                '-ms-scroll-limit' in document.documentElement.style &&
+                '-ms-ime-align' in document.documentElement.style
+            )
         }
         if (checkIE()) {
-            window.addEventListener('hashchange', () => {
-                var currentPath = window.location.hash.slice(1)
-                if (this.$route.path !== currentPath) {
-                    this.$router.push(currentPath)
-                }
-            }, false)
+            window.addEventListener(
+                'hashchange',
+                () => {
+                    var currentPath = window.location.hash.slice(1)
+                    if (this.$route.path !== currentPath) {
+                        this.$router.push(currentPath)
+                    }
+                },
+                false
+            )
         }
     },
     data() {
         return {
             permiss: [],
             // 面包屑
-            breadcrumb: []
+            breadcrumb: [],
+            bmap: true
         }
     },
     components: {
@@ -50,7 +58,8 @@ export default {
             require(['@/components/index/common/footer'], resolve),
         'side-tools': resolve =>
             require(['@/components/common/side-tools'], resolve),
-        'aside-menu': resolve => require(['@/components/my/common/aside'], resolve)
+        'aside-menu': resolve =>
+            require(['@/components/my/common/aside'], resolve)
     },
     computed: {
         istrue() {
@@ -66,32 +75,35 @@ export default {
         })
     },
     watch: {
-    // 'user.id': {
-    //     handler: function (id) {
-    //         if (!id) {
-    //             this.redirectCallback(this.page.login.url)
-    //         }
-    //     },
-    //     immediate: true
-    // },
+        // 'user.id': {
+        //     handler: function (id) {
+        //         if (!id) {
+        //             this.redirectCallback(this.page.login.url)
+        //         }
+        //     },
+        //     immediate: true
+        // },
         identity: {
             handler: function (identity) {
                 if (identity) {
-                    this.permiss = Object.values(this.permission[identity] || {})
-                    console.log('左侧导航数据：', this.permiss)
+                    this.permiss = Object.values(
+                        this.permission[identity] || {}
+                    )
+                    // console.log('左侧导航数据：', this.permiss)
                 }
             },
             immediate: true
         },
-    // $route: {
-    //   handler: function(val, oldval) {
-        
-    //   },
-    //   deep: true
-    // }
+        $route: {
+            handler: function (val, oldval) {
+                if (val.path == '/bmap') {
+                    this.bmap = false
+                }
+            },
+            deep: true
+        }
     },
-    created() {
-    },
+    created() {},
     methods: {}
 }
 </script>
@@ -99,29 +111,29 @@ export default {
 <style lang='scss' scoped>
 @import "~@/assets/css/base/utils.scss";
 * {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 .wrap {
-  padding-top: $--header-height + $--box-margin;
-  background-color: $--wrap-bg;
-  padding-top:68px;
+    padding-top: $--header-height + $--box-margin;
+    background-color: #fff;
+    padding-top: 68px;
 }
 
 .container {
-  padding-bottom: 100px;
-  margin-top: 100px;
-  background: #f8f8f8;
+    padding-bottom: 100px;
+    margin-top: 100px;
+    background: #fff;
 }
 
 $aside-width: 200px;
 $aside-margin: 20px;
 .aside {
-  width: $aside-width;
-  margin-right: $aside-margin;
+    width: $aside-width;
+    margin-right: $aside-margin;
 }
 
 .content {
-  width: 1200 - $aside-width - $aside-margin;
+    width: 1200 - $aside-width - $aside-margin;
 }
 </style>

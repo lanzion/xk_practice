@@ -3,6 +3,7 @@ import xhr from 'Axios'
 // 课程管理
 const courseList = (options = {}, page) => xhr.post(`/practice/course/selectPager?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 const courseAdd = (options = {}) => xhr.post('/practice/course/add', options)
+const courseshowOrHide = (options = {}) => xhr.post('/practice/course/showOrHide', options)
 const courseEdit = (options = {}) => xhr.post('/practice/course/modify', options)
 const commentList = (options = {}, page) => xhr.post(`/admin/schActivityDetail/distributionPager?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 const courseDetail = (options = {}) => xhr.post('/practice/course/selectDetail', options)
@@ -54,7 +55,7 @@ const templateEdit = (options = {}) => xhr.post('/admin/template/modify', option
 
 // 通用
 // 学校列表查询
-const schoolList = (options = {}, page) => xhr.post(`/admin/baseSchool/selectPager?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
+const schoolList = (options = {}, page) => xhr.post(`/practice/baseSchool/selectPager?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 // 学校详情
 const schoolDetail = (options = {}) => xhr.post('/admin/baseSchool/selectDetail', options)
 // 新增学校
@@ -82,19 +83,19 @@ const recommendAdd = (options = {}) => xhr.post('/admin/recommend/add', options)
 const recommendCancel = (options = {}) => xhr.post('/admin/recommend/cancel', options)
 // 获取角色权限
 // const getByPid = (options = {}) => xhr.post("/common/right/list/findByIdentityType", options);
-const getByPid = (options = {}) => xhr.post('/admin/baseUser/list/findByIdentityType', options)
+const getByPid = (options = {}) => xhr.post('/practice/baseUser/list/findByIdentityType', options)
 // 获取账号详情
-const selectDetailByOrgUser = (options = {}) => xhr.post('/admin/baseUser/selectDetailByOrgUser', options)
-const modifyUser = (options = {}) => xhr.post('/admin/baseUser/modifyUser', options)
+const selectDetailByOrgUser = (options = {}) => xhr.post('/practice/baseUser/selectDetailByOrgUser', options)
+const modifyUser = (options = {}) => xhr.post('/practice/baseUser/modifyUser', options)
 // 添加账号
-const addUser = (options = {}) => xhr.post('/admin/baseUser/addUser', options)
+const addUser = (options = {}) => xhr.post('/practice/baseUser/addUser', options)
 const delUser = (options = {}) => xhr.post('/admin/baseUser/delUser', options)
 // 获取教育局列表
-const baseEducationList = (options = {}, page) => xhr.post(`/admin/baseEducation/selectPager?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
+const baseEducationList = (options = {}, page) => xhr.post(`/practice/baseEducation/selectPager?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 const addEdus = (options = {}) => xhr.post('/admin/baseEducation/addEdus', options)
 const delEdus = (options = {}) => xhr.post('/admin/baseEducation/del', options)
-const editEdus = (options = {}) => xhr.post('/admin/baseEducation/modify', options)
-const detailEdus = (options = {}) => xhr.post('/admin/baseEducation/selectDetail', options)
+const editEdus = (options = {}) => xhr.post('/practice/baseEducation/modify', options)
+const detailEdus = (options = {}) => xhr.post('/practice/baseEducation/selectDetail', options)
 
 const adminBaseInfoList = (options = {}, page) => xhr.post(`/admin/adminBaseInfo/selectPager?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 // 活动统计
@@ -124,11 +125,12 @@ const activityTypeDetail = (options = {}) => xhr.post('/admin/activityType/selec
 // 活动主题详情
 const activityTypeDetailData = (options = {}) => xhr.post('/admin/activityType/selectDetailData', options)
 // 根据地区查基地
-const adminBaseInfo = (options = {}, page) => xhr.post(`/admin/adminBaseInfo/selectAll?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
+const adminBaseInfo = (options = {}, page) => xhr.post(`/practice/adminBaseInfo/selectAll?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 
 export {
     courseList,
     courseAdd,
+    courseshowOrHide,
     commentList,
     courseDetail,
     schoolList,

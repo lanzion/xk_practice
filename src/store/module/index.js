@@ -5,10 +5,8 @@
 
 // 公共组件
 
-import course from './course'
 import dictionaryCommon from './modules/dictionaryCommon'
 
 export default {
-    course,
     dictionaryCommon
 }

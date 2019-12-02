@@ -1,7 +1,7 @@
 import xhr from 'Axios'
 
 // 获取Banner图
-const requestBannerList = (options = {}) => xhr.post('/maker/banner/getBannerImg', options)
+const requestBannerList = (options = {}) => xhr.post('/practice/banner/getBannerImg', options)
 
 // 获取省/市/区县
 // const requestRegion = (options = {}) => xhr.post('/admin/sysArea/currentLocal', options)

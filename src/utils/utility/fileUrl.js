@@ -4,14 +4,13 @@
 */
 function fileUrl(url, {filetype = 'image'} = {}) {
     const isFullpath = /(http(s)?:\/\/)/i.test(url)
-
     if (url) {
         url = isFullpath ? url : (configs.fileBaseUrl + url)
     }
 
     switch (filetype) {
         case 'image':
-            const reg = /\.jp(e)?g|gif|png|bmp$/i // 过滤文件类型
+            const reg = /\.jp(e)?g|gif|png|pn|bmp$/i // 过滤文件类型
             return !reg.test(url) ? null : url.split('?')[0]
         default:
             return url.split('?')[0] || null

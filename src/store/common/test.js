@@ -15,6 +15,7 @@ const state = {
     teachernewworks: '',
     teachernamefen: '',
     activitytitle: '',
+    stu_id_list: null,
 }
 const mutations = {
     changeisok(state, payload = {}) {
@@ -64,6 +65,9 @@ const mutations = {
     },
     changeactivitytitle(state, payload = {}) {
         state.activitytitle = payload
+    },
+    changeastu_id_list(state, payload = {}) {
+        state.stu_id_list = payload
     },
 }
 const getters = {

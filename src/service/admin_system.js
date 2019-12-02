@@ -3,19 +3,19 @@ import xhr from 'Axios'
 
 /** ****************************************Banner**********************************************/
 // Banner列表
-let requestSystemBanner = (options = {}) => xhr.post('/admin/banner/getAllBanner', options)
+let requestSystemBanner = (options = {}) => xhr.post('/practice/banner/getAllBanner', options)
 // 添加Banner
-let addBanner = (options = {}) => xhr.post('/admin/banner/addFile', options)
+let addBanner = (options = {}) => xhr.post('/practice/banner/addFile', options)
 // 删除Banner
-let delBanner = (options = {}) => xhr.post('/admin/banner/delFile', options)
+let delBanner = (options = {}) => xhr.post('/practice/banner/delFile', options)
 // 添加banner关系
-let addBannerRelation = (options = {}) => xhr.post('/admin/banner/add', options)
+let addBannerRelation = (options = {}) => xhr.post('/practice/banner/add', options)
 // 删除banner关系
-let delBannerRelation = (options = {}) => xhr.post('/admin/banner/del', options)
+let delBannerRelation = (options = {}) => xhr.post('/practice/banner/del', options)
 // 修改banner顺序
-let updateBannerSort = (options = {}) => xhr.post('/admin/banner/updateSort', options)
+let updateBannerSort = (options = {}) => xhr.post('/practice/banner/updateSort', options)
 // 设置banner轮播时间
-let updateBannerTime = (options = {}) => xhr.post('/admin/banner/updateBannerTime', options)
+let updateBannerTime = (options = {}) => xhr.post('/practice/banner/updateBannerTime', options)
 
 /** *****************************************Role*******************************************/
 // 角色列表

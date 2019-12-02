@@ -13,6 +13,7 @@ import createLogger from 'vuex/dist/logger'
 Vue.use(Vuex)
 
 const state = {
+    stu_id_list: null,
 }
 const debug = process.env.NODE_ENV !== 'production'
 
