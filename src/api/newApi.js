@@ -4,6 +4,8 @@ import xhr from 'Axios'
 const selectUserList = (options = {}, page) => xhr.post(`/practice/baseUser/selectPager?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 // 添加管理员账号
 const addUser = (options = {}) => xhr.post('/admin/baseEducation/addUser', options)
+// 修改账号状态
+const modifyUserStatus = (options = {}) => xhr.post('/practice/baseUser/modifyUserStatus', options)
 // 基地列表
 const BaseList = (options = {}, page) => xhr.post(`/practice/baseInfo/selectPager?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 // 根据名称搜索基地
@@ -119,6 +121,7 @@ const resultLockChange = (options = {}) => xhr.post('/practice/activity/result/l
 export {
     selectUserList,
     addUser,
+    modifyUserStatus,
     BaseList,
     searchBaselist,
     informationList,

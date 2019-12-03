@@ -273,6 +273,7 @@ $--user-info-height: 60px;
   padding-top: 70px;
   box-sizing: border-box;
   padding-bottom: 20px;
+  z-index: 100;
 
   .is-level-1 {
     font-size: 16px;

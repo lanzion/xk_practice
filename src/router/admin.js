@@ -59,10 +59,6 @@ const courseRecord = () => import('@/views/admin/practicalManage/courseManage/re
 const courseDetail = () => import('@/views/admin/practicalManage/courseManage/detail')
 const courseEdit = () => import('@/views/admin/practicalManage/create/eidt')
 const courseSchedule = () => import('@/views/admin/practicalManage/courseManage/schedule')
-const courseEvalute = () => import('@/views/admin/practicalManage/courseEvalute/index')
-const practicalComment = () => import('@/views/admin/practicalManage/comment/index')
-const practicalCommentDetail = () => import('@/views/admin/practicalManage/comment/detail')
-const practicalCommentAdd = () => import('@/views/admin/practicalManage/comment/add')
 
 // -----------------------------------------------------------------------------------------------
 const practicalStart = () => import('@/views/admin/practicalManage/start/index')
@@ -106,19 +102,13 @@ const baseManageList = () => import('@/views/admin/baseManage/baseList/index')//
 const baseManageListAdd = () => import('@/views/admin/baseManage/baseList/add')
 const baseManageListDetail = () => import('@/views/admin/baseManage/baseList/detail')
 const baseManageListEdit = () => import('@/views/admin/baseManage/baseList/edit')
-const baseManageAudit = () => import('@/views/admin/baseManage/baseAudit/index')// 基地审核
-const baseManageAuditDetail = () => import('@/views/admin/baseManage/baseAudit/detail')
-const baseManageService = () => import('@/views/admin/baseManage/baseService/index')// 基地审核
-const baseManageServiceDetail = () => import('@/views/admin/baseManage/baseService/detail')
+
 // 基地基本信息
 const baseInfo = () => import('@/views/admin/baseManage/baseInfo/index')
 
 // 机构/基地权限2.0
 const baseAuthortySchedule = () => import('@/views/admin/baseManage/schedule/index')
 const baseAuthortyScheduleDetail = () => import('@/views/admin/baseManage/schedule/scheduleDetail')
-const serviceList = () => import('@/views/admin/baseManage/serviceList/index')
-const serviceDetails = () => import('@/views/admin/baseManage/serviceList/serviceDetails')
-const addSetvice = () => import('@/views/admin/baseManage/serviceList/addSetvice')
 
 // 通知公告
 const noticeManage = () => import('@/views/admin/noticeManage/index')
@@ -448,34 +438,6 @@ export default new Router({
                     ]
 
                 },
-
-                {
-                    path: 'courseEvalute',
-                    component: container,
-                    children: [
-                        {
-                            path: '/',
-                            component: courseEvalute
-                        }
-                    ]
-
-                }, {
-                    path: 'practicalComment',
-                    component: container,
-                    children: [
-                        {
-                            path: '/',
-                            component: practicalComment
-                        }, {
-                            path: 'detail',
-                            component: practicalCommentDetail
-                        }, {
-                            path: 'add',
-                            component: practicalCommentAdd
-                        }
-                    ]
-
-                },
                 // ------------------------------------------
                 {
                     path: 'practicalStart',
@@ -727,33 +689,6 @@ export default new Router({
                 ]
             },
             {
-                path: 'baseAudit',
-                component: container,
-                children: [
-                    {
-                        path: '/',
-                        component: baseManageAudit,
-
-                    }, {
-                        path: 'detail',
-                        component: baseManageAuditDetail,
-                    }
-                ]
-            }, {
-                path: 'baseService',
-                component: container,
-                children: [
-                    {
-                        path: '/',
-                        component: baseManageService,
-
-                    }, {
-                        path: 'detail',
-                        component: baseManageServiceDetail,
-                    }
-                ]
-            },
-            {
                 path: 'baseInfo',
                 component: baseInfo,
             }
@@ -778,37 +713,6 @@ export default new Router({
                 path: 'edit',
                 component: noticeManageEdit
             }]
-        },
-        {
-            name: 'baseAuthority',
-            path: '/baseAuthority',
-            component: container,
-            children: [
-                {
-                    path: 'baseAuthortySchedule',
-                    component: baseAuthortySchedule
-                },
-                {
-                    path: 'serviceList',
-                    name: 'serviceList',
-                    component: serviceList
-                },
-                {
-                    path: 'serviceDetails',
-                    name: 'serviceDetails',
-                    component: serviceDetails
-                },
-                {
-                    path: 'addSetvice',
-                    name: 'addSetvice',
-                    component: addSetvice
-                },
-                {
-                    path: 'editSetvice',
-                    name: 'editSetvice',
-                    component: addSetvice
-                }
-            ]
         },
         // 基地资讯.0
         {
