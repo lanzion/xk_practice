@@ -28,11 +28,6 @@
         class="upload-list-tips"
       >仅支持JPG、GIF、PNG、JPEG格式，文件小于 {{ imgStandardFileSize }} M。像素500 x 500比例</p>
     </el-form-item>
-    <el-form-item label="所属基地" prop="baseId" v-if="isReadOnly">
-      <el-col :span="12">
-        <el-input v-model="schoolName" :disabled="isReadOnly"></el-input>
-      </el-col>
-    </el-form-item>
     <el-form-item label="备注">
       <el-col :span="20">
         <el-input
@@ -58,7 +53,6 @@
             :props="defaultProps"
             :check-strictly="isCheckStrictly"
             :filter-node-method="filterNode"
-            :default-checked-keys="form.permissList"
             @check-change="getPermiss"
             v-loading="isLoading1"
           ></el-tree>
@@ -233,6 +227,11 @@ export default {
           const { code, entity: datas } = res.data;
           if (code === 200 && datas) {
             this.datas = datas[0].children;
+            setTimeout(()=>{
+              this.form.permissList.forEach(value=>{
+                this.$refs.tree.setChecked(value,true,false)
+              })
+            },500)
           }
         })
         .finally(() => {

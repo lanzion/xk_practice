@@ -89,7 +89,7 @@ const selectDetailByOrgUser = (options = {}) => xhr.post('/practice/baseUser/sel
 const modifyUser = (options = {}) => xhr.post('/practice/baseUser/modifyUser', options)
 // 添加账号
 const addUser = (options = {}) => xhr.post('/practice/baseUser/addUser', options)
-const delUser = (options = {}) => xhr.post('/admin/baseUser/delUser', options)
+const delUser = (options = {}) => xhr.post('/practice/baseUser/delUser', options)
 // 获取教育局列表
 const baseEducationList = (options = {}, page) => xhr.post(`/practice/baseEducation/selectPager?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 const addEdus = (options = {}) => xhr.post('/admin/baseEducation/addEdus', options)

@@ -4,8 +4,8 @@
             <div class="page-fl fl">
                 <div class="page-fl-title">
                     <h3>{{schoolDetail.schoolName}}</h3>
-                    <p id="conent">
-                        {{schoolDetail.remark}}
+                    <p id="conent" v-html="schoolDetail.remark">
+                        
                         <span></span>
                     </p>
                     <h4 @click="go()">点击查看详情>></h4>
@@ -27,7 +27,7 @@
                             <span>
                                 {{schoolDetail.address}}
                                 <i
-                                    @click="getMap(datas.address)"
+                                    @click="getMap(schoolDetail.address,schoolDetail.name)"
                                     :style="{backgroundImage:'url('+baiduditu+')'}"
                                 ></i>
                             </span>
@@ -53,62 +53,19 @@
                 ></i>
                 <span class="page-fl-coure-header-one">活动成果</span>
                 <i class="page-fl-coure-header-max" :style="{backgroundImage:'url('+gengduo+')'}"></i>
-                <span class="page-fl-coure-header-thr">更多</span>
+                <span class="page-fl-coure-header-thr" @click="moreactivey()">更多</span>
             </div>
             <ul class="page-fl-coure-ul">
-                <li>
+                <li v-for="(g,index) in goods" :key="index" @click="goactivty(g.id)">
                     <div class="page-fl-coure-ul-img">
-                        <ov-image :type="3" :src-data="'123'" :img-height="'168px'"></ov-image>
+                        <ov-image :type="3" :src-data="g.cover" :img-height="'168px'"></ov-image>
                     </div>
                     <div class="page-fl-coure-ul-connet">
                         <h3
                             :style="{'-webkit-box-orient':'vertical'}"
-                        >课程名称课程课程名称课程名称名称课程名称…课程名称课程名称名称课程名称…名称名称课程名称…</h3>
+                        >{{g.title}}</h3>
                         <p :style="{'-webkit-box-orient':'vertical'}">
-                            2019年5月21日，我校文科班在朱老师和宋老师的组织下来到了广东省博物大海道——南海一号沉船考古展金船中国水下考南海一号沉船考古展金船中国水下考中国水下考...
-                            2019年5月21日，我校文科班在朱老师和宋老师的组织下来到了广东省博物大海道——南海一号沉船考古展金船中国水下考南海一号沉船考古展金船中国水下考中国水下考...
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div class="page-fl-coure-ul-img">
-                        <ov-image :type="3" :src-data="'123'" :img-height="'168px'"></ov-image>
-                    </div>
-                    <div class="page-fl-coure-ul-connet">
-                        <h3
-                            :style="{'-webkit-box-orient':'vertical'}"
-                        >课程名称课程课程名称课程名称名称课程名称…课程名称课程名称名称课程名称…名称名称课程名称…</h3>
-                        <p :style="{'-webkit-box-orient':'vertical'}">
-                            2019年5月21日，我校文科班在朱老师和宋老师的组织下来到了广东省博物大海道——南海一号沉船考古展金船中国水下考南海一号沉船考古展金船中国水下考中国水下考...
-                            2019年5月21日，我校文科班在朱老师和宋老师的组织下来到了广东省博物大海道——南海一号沉船考古展金船中国水下考南海一号沉船考古展金船中国水下考中国水下考...
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div class="page-fl-coure-ul-img">
-                        <ov-image :type="3" :src-data="'123'" :img-height="'168px'"></ov-image>
-                    </div>
-                    <div class="page-fl-coure-ul-connet">
-                        <h3
-                            :style="{'-webkit-box-orient':'vertical'}"
-                        >课程名称课程课程名称课程名称名称课程名称…课程名称课程名称名称课程名称…名称名称课程名称…</h3>
-                        <p :style="{'-webkit-box-orient':'vertical'}">
-                            2019年5月21日，我校文科班在朱老师和宋老师的组织下来到了广东省博物大海道——南海一号沉船考古展金船中国水下考南海一号沉船考古展金船中国水下考中国水下考...
-                            2019年5月21日，我校文科班在朱老师和宋老师的组织下来到了广东省博物大海道——南海一号沉船考古展金船中国水下考南海一号沉船考古展金船中国水下考中国水下考...
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div class="page-fl-coure-ul-img">
-                        <ov-image :type="3" :src-data="'123'" :img-height="'168px'"></ov-image>
-                    </div>
-                    <div class="page-fl-coure-ul-connet">
-                        <h3
-                            :style="{'-webkit-box-orient':'vertical'}"
-                        >课程名称课程课程名称课程名称名称课程名称…课程名称课程名称名称课程名称…名称名称课程名称…</h3>
-                        <p :style="{'-webkit-box-orient':'vertical'}">
-                            2019年5月21日，我校文科班在朱老师和宋老师的组织下来到了广东省博物大海道——南海一号沉船考古展金船中国水下考南海一号沉船考古展金船中国水下考中国水下考...
-                            2019年5月21日，我校文科班在朱老师和宋老师的组织下来到了广东省博物大海道——南海一号沉船考古展金船中国水下考南海一号沉船考古展金船中国水下考中国水下考...
+                           {{g.summary}}
                         </p>
                     </div>
                 </li>
@@ -125,19 +82,17 @@
                     class="page-fl-evaluate-header-max"
                     :style="{backgroundImage:'url('+gengduo+')'}"
                 ></i>
-                <span class="page-fl-evaluate-header-thr">更多</span>
+                <span class="page-fl-evaluate-header-thr" @click="morebase()">更多</span>
             </div>
             <ul class="page-fl-evaluate-ul">
-                <li>
+                <li v-for="(g,index) in lists" :key="index" @click="gobase(g.baseInfoId)">
                     <div>
-                        <ov-image :type="3" :src-data="'123'" :img-height="'235px'"></ov-image>
+                        <ov-image :type="3" :src-data="g.cover" :img-height="'235px'"></ov-image>
                     </div>
-                    <h3>课程名称课程名称名称课程名称…</h3>
+                    <h3>{{g.baseInfoName}}</h3>
                     <h4>已参加课程:</h4>
                     <ul>
-                        <li>《寻找广州城市天际线》</li>
-                        <li>《寻找广州城市天际线城市天际线》</li>
-                        <li>《寻找广州城市天际线》</li>
+                        <li v-for="(t,index) in g.courseList" :key="index">《{{t.courseName}}》</li>
                     </ul>
                 </li>
             </ul>
@@ -147,6 +102,7 @@
 
 <script>
 import { requestwebapischoolDetailbase } from '@/api/webApi/school'
+import { requestwebapiactivityresults } from '@/api/webApi/activity'
 import { requestwebapiLongitudeAndlatitude } from '@/api/webApi/base'
 export default {
     name: 'schooldetailpage',
@@ -155,8 +111,11 @@ export default {
             id: '',
             value: 5,
             lists: [],
+            goods: [],
+            istrue: false,
             lng: 0,
             lat: 0,
+            schoolgoodsNum: -1,
             schoolDetail: {},
             time: require('../../../../../../static/img/time.png'),
             erweima: require('../../../../../../static/img/xikegongzhonghao.png'),
@@ -181,12 +140,25 @@ export default {
     watch: {
         datas: function (val) {
             this.schoolDetail = JSON.parse(val)
-            console.log(this.schoolDetail)
-        }
+        },
+
+        schoolgoodsNum: {
+            handler(newval, oldval) {
+                if (newval) {
+                    this.istrue = true
+                    this.$store.commit('changeSchoolgoodsNum', this.istrue)
+                } else {
+                    this.istrue = false
+                    this.$store.commit('changeSchoolgoodsNum', this.istrue)
+                }
+            },
+            deep: true
+        },
     },
     created() {
         this.schoolDetail = JSON.parse(sessionStorage.getItem('schoolDetail'))
         this.getlists()
+        this.getgoods()
     },
     methods: {
         go() {
@@ -194,6 +166,32 @@ export default {
                 path: '/school/schooldetail/brief',
                 query: { schoolId: this.id }
             })
+        },
+        async getgoods() {
+            this.isLoading = true
+            let schoolId = this.$route.query.schoolId
+            if (schoolId) {
+                this.id = schoolId
+            } else {
+                this.id = sessionStorage.getItem('schoolId')
+            }
+            let pages = {
+                pageSize: 4,
+                pageNum: 1
+            }
+            const res = await requestwebapiactivityresults(
+                { schoolId: this.id },
+                pages
+            )
+            const { entity: datas = {} } = res.data
+            try {
+                this.goods = datas.resultData || []
+                this.schoolgoodsNum = this.goods.length
+            } catch (error) {
+                this.goods = []
+            } finally {
+                this.isLoading = false
+            }
         },
         async getlists() {
             this.isLoading = true
@@ -214,7 +212,6 @@ export default {
             const { entity: datas = {} } = res.data
             try {
                 this.lists = datas.resultData || []
-                console.log(this.lists)
             } catch (error) {
                 this.lists = []
             } finally {
@@ -235,6 +232,7 @@ export default {
                         lng: this.lng,
                         lat: this.lat,
                         name: this.datas.schoolName
+                                                 
                     }
                 })
                 window.open(href, '_blank')
@@ -242,7 +240,33 @@ export default {
             } finally {
                 this.isLoading = false
             }
-        }
+        },
+        moreactivey() {
+            this.$router.push({
+                path: '/school/schooldetail/curriculum',
+                query: { schoolId: this.id }
+            })
+        },
+        morebase() {
+            this.$router.push({
+                path: '/school/schooldetail/bases',
+                query: { schoolId: this.id }
+            })
+        },
+        gobase(id) {
+            sessionStorage.setItem('baseId', id)
+            this.$router.push({
+                path: '/base/basedetail',
+                query: { baseId: id }
+            })
+        },
+        goactivty(id) {
+            sessionStorage.setItem('activityresultsId', id)
+            this.$router.push({
+                path: '/activity/activityresult/activityresultdetail',
+                query: { activityresultsId: id }
+            })
+        },
     }
 }
 </script>

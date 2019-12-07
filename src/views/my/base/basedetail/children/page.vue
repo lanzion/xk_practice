@@ -3,8 +3,7 @@
         <div class="page-fl fl">
             <div class="page-fl-title">
                 <h3>{{baseDetail.name}}</h3>
-                <p id="conent">
-                    {{baseDetail.remark}}
+                <p id="conent" v-html="baseDetail.remark">
                     <span></span>
                 </p>
                 <h4 @click="go()">点击查看详情>></h4>
@@ -16,43 +15,43 @@
                         :style="{backgroundImage:'url('+kechenglan+')'}"
                     ></i>
                     <span class="page-fl-coure-header-one">课程</span>
-                    <span class="page-fl-coure-header-two">(4门)</span>
+                    <span class="page-fl-coure-header-two">({{goodsNum}}门)</span>
                     <i
                         class="page-fl-coure-header-max"
                         :style="{backgroundImage:'url('+gengduo+')'}"
                     ></i>
-                    <span class="page-fl-coure-header-thr">更多</span>
+                    <span class="page-fl-coure-header-thr" @click="coursemore()">更多</span>
                 </div>
                 <ul class="page-fl-coure-ul">
-                    <li v-for="(g,index) in goods" :key="index">
+                    <li v-for="(g,index) in goods" :key="index" @click="gobcourse(g.id)">
                         <div>
                             <ov-image :type="3" :src-data="g.cover" :img-height="'248px'"></ov-image>
                         </div>
                         <h3>{{g.name}}</h3>
                         <div class="page-fl-coure-ul-min">
-                            <span>课程分类</span>
+                            <span>课程分类:</span>
                             <span>{{g.parentName}}>>{{g.childrenName}}</span>
                         </div>
                         <div class="page-fl-coure-ul-max">
-                            <span>适合学段</span>
+                            <span>适合学段:</span>
                             <span>{{g.fit}}</span>
                         </div>
                     </li>
                 </ul>
             </div>
-            <div class="page-fl-evaluate">
+            <div class="page-fl-evaluate" v-if="nomoreone">
                 <div class="page-fl-evaluate-header">
                     <i
                         class="page-fl-evaluate-header-min"
                         :style="{backgroundImage:'url('+fankui+')'}"
                     ></i>
                     <span class="page-fl-evaluate-header-one">评价反馈</span>
-                    <span class="page-fl-evaluate-header-two">(20)</span>
+                    <span class="page-fl-evaluate-header-two">({{goversNum}})</span>
                     <i
                         class="page-fl-evaluate-header-max"
                         :style="{backgroundImage:'url('+gengduo+')'}"
                     ></i>
-                    <span class="page-fl-evaluate-header-thr">更多</span>
+                    <span class="page-fl-evaluate-header-thr" @click="gofeed()">更多</span>
                 </div>
                 <ul class="page-fl-evaluate-ul">
                     <li class="page-fl-evaluate-li" v-for="(g,index) in govers" :key="index">
@@ -95,6 +94,7 @@
                         <span>
                             {{baseDetail.address}}
                             <i
+                                @click="getMap(baseDetail.address,baseDetail.name)"
                                 :style="{backgroundImage:'url('+baiduditu+')'}"
                             ></i>
                         </span>
@@ -111,7 +111,7 @@
                     </li>
                     <li>
                         <i :style="{backgroundImage:'url('+pingfeng+')'}"></i>
-                        <span>{{numFilter(baseDetail.scorse)}}</span>
+                        <span>{{numFilter(baseDetail.scorse === null ? 5 : baseDetail.scorse )}}</span>
                     </li>
                     <li>
                         <i :style="{backgroundImage:'url('+guanwang+')'}"></i>
@@ -124,18 +124,19 @@
                     <img :src="baseDetail.officialAccounts" alt />
                 </div>
             </div>
-            <div class="page-fr-two">
+            <div class="page-fr-two" v-if="nomoretwo">
                 <div class="page-fr-two-header">
                     <span class="page-fr-two-header-one">参与学校</span>
                     <span class="page-fr-two-header-two">({{num}}所)</span>
                     <i class="page-fr-two-header-max" :style="{backgroundImage:'url('+gengduo+')'}"></i>
-                    <span class="page-fr-two-header-thr">更多</span>
+                    <span class="page-fr-two-header-thr" @click="moreschool()">更多</span>
                 </div>
                 <ul class="page-fr-two-ul">
                     <li
                         class="page-fr-two-ul-li"
                         v-for="(g,index) in lists"
                         :key="index"
+                        @click="goschool(g.schoolId)"
                     >{{g.schoolName}}</li>
                 </ul>
             </div>
@@ -147,7 +148,8 @@
 import {
     requestwebapibaseDetailcourse,
     requestwebapibaseDetailschool,
-    requestwebapigetBaseevaluation
+    requestwebapigetBaseevaluation,
+    requestwebapiLongitudeAndlatitude
 } from '@/api/webApi/base'
 export default {
     name: 'page',
@@ -156,10 +158,15 @@ export default {
             id: '',
             goods: [],
             lists: [],
+            istrue: false,
             value: 5,
             baseDetail: {},
             govers: [],
+            goversNum: 0,
             num: '',
+            goodsNum: -1,
+            nomoreone: false,
+            nomoretwo: false,
             time: require('../../../../../../static/img/time.png'),
             erweima: require('../../../../../../static/img/xikegongzhonghao.png'),
             kechenglan: require('../../../../../../static/img/kechenglan.png'),
@@ -186,6 +193,40 @@ export default {
     watch: {
         datas: function (val) {
             this.baseDetail = JSON.parse(val)
+        },
+
+        goodsNum: {
+            handler(newval, oldval) {
+                if (newval) {
+                    this.istrue = true
+                    this.$store.commit('changegoodsNum', this.istrue)
+                } else {
+                    this.istrue = false
+                    this.$store.commit('changegoodsNum', this.istrue)
+                }
+            },
+            deep: true
+        },
+
+        'govers.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomoreone = false
+                } else {
+                    this.nomoreone = true
+                }
+            },
+            deep: true
+        },
+        'lists.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomoretwo = false
+                } else {
+                    this.nomoretwo = true
+                }
+            },
+            deep: true
         }
     },
     created() {
@@ -195,9 +236,6 @@ export default {
         this.getBaseevaluation()
     },
     methods: {
-        go() {
-            this.$router.push({ path: '/base/basedetail/brief' })
-        },
         async getCourselist() {
             this.isLoading = true
             let pages = {
@@ -221,6 +259,7 @@ export default {
                     x.fit = this.filterFit(x.fit)
                 })
                 this.goods = array || []
+                this.goodsNum = array.length
             } catch (error) {
                 this.goods = []
             } finally {
@@ -257,7 +296,7 @@ export default {
             this.isLoading = true
             let pages = {
                 pageNum: 1,
-                pageSize: 6
+                pageSize: 10
             }
             let baseId = this.$route.query.baseId
             if (baseId) {
@@ -276,11 +315,69 @@ export default {
                     x.totalScore = Number(this.numFilter(x.totalScore))
                 })
                 this.govers = array || []
+                this.goversNum = datas.totalNum
             } catch (error) {
                 this.govers = []
             } finally {
                 this.isLoading = false
             }
+        },
+        async getMap(address, name) {
+            const res = await requestwebapiLongitudeAndlatitude({
+                address: address
+            })
+            const { entity: datas = {} } = res.data
+            try {
+                console.log(datas)
+                this.lng = datas.lng || 113.27
+                this.lat = datas.lat || 23.13
+                const { href } = this.$router.resolve({
+                    name: `bmap`,
+                    query: { lng: this.lng, lat: this.lat, name: name }
+                })
+                window.open(href, '_blank')
+            } catch (error) {
+            } finally {
+                this.isLoading = false
+            }
+        },
+        gobcourse(id) {
+            sessionStorage.setItem('courseId', id)
+            this.$router.push({
+                path: '/course/coursedetails',
+                query: { courseId: id }
+            })
+        },
+        go() {
+            this.$router.push({
+                path: '/base/basedetail/brief',
+                query: { baseId: this.id }
+            })
+        },
+        coursemore() {
+            this.$router.push({
+                path: '/base/basedetail/curriculum',
+                query: { baseId: this.id }
+            })
+        },
+        gofeed() {
+            this.$router.push({
+                path: '/base/basedetail/feedback',
+                query: { baseId: this.id }
+            })
+        },
+        moreschool() {
+            this.$router.push({
+                path: '/base/basedetail/schools',
+                query: { baseId: this.id }
+            })
+        },
+        goschool(id) {
+            sessionStorage.setItem('schoolId', id)
+            this.$router.push({
+                path: '/school/schooldetail',
+                query: { schoolId: id }
+            })
         },
         filterFit(val) {
             let txt = ''
@@ -296,7 +393,7 @@ export default {
         numFilter(value) {
             let realVal = parseFloat(value).toFixed(1)
             return realVal
-        },
+        }
     }
 }
 </script>

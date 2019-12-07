@@ -9,13 +9,14 @@
                 <el-form :inline="true" class="el-form-l fl" @submit.native.prevent>
                     <el-form-item>
                         <el-select
+                            disabled
                             v-model="isCompulsory"
-                            placeholder="请选择学段"
+                            placeholder="初中"
                             @change="resetPage"
                             clearable
                         >
                             <el-option
-                                v-for="item in fit"
+                                v-for="item in schoolfit"
                                 :key="item.code"
                                 :label="item.name"
                                 :value="item.code"
@@ -28,7 +29,7 @@
                     <el-form-item>
                         <el-input
                             v-model="name"
-                            placeholder="请输入基地/机构关键字"
+                            placeholder="请输入学校的关键字"
                             @keyup.native.enter="resetPage"
                         ></el-input>
                     </el-form-item>
@@ -50,60 +51,56 @@
                     <div class="cord-sl">
                         <span>
                             已发起
-                            <i>{{g.actNum}}</i>活动
+                            <i>{{g.actNum}}</i>场活动
                         </span>
                     </div>
                 </li>
             </ul>
-            <no-data v-if="nomore"></no-data>
+            <!-- <infinite-loading @infinite="getlists" ref="infiniteLoading">
+                <span slot="spinner">正在加载中...</span>
+                <span slot="no-more">没有更多数据了...</span>
+                 <span slot="no-results">暂无数据...</span>
+            </infinite-loading>-->
         </div>
     </div>
 </template>
 
 <script>
-// import { requestMultField } from '@/api/common'
 import { requestwebapischool } from '@/api/webApi/school'
-import { fit } from '@/utils/utility/dict.js'
+import { schoolfit } from '@/utils/utility/dict.js'
 export default {
     data() {
         return {
-            fit: fit,
+            schoolfit: schoolfit,
             name: '',
-            isCompulsory: '',
-            pages: {
-                pageSize: 16,
-                pageNum: 1
-            },
+            isCompulsory: 'middleSchool',
             datas: [],
-            nomore: false
+            pages: {
+                pageSize: 12,
+                pageNum: 1
+            }
         }
     },
     created() {
         this.getlists()
     },
-    watch: {
-        'datas.length': {
-            handler(newval, oldval) {
-                if (newval === 0) {
-                    this.nomore = true
-                } else {
-                    this.nomore = false
-                }
-            },
-            deep: true
-        }
-    },
     methods: {
-        // 重置分页
+        // resetPage() {
+        //     this.datas = []
+        //     this.$nextTick(() => {
+        //         this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset')
+        //     })
+        // },
         resetPage() {
-            this.$set(this.pages, 'pageNum', 1)
             this.getlists()
         },
         async getlists() {
-            this.isLoading = true
+            if (this.isCompulsory) {
+                this.isCompulsory = 'middleSchool'
+            }
             let form = {
                 schoolName: this.name,
-                schoolType: this.isCompulsory,
+                schoolType: this.isCompulsory
             }
             const res = await requestwebapischool(form, this.pages)
             const { entity: datas = {} } = res.data
@@ -113,9 +110,35 @@ export default {
             } catch (error) {
                 this.datas = []
             } finally {
-                this.isLoading = false
             }
         },
+        // async getlists($state) {
+        //     let form = {
+        //         schoolName: this.name,
+        //         schoolType: this.isCompulsory
+        //     }
+        //     const res = await requestwebapischool(form, this.pages)
+        //     const { entity: datas = {} } = res.data
+        //     try {
+        //         if (datas.resultData.length) {
+        //             this.datas = datas.resultData
+        //             $state.loaded()
+        //             if (this.datas.length / 5 === 16) {
+        //                 $state.complete()
+        //             }
+        //             if (this.datas.length < this.pages.pageSize) {
+        //                 $state.complete()
+        //             }
+        //             this.pages.pageSize += 16
+        //         } else {
+        //             $state.complete()
+        //         }
+        //         this.totalNum = datas.totalNum || 0
+        //     } catch (error) {
+
+        //     } finally {
+        //     }
+        // },
         changes(id) {
             sessionStorage.setItem('schoolId', id)
             this.$router.push({
@@ -143,6 +166,7 @@ export default {
     .cord {
         width: 100%;
         overflow: hidden;
+        min-height: 500px;
         ul {
             width: 100%;
             overflow: hidden;
@@ -205,9 +229,9 @@ export default {
         }
     }
 }
-.el-form-l{
-    .el-form-item{
-        width: 108px;
+.el-form-l {
+    .el-form-item {
+        width: 120px;
     }
 }
 </style>

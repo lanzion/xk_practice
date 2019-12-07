@@ -20,13 +20,13 @@
                             :class="item.url.slice(9) == $route.path.slice(0,item.url.length - 9) ? 'actives':''"
                             :href="item.url"
                         >{{ item.name }}</a>
-                        <div class="nav-item-div">
+                        <!-- <div class="nav-item-div">
                             <ul>
                                 <li v-for="(g,index) in item.children" :key="index">
                                     <a :href="g.url">{{g.name}}</a>
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                     </li>
                 </ul>
                 <template v-if="user.id">

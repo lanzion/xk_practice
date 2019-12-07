@@ -3,7 +3,7 @@
         <div class="brief-fl fl">
             <div class="brief-fl-title">
                 <h3>{{baseDetail.name}}</h3>
-                <p id="conent">{{baseDetail.remark}}</p>
+                <p id="conent" v-html="baseDetail.remark"></p>
             </div>
         </div>
         <div class="brief-fr fr">
@@ -30,7 +30,9 @@
                     </li>
                     <li>
                         <i :style="{backgroundImage:'url('+dengji+')'}"></i>
-                        <span>省级</span>
+                        <span v-if="baseDetail.publishingUnitLevel == 'A'">省级</span>
+                        <span v-else-if="baseDetail.publishingUnitLevel == 'B'">市级</span>
+                        <span v-else-if="baseDetail.publishingUnitLevel == 'C'">区县级</span>
                     </li>
                     <li>
                         <i :style="{backgroundImage:'url('+pingfeng+')'}"></i>

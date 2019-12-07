@@ -129,9 +129,8 @@ export default {
     color: #475669;
     font-size: 18px;
     opacity: 0.75;
-    line-height: 400px;
+    line-height: 350px;
     margin: 0;
-    /* height: 400px;\
 }
 .el-carousel__item h3 img {
   display: inline-block;
@@ -179,7 +178,6 @@ export default {
 }
 .xk_swriper {
     position: relative;
-    // height: 400px;
     overflow: hidden;
     img {
         width: 100%;

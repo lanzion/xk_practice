@@ -17,15 +17,16 @@
                     </el-select>
                 </el-form-item>
 
-                <el-form-item>
-                    <el-select v-model="region" placeholder="所在地区">
-                        <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        ></el-option>
-                    </el-select>
+                <el-form-item class="el-form-item-wd">
+                    <el-cascader
+                        v-model="pcode"
+                        placeholder="请选择市区"
+                        :props="prop"
+                        @change="resetPage"
+                        :show-all-levels="false"
+                        class="font_pla"
+                    ></el-cascader>
+                    <!-- <region type="object" @change="getaddres" class="regions"></region> -->
                 </el-form-item>
             </el-form>
 
@@ -46,10 +47,10 @@
             <ul class="base-ul">
                 <li class="base-li" v-for="(g,index) in datas" :key="index">
                     <div class="base-li-img fl" @click="go(g.id)">
-                        <ov-image :type="1" :src-data="'123'" :img-height="'222px'"></ov-image>
+                        <ov-image :type="1" :src-data="getFileUrl(g.cover)" :img-height="'222px'"></ov-image>
                     </div>
                     <div class="base-li-conent fl">
-                        <h3 :style="{'-webkit-box-orient':'vertical'}" @click="go()">{{g.name}}</h3>
+                        <h3 :style="{'-webkit-box-orient':'vertical'}" @click="go(g.id)">{{g.name}}</h3>
                         <div class="base-li-conent-box">
                             <span>认定级别:</span>
                             <span v-if="g.publishingUnitLevel == 'A'">省级</span>
@@ -80,15 +81,20 @@
                                 class="dizhi"
                             ></span>
                         </div>
-                        <div class="base-li-conent-box">
+                        <div class="base-li-conent-box" v-if="g.courseDtoList.length !== 0">
                             <span>热门课程:</span>
-                            <span v-if="g.courseDtoList.length === 0">暂无课程</span>
+                            <!-- <span v-if="g.courseDtoList.length === 0">暂无课程</span>
                             <span
                                 v-else-if="g.courseDtoList.length !== 0"
                                 v-for="(t,index) in g.courseDtoList"
                                 :key="index"
                                 class="base-li-conent-box-span"
-                            >{{t.courseName}}</span>
+                            >《{{t.courseName}}》</span>-->
+                            <span
+                                v-for="(t,index) in g.courseDtoList"
+                                :key="index"
+                                class="base-li-conent-box-span"
+                            >《{{t.courseName}}》</span>
                         </div>
                         <div class="base-li-conent-box">
                             <span>
@@ -100,6 +106,11 @@
                     </div>
                 </li>
             </ul>
+            <infinite-loading @infinite="getlists" ref="infiniteLoading">
+                <span slot="spinner">正在加载中...</span>
+                <span slot="no-more">没有更多数据了...</span>
+                <span slot="no-results">暂无数据...</span>
+            </infinite-loading>
         </div>
     </div>
 </template>
@@ -109,49 +120,111 @@ import {
     requestwebapibase,
     requestwebapiLongitudeAndlatitude
 } from '@/api/webApi/base'
+import { requestRegion } from '@/api/common'
 import { Courselevel } from '@/utils/utility/dict.js'
 export default {
     name: '',
     data() {
         return {
             municipal: '',
-            region: '',
             name: '',
             Courselevel: Courselevel,
             options: [],
+            pages: {
+                pageSize: 10,
+                pageNum: 1
+            },
             value: 5.0,
             bmap: '../../../../static/img/baiduditu.png',
             centerDialogVisible: false,
             datas: [],
             lng: '',
-            lat: ''
+            lat: '',
+            arr: [],
+            values: '',
+            departmentOptions: [],
+            cascaderData: [],
+            selectedOptions: [],
+            pcode: [],
+            prop: {
+                lazy: true,
+                lazyLoad(node, resolve) {
+                    setTimeout(() => {
+                        if (node.level == 0) {
+                            requestRegion({ pcode: 440000 })
+                                .then(res => {
+                                    const cities = res.data.appendInfo.list.map(
+                                        (value, i) => ({
+                                            value: value.code,
+                                            label: value.name,
+                                            leaf: node.level >= 1
+                                        })
+                                    )
+                                    // 通过调用resolve将子节点数据返回，通知组件数据加载完成
+                                    resolve(cities)
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                })
+                        }
+                        if (node.level == 1) {
+                            requestRegion({ pcode: node.value })
+                                .then(res => {
+                                    const areas = res.data.appendInfo.list.map(
+                                        (value, i) => ({
+                                            value: value.code,
+                                            label: value.name,
+                                            leaf: node.level >= 1
+                                        })
+                                    )
+                                    // 通过调用resolve将子节点数据返回，通知组件数据加载完成
+                                    resolve(areas)
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                })
+                        }
+                    }, 500)
+                }
+            }
         }
     },
     created() {
-        this.getlists()
+        // this.getlists()
     },
     methods: {
-        async getlists() {
-            this.isLoading = true
+        async getlists($state) {
             let form = {
                 provinceId: '',
-                cityId: '',
-                areaId: '',
+                cityId: this.pcode[0],
+                areaId: this.pcode[1],
                 name: this.name,
                 publishingUnitLevel: this.municipal
             }
             const res = await requestwebapibase(form, this.pages)
             const { entity: datas = {} } = res.data
             try {
-                let array = datas.resultData
+                let array = datas.resultData || []
                 array.forEach(x => {
                     if (x.score == null) {
                         x.score = 5.0
                     }
                     x.score = Number(this.numFilter(x.score))
                 })
-                this.datas = array || []
                 this.totalNum = datas.totalNum || 0
+                if (array.length) {
+                    this.datas = array
+                    $state.loaded()
+                    if (this.datas.length / 5 === 10) {
+                        $state.complete()
+                    }
+                    if (this.datas.length < this.pages.pageSize) {
+                        $state.complete()
+                    }
+                    this.pages.pageSize += 10
+                } else {
+                    $state.complete()
+                }
             } catch (error) {
                 this.datas = []
             } finally {
@@ -159,7 +232,10 @@ export default {
             }
         },
         resetPage() {
-            this.getlists()
+            this.datas = []
+            this.$nextTick(() => {
+                this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset')
+            })
         },
         async getMap(address, name) {
             const res = await requestwebapiLongitudeAndlatitude({
@@ -190,7 +266,7 @@ export default {
         numFilter(value) {
             let realVal = parseFloat(value).toFixed(1)
             return realVal
-        },
+        }
     }
 }
 </script>
@@ -207,6 +283,7 @@ export default {
     .base {
         min-height: 500px;
         .base-ul {
+            margin-bottom: 30px;
             .base-li {
                 width: 100%;
                 height: 284px;
@@ -249,6 +326,10 @@ export default {
                             }
                             &:nth-child(2) {
                                 color: #333333;
+                                max-width: 700px;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
                             }
                             i {
                                 display: inline-block;
@@ -277,9 +358,12 @@ export default {
         }
     }
 }
-.el-form-l{
-    .el-form-item{
+.el-form-l {
+    .el-form-item {
         width: 108px;
+    }
+    .el-form-item-wd {
+        width: 130px;
     }
 }
 </style>

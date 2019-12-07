@@ -1,7 +1,7 @@
 <template>
     <div class="feedback">
-        <div class="feedback-fl-evaluate" v-if="nomore">
-            <div class="feedback-fl-evaluate-header">
+        <div class="feedback-fl-evaluate">
+            <div class="feedback-fl-evaluate-header" v-if="nomore">
                 <span class="feedback-fl-evaluate-header-one">评分</span>
                 <span class="feedback-fl-evaluate-header-two">({{totalNum}}条)</span>
                 <span>
@@ -38,8 +38,12 @@
                     <p>{{g.comment}}</p>
                 </li>
             </ul>
+            <infinite-loading @infinite="getBaseevaluation" ref="infiniteLoading">
+                <span slot="spinner">正在加载中...</span>
+                <span slot="no-more">没有更多数据了...</span>
+                 <no-data slot="no-results"></no-data>
+            </infinite-loading>
         </div>
-        <no-data v-if="!nomore"></no-data>
     </div>
 </template>
 
@@ -51,11 +55,15 @@ export default {
         return {
             govers: [],
             scoreAvg: 0,
-            nomore: false
+            nomore: false,
+            pages: {
+                pageSize: 12,
+                pageNum: 1
+            }
         }
     },
     created() {
-        this.getBaseevaluation()
+        // this.getBaseevaluation()
     },
     watch: {
         'govers.length': {
@@ -70,12 +78,7 @@ export default {
         }
     },
     methods: {
-        async getBaseevaluation() {
-            this.isLoading = true
-            let pages = {
-                pageNum: 1,
-                pageSize: 12
-            }
+        async getBaseevaluation($state) {
             let baseId = this.$route.query.baseId
             if (baseId) {
                 this.id = baseId
@@ -84,18 +87,29 @@ export default {
             }
             const res = await requestwebapigetBaseevaluation(
                 { baseInstId: this.id },
-                pages
+                this.pages
             )
             const { entity: datas = {} } = res.data
             const { appendInfo: lists = {} } = res.data
             try {
-                let array = datas.resultData || []
-                array.forEach(x => {
-                    x.totalScore = Number(this.numFilter(x.totalScore))
-                })
-                this.govers = array || []
+                if (datas.resultData.length) {
+                    this.govers = datas.resultData
+                    this.govers.forEach(x => {
+                        x.totalScore = Number(this.numFilter(x.totalScore))
+                    })
+                    this.scoreAvg = Number(this.numFilter(lists.scoreAvg))
+                    $state.loaded()
+                    if (this.govers.length / 5 === 12) {
+                        $state.complete()
+                    }
+                    if (this.govers.length < this.pages.pageSize) {
+                        $state.complete()
+                    }
+                    this.pages.pageSize += 12
+                } else {
+                    $state.complete()
+                }
                 this.totalNum = datas.totalNum || 0
-                this.scoreAvg = Number(this.numFilter(lists.scoreAvg))
             } finally {
                 this.isLoading = false
             }
@@ -110,6 +124,7 @@ export default {
 <style lang='scss' scoped>
 .feedback-fl-evaluate {
     margin-bottom: 90px;
+    min-height: 400px;
     .feedback-fl-evaluate-header {
         border-bottom: 1px solid #eee;
         height: 34px;

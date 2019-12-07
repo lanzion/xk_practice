@@ -6,7 +6,7 @@
         <el-form-item label="账号">
           <el-input v-model="form.account" placeholder="请输入账号" @keyup.native.enter="resetPage"></el-input>
         </el-form-item>
-       
+
         <el-button type="primary" plain @click="resetPage">搜索</el-button>
         <!-- 表头权限及统计 -->
         <section class="g-table--head clearfix fr">
@@ -31,12 +31,12 @@
       border
     >
       <el-table-column label="选择" align="center" type="selection" width="55"></el-table-column>
-      <el-table-column prop="account" label="帐号" align="center" sortable show-overflow-tooltip/>
-      <el-table-column prop="userName" label="用户名" align="center" sortable show-overflow-tooltip/>
-      <el-table-column prop="remark" label="备注" align="center" />
+      <el-table-column prop="account" label="帐号" align="center" sortable show-overflow-tooltip />
+      <el-table-column prop="userName" label="用户名" align="center" sortable show-overflow-tooltip />
+      <el-table-column prop="remark" label="备注" align="center" show-overflow-tooltip/>
       <el-table-column prop="lockStatus" label="状态" align="center">
         <template slot-scope="scope">
-           <span v-if="scope.row.lockStatus == 0">开启</span>
+          <span v-if="scope.row.lockStatus == 0">开启</span>
           <span v-else>关闭</span>
         </template>
       </el-table-column>
@@ -49,7 +49,9 @@
             v-bind="{
                         del: { callback: doDel },
                         detail: { query: { id: 'id',identity:'identity'} },
-                        edit:{query:{id:'id',identity:'identity'}}
+                        edit:{query:{id:'id',identity:'identity'}},
+                        shieid: {visible:scope.row.lockStatus==0,callback:chengStatus},
+                         open: {visible:scope.row.lockStatus==1,callback:chengStatus},
                     }"
           />
         </template>
@@ -57,11 +59,7 @@
     </el-table>
 
     <!-- 分页 -->
-    <pagination
-      :param="pages"
-      :total="totalNum"
-      @change="getDatas"
-    ></pagination>
+    <pagination :param="pages" :total="totalNum" @change="getDatas"></pagination>
 
     <!-- 重置密码弹窗 -->
     <el-dialog width="500px" title="重置密码" :visible.sync="passwordVisible">
@@ -72,9 +70,8 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import { selectUserList } from "@/api/newApi";
+import { selectUserList,modifyUserStatus } from "@/api/newApi";
 import { delUser } from "@/api/resetApi";
-
 
 import permission from "@/mixin/admin-operate";
 import user from "@/mixin/admin-user";
@@ -84,11 +81,11 @@ export default {
   mixins: [permission, user],
   data() {
     return {
-      form:{
-                identityList: ["5"],
-                account:null,
-                type:"D",
-     },
+      form: {
+        identityList: ["5"],
+        account: null,
+        type: "D"
+      },
       listData: [],
       selection: [],
       datas: [],
@@ -110,12 +107,10 @@ export default {
     this.getDataDict({ code: "subject" });
     this.getDatas();
   },
-  watch: {
-    
-  },
+  watch: {},
   methods: {
     ...mapActions("dict", ["getDataDict"]),
-   
+
     // 重置分页
     resetPage() {
       this.$set(this.pages, "pageNum", 1);
@@ -124,22 +119,20 @@ export default {
 
     // 记录表格选中项
     handleSelectionChange(val) {
-      val.forEach(o =>o.isId =1);
-     
-     this.selection = val;
-    },
+      val.forEach(o => (o.isId = 1));
 
-    
+      this.selection = val;
+    },
 
     // 获取列表数据
     async getDatas() {
       this.isLoading = true;
-      const formList = Object.assign({}, this.form)
-      const res = await selectUserList(formList, this.pages)
+      const formList = Object.assign({}, this.form);
+      const res = await selectUserList(formList, this.pages);
 
       try {
         const datas = res.data.entity;
-         this.totalNum = datas.totalNum || 0
+        this.totalNum = datas.totalNum || 0;
         this.listData = datas.resultData;
       } catch (error) {
         this.listData = [];
@@ -175,62 +168,74 @@ export default {
     },
 
     // 删除操作
-        doDel({data}) {
-            const items = data;
-            if (items) {
-                const params = { idList: [items.id] };
-                this.$confirm(`确认删除该数据吗?`, "提示", {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    type: "warning"
-                }).then(() => {
-                    delUser(params).then(res => {
-                    const { code, msg } = res.data;
-                    if (code === 200) {
-                        this.$message({
-                        message: `删除成功`,
-                        type: "success"
-                        });
-
-                        this.getDatas();
-                    } else {
-                        this.$message({
-                        message: msg || "操作失败",
-                        type: "error"
-                        });
-                    }
-                    });
-                })
-                .catch(() => {});
-            } else {
+    doDel({ data }) {
+      const items = data;
+      if (items) {
+        const params = { idList: [items.id] };
+        this.$confirm(`确认删除该数据吗?`, "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            delUser(params).then(res => {
+              const { code, msg } = res.data;
+              if (code === 200) {
                 this.$message({
-                message: "请至少选择一条数据!",
-                type: "warning"
+                  message: `删除成功`,
+                  type: "success"
                 });
-            }
-        },
 
-    doStop() {
-      console.log("停止！！");
-      this.$confirm("是否确认终止?", "提示", {
+                this.getDatas();
+              } else {
+                this.$message({
+                  message: msg || "操作失败",
+                  type: "error"
+                });
+              }
+            });
+          })
+          .catch(() => {});
+      } else {
+        this.$message({
+          message: "请至少选择一条数据!",
+          type: "warning"
+        });
+      }
+    },
+    chengStatus(data){
+      let txt,lockStatus;
+      lockStatus = data.data.lockStatus==0?1:0
+      txt = lockStatus?'停用':'启用'
+      this.$confirm(`${txt}后此账号将${lockStatus?'不':''}能正常使用，确定要${txt}？`, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
-        center: true
+        type: "warning"
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
+          modifyUserStatus({ id: data.data.id, lockStatus: lockStatus }).then(res => {
+            try {
+              let _data = res.data;
+              if (_data.code == 200) {
+                this.$message({
+                  type: "success",
+                  message: `${txt}成功!`
+                });
+                data.data.lockStatus = lockStatus
+              } else {
+                this.$message({
+                  type: "success",
+                  message: _data.msg || `${txt}失败!`
+                });
+              }
+            } catch (err) {
+              console.log(err);
+            } finally {
+            }
           });
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
-    }
+        .catch(() => {});
+    },
   }
 };
 </script>

@@ -22,7 +22,9 @@
         <el-col :span="15">
           <el-form-item label="所属学段" prop="schoolType">
             <el-checkbox-group v-model="form.schoolType">
-              <el-checkbox v-for="(item) in fit" :label="item.code" :key="item.code">{{ item.name }}</el-checkbox>
+              <el-checkbox label="primarySchool">小学</el-checkbox>
+              <el-checkbox label="middleSchool">初中</el-checkbox>
+              <el-checkbox label="highSchool">高中</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
         </el-col>
@@ -236,13 +238,13 @@ export default {
       const { entity: datas = {} } = res.data;
       try {
         if (res.data.code == 200) {
-          if (datas.designSpaceBackground) {
-            this.homePageCover = [
+          if (datas.backgroundImg) {
+            this.backgroundImg = [
               {
                 name: "2.png",
                 status: "success",
                 uploadName: "_2.png",
-                url: datas.designSpaceBackground
+                url: datas.backgroundImg
               }
             ];
           }
@@ -278,27 +280,23 @@ export default {
     submitForm(formName) {
       this.$refs["ruleForm"].validate(valid => {
         if (valid) {
-        const formList = Object.assign({}, this.form);
-          formList.schoolType = formList.schoolType.join(',');
-          this.isLoading = true;
-            schoolModify(formList)
-              .then(res => {
-                let data = res.data;
-                if (data.code == 200) {
-                  this.$message({
-                    message: "保存成功",
-                    type: "success"
-                  });
-                } else {
-                  this.$message({
-                    message: res.data.msg || `保存失败`,
-                    type: "error"
-                  });
-                }
-              })
-              .finally(() => {
-                this.isLoading = false;
-              });
+          const formList = Object.assign({}, this.form);
+          formList.schoolType = formList.schoolType.join(",");
+          schoolModify(formList)
+            .then(res => {
+              let data = res.data;
+              if (data.code == 200) {
+                this.$message({
+                  message: "保存成功",
+                  type: "success"
+                });
+              } else {
+                this.$message({
+                  message: res.data.msg || `保存失败`,
+                  type: "error"
+                });
+              }
+            })
         } else {
           console.log("error submit!!");
           return false;
@@ -306,8 +304,8 @@ export default {
       });
     }
   },
-  created(){
-      this.getSchoolDetail()
+  created() {
+    this.getSchoolDetail();
   }
 };
 </script>

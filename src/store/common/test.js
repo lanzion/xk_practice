@@ -15,6 +15,8 @@ const state = {
     teachernewworks: '',
     teachernamefen: '',
     activitytitle: '',
+    goodsNum: '',
+    schoolgoodsNum: '',
     stu_id_list: null,
 }
 const mutations = {
@@ -65,6 +67,12 @@ const mutations = {
     },
     changeactivitytitle(state, payload = {}) {
         state.activitytitle = payload
+    },
+    changegoodsNum(state, payload = {}) {
+        state.goodsNum = payload
+    },
+    changeSchoolgoodsNum(state, payload = {}) {
+        state.schoolgoodsNum = payload
     },
     changeastu_id_list(state, payload = {}) {
         state.stu_id_list = payload

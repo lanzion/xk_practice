@@ -4,11 +4,11 @@
             <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item :to="{ path: '/activity' }">活动中心</el-breadcrumb-item>
             <el-breadcrumb-item :to="{path: '/activity/activityresults'}">活动成果</el-breadcrumb-item>
-            <el-breadcrumb-item>{{datas.title}}</el-breadcrumb-item>
+            <el-breadcrumb-item>成果详情</el-breadcrumb-item>
         </el-breadcrumb>
         <div class="activityresultdetail-conent">
             <div class="activityresultdetail-conent-fl fl">
-                <h3>{{datas.summary}}</h3>
+                <h3>{{datas.title}}</h3>
                 <div class="activityresultdetail-conent-fl-box">
                     <ul class="fl">
                         <li>
@@ -27,7 +27,7 @@
                     <div class="qrcode fr">
                         <span>发送到:</span>
                         <span>
-                            <qrcode />
+                            <qrcode class="qrcodeimg" />
                         </span>
                     </div>
                 </div>
@@ -42,29 +42,27 @@
                     <ul>
                         <li>
                             <i :style="{backgroundImage:'url('+xuexiao+')'}"></i>
-                            <span>{{datas.schoolName}}</span>
+                            <span @click="goschool(datas.schoolId)">{{datas.schoolName}}</span>
                         </li>
                         <li>
                             <i :style="{backgroundImage:'url('+jidi+')'}"></i>
-                            <span>{{datas.baseInstName}}</span>
+                            <span @click="gobase(datas.baseInstId)">{{datas.baseInstName}}</span>
                         </li>
                         <li>
                             <i :style="{backgroundImage:'url('+kecheng+')'}"></i>
-                            <span>{{datas.courseName}}</span>
+                            <span @click="gocourse(datas.courseId)">{{datas.courseName}}</span>
                         </li>
                     </ul>
                 </div>
                 <div class="activityresultdetail-conent-fr-two">
                     <h4>其它活动成果</h4>
                     <ul>
-                        <li v-for="(g,index) in goods" :key="index">
+                        <li v-for="(g,index) in goods" :key="index" @click="other(g.id)">
                             <div class="activityresultdetail-conent-fr-two-img">
                                 <ov-image :type="3" :src-data="g.cover" :img-height="'54px'" />
                             </div>
                             <div class="activityresultdetail-conent-fr-two-name">
-                                <h4
-                                    :style="{'-webkit-box-orient':'vertical'}"
-                                >{{g.title}}</h4>
+                                <h4 :style="{'-webkit-box-orient':'vertical'}">{{g.title}}</h4>
                             </div>
                         </li>
                     </ul>
@@ -102,13 +100,17 @@ export default {
         this.getlists()
     },
     methods: {
-        async getlists() {
+        async getlists(id) {
             this.isLoading = true
-            let activityresultsId = this.$route.query.activityresultsId
-            if (activityresultsId) {
-                this.id = activityresultsId
+            if (id) {
+                this.id = id
             } else {
-                this.id = sessionStorage.getItem('activityresultsId')
+                let activityresultsId = this.$route.query.activityresultsId
+                if (activityresultsId) {
+                    this.id = activityresultsId
+                } else {
+                    this.id = sessionStorage.getItem('activityresultsId')
+                }
             }
             const res = await requestwebapiactivityresultsDetail({
                 id: this.id
@@ -142,6 +144,32 @@ export default {
             } finally {
                 this.isLoading = false
             }
+        },
+        goschool(id) {
+            sessionStorage.setItem('schoolId', id)
+            this.$router.push({
+                path: '/school/schooldetail',
+                query: { schoolId: id }
+            })
+        },
+        gobase(id) {
+            sessionStorage.setItem('baseId', id)
+            this.$router.push({
+                path: '/base/basedetail',
+                query: { baseId: id }
+            })
+        },
+        gocourse(id) {
+            sessionStorage.setItem('courseId', id)
+            this.$router.push({
+                path: '/course/coursedetails',
+                query: { courseId: id }
+            })
+        },
+        other(id) {
+            sessionStorage.setItem('activityresultsId', id)
+            this.getlists(id)
+            document.documentElement.scrollTop = document.body.scrollTop = 0
         }
     }
 }
@@ -157,11 +185,13 @@ export default {
         line-height: 38px;
     }
     .activityresultdetail-conent {
+        width: 100%;
         overflow: hidden;
         .activityresultdetail-conent-fl {
             width: 868px;
             height: auto;
             h3 {
+                width: 100%;
                 margin-bottom: 32px;
                 font-size: 26px;
                 font-weight: normal;
@@ -169,16 +199,12 @@ export default {
                 line-height: 31px;
                 letter-spacing: 0px;
                 color: #333333;
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 2;
-                overflow: hidden;
+                word-break: break-all;
             }
             .activityresultdetail-conent-fl-box {
                 height: 30px;
                 margin-bottom: 58px;
                 ul {
-                    overflow: hidden;
                     li {
                         float: left;
                         margin-right: 22px;
@@ -209,15 +235,22 @@ export default {
                             margin-right: 10px;
                         }
                     }
+                    .qrcodeimg {
+                        z-index: 1000;
+                    }
                 }
             }
             .activityresultdetail-conent-fl-show {
+                overflow: hidden;
+                width: 100%;
                 p {
+                    width: 100%;
                     line-height: 24px;
                     font-size: 14px;
                     color: #333;
                     letter-spacing: 0px;
                     text-indent: 20px;
+                    word-break: break-all;
                 }
             }
         }
@@ -238,6 +271,7 @@ export default {
                 ul {
                     li {
                         margin-top: 10px;
+                        cursor: pointer;
                         i {
                             display: inline-block;
                             height: 20px;
@@ -257,6 +291,16 @@ export default {
                             line-height: 23px;
                             letter-spacing: 0px;
                             color: #333333;
+                        }
+                        i {
+                            display: inline-block;
+                            height: 20px;
+                            width: 20px;
+                            background-repeat: no-repeat;
+                            background-size: 20px;
+                            vertical-align: top;
+                            margin-right: 10px;
+                            margin-top: 3px;
                         }
                     }
                 }
@@ -278,6 +322,7 @@ export default {
                         padding: 9px 10px;
                         box-sizing: border-box;
                         cursor: pointer;
+                        overflow: hidden;
                         &:hover {
                             box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.15);
                         }
@@ -285,6 +330,7 @@ export default {
                             float: left;
                             width: 88px;
                             margin-right: 12px;
+                            overflow: hidden;
                         }
                         .activityresultdetail-conent-fr-two-name {
                             float: left;
@@ -299,6 +345,7 @@ export default {
                                 -webkit-box-orient: vertical;
                                 -webkit-line-clamp: 2;
                                 overflow: hidden;
+                                word-break: break-all;
                             }
                         }
                     }

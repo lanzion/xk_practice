@@ -15,7 +15,11 @@ export const fit = [
     {code: 'middleSchool', name: '初中'},
     {code: 'highSchool', name: '高中'},
 ]
-
+export const schoolfit = [
+    // {code: 'primarySchool', name: '小学'},
+    {code: 'middleSchool', name: '初中'},
+    // {code: 'highSchool', name: '高中'},
+]
 // 状态
 export const status = [
     {code: 0, name: '已屏蔽'},

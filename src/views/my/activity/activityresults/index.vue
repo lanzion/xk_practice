@@ -2,7 +2,7 @@
     <div class="container">
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ path: '/course' }">实践活动</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/activity' }">活动中心</el-breadcrumb-item>
             <el-breadcrumb-item>活动成果</el-breadcrumb-item>
         </el-breadcrumb>
         <div class="activityresults">
@@ -36,6 +36,11 @@
                     </div>
                 </li>
             </ul>
+            <infinite-loading @infinite="getlists" ref="infiniteLoading">
+                <span slot="spinner">正在加载中...</span>
+                <span slot="no-more">没有更多数据了...</span>
+                <span slot="no-results">暂无数据...</span>
+            </infinite-loading>
         </div>
     </div>
 </template>
@@ -49,23 +54,41 @@ export default {
             time: require('../../../../../static/img/time.png'),
             eyes: require('../../../../../static/img/eyes.png'),
             plo: require('../../../../../static/img/plo.png'),
-            datas: []
+            datas: [],
+            pages: {
+                pageSize: 8,
+                pageNum: 1
+            }
         }
     },
     created() {
-        this.getlists()
+        // this.getlists()
     },
     methods: {
-        async getlists() {
-            this.isLoading = true
-            const res = await requestwebapiactivityresults({ id: this.id })
+        async getlists($state) {
+            const res = await requestwebapiactivityresults(
+                { id: this.id },
+                this.pages
+            )
             const { entity: datas = {} } = res.data
             try {
-                this.datas = datas.resultData || []
+                if (datas.resultData.length) {
+                    this.datas = datas.resultData
+                    $state.loaded()
+                    if (this.datas.length / 5 === 8) {
+                        $state.complete()
+                    }
+                    if (this.datas.length < this.pages.pageSize) {
+                        $state.complete()
+                    }
+                    this.pages.pageSize += 8
+                } else {
+                    $state.complete()
+                }
+                this.totalNum = datas.totalNum || 0
             } catch (error) {
                 this.datas = []
             } finally {
-                this.isLoading = false
             }
         },
         go(id) {
@@ -93,6 +116,7 @@ export default {
     .activityresults {
         min-height: 500px;
         .activityresults-ul {
+            margin-bottom: 30px;
             .activityresults-li {
                 width: 100%;
                 height: 284px;
@@ -125,6 +149,7 @@ export default {
                         -webkit-box-orient: vertical;
                         -webkit-line-clamp: 2;
                         overflow: hidden;
+                        word-break: break-all;
                     }
                     p {
                         margin-bottom: 60px;
@@ -138,6 +163,7 @@ export default {
                         -webkit-box-orient: vertical;
                         -webkit-line-clamp: 2;
                         overflow: hidden;
+                        word-break: break-all;
                     }
                     ul {
                         width: 100%;

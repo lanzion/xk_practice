@@ -407,7 +407,8 @@
             border: 1px dashed $--border-color-base;
             font-size: 30px;
             color: $--color-text-statis;
-            background-color: mix($--color-primary, #fff, 6%);
+            // background-color: mix($--color-primary, #fff, 6%);
+            background-color: #fafafa;
             &:hover {
                 border-color: $--color-primary;
             }

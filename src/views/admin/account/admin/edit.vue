@@ -53,7 +53,6 @@
             :props="defaultProps"
             :check-strictly="isCheckStrictly"
             :filter-node-method="filterNode"
-            :default-checked-keys="form.permissList"
             @check-change="getPermiss"
             v-loading="isLoading1"
           ></el-tree>
@@ -229,6 +228,11 @@ export default {
               o => o.permissionName == "创客后台管理"
             );
             this.datas = dataArr[0].children;
+            setTimeout(()=>{
+              this.form.permissList.forEach(value=>{
+                this.$refs.tree.setChecked(value,true,false)
+              })
+            },500)
           }
         })
         .finally(() => {

@@ -3,7 +3,7 @@
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item :to="{ path: '/course' }">课程中心</el-breadcrumb-item>
-            <el-breadcrumb-item>{{datas.name}}</el-breadcrumb-item>
+            <el-breadcrumb-item>课程详情</el-breadcrumb-item>
         </el-breadcrumb>
         <div class="dlest">
             <div class="dlest-fl">
@@ -25,27 +25,41 @@
                 </el-row>
                 <el-row>
                     <el-col class="dlest-fr-title">
-                        <span>选修类型:</span>
-                        <span v-text="datas.courseType ==='A' ? '必修' : '选修' "></span>
+                        <span>课程类型:</span>
+                        <span v-if="datas.courseType == 'A'">必修</span>
+                        <span v-else-if="datas.courseType == 'B'">选修</span>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col class="dlest-fr-title">
                         <span>课程时长:</span>
-                        <span v-text="datas.courseDuration ==='A' ? '半天' : '一天' "></span>
+                        <span v-if="datas.courseDuration == 'A'">半天</span>
+                        <span v-else-if="datas.courseDuration == 'B'">一天</span>
+                        <span v-else-if="datas.courseDuration == 'C'">一天半</span>
+                        <span v-else-if="datas.courseDuration == 'D'">两天</span>
+                        <span v-else-if="datas.courseDuration == 'E'">两天半</span>
+                        <span v-else-if="datas.courseDuration == 'F'">三天</span>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col class="dlest-fr-title">
                         <span>是否收费:</span>
-                        <span v-if="datas.isFree === 0">免费</span>
-                        <span v-else-if="datas.istrue !== 0">收费</span>
+                        <span v-if="datas.isFree == 1">免费</span>
+                        <span v-if="datas.isFree == 0">收费 <i>{{datas.price}}</i></span>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col class="dlest-fr-title">
                         <span>基地/机构:</span>
                         <span>{{datas.baseinfoName}}</span>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col class="dlest-fr-title">
+                        <span>认定级别:</span>
+                        <span v-if="datas.publishingUnitLevel == 'A'">省级</span>
+                        <span v-else-if="datas.publishingUnitLevel == 'B'">市级</span>
+                        <span v-else-if="datas.publishingUnitLevel == 'C'">区级</span>
                     </el-col>
                 </el-row>
                 <el-row>
@@ -58,10 +72,10 @@
         </div>
         <div class="nice">
             <ul>
-                <li class="niceto maright" @click="change()">
+                <li class="niceto maright" @click="changeone()">
                     <span :class=" num === false ? 'active niceto' : 'niceto'">课程内容</span>
                 </li>
-                <li class="niceto" @click="change()">
+                <li class="niceto" @click="changetwo()">
                     <span :class=" num === true ? 'active niceto' : 'niceto'">参与学校</span>
                     <span
                         v-if="totalNum !== 0"
@@ -88,7 +102,11 @@
                 border
                 :header-cell-style="{background:'#f2f5fb',color:'#666666'}"
             >
-                <el-table-column prop="schoolName" label="学校名称" align="center"></el-table-column>
+                <el-table-column label="学校名称" align="center">
+                    <template slot-scope="scope">
+                        <span @click="goschool(scope.row.schoolId)">{{scope.row.schoolName}}</span>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="schoolAddress" label="地区" align="center"></el-table-column>
             </el-table>
             <div class="more">
@@ -100,18 +118,29 @@
                     border
                     :header-cell-style="{background:'#f2f5fb',color:'#666666'}"
                 >
-                    <el-table-column property="schoolName" label="学校名称" align="center"></el-table-column>
+                    <el-table-column label="学校名称" align="center">
+                        <template slot-scope="scope">
+                            <span @click="goschool(scope.row.schoolId)">{{scope.row.schoolName}}</span>
+                        </template>
+                    </el-table-column>
                     <el-table-column property="schoolAddress" label="地区" align="center"></el-table-column>
                 </el-table>
+                <pagination
+                    :param="pages"
+                    :total="totalNum"
+                    :page-sizes="[10, 15, 20]"
+                    @change="getdatas"
+                    style="text-align: right;"
+                ></pagination>
             </el-dialog>
         </div>
 
-        <div class="courses">相关课程</div>
-        <div class="cord">
+        <div class="courses" v-if="nomore">相关课程</div>
+        <div class="cord" v-if="nomore">
             <ul>
-                <li @click="changes()" v-for="(g,index) in lists" :key="index">
+                <li @click="changes(g.courseId)" v-for="(g,index) in lists" :key="index">
                     <div class="cord-img">
-                        <ov-image :src-data="getFileUrl(imgs)" :img-height="'178px'"></ov-image>
+                        <ov-image :src-data="getFileUrl(g.cover)" :img-height="'178px'"></ov-image>
                     </div>
                     <div class="cord-of">
                         <span>{{g.courseName}}</span>
@@ -144,7 +173,20 @@ export default {
             datas: {},
             fit: '',
             num: false,
-            lists: []
+            lists: [],
+            scrollTop: ''
+        }
+    },
+    watch: {
+        'lists.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = false
+                } else {
+                    this.nomore = true
+                }
+            },
+            deep: true
         }
     },
     created() {
@@ -153,13 +195,17 @@ export default {
         this.getcourse()
     },
     methods: {
-        async getlists() {
+        async getlists(id) {
             this.isLoading = true
-            let courseId = this.$route.query.id
-            if (courseId) {
-                this.id = courseId
+            if (id) {
+                this.id = id
             } else {
-                this.id = sessionStorage.getItem('courseId')
+                let courseId = this.$route.query.courseId
+                if (courseId) {
+                    this.id = courseId
+                } else {
+                    this.id = sessionStorage.getItem('courseId')
+                }
             }
             const res = await requestwebapicurriculumDetail({ id: this.id })
             const { entity: datas = {} } = res.data
@@ -211,6 +257,13 @@ export default {
                 this.isLoading = false
             }
         },
+        goschool(id) {
+            sessionStorage.setItem('schoolId', id)
+            this.$router.push({
+                path: '/school/schooldetail',
+                query: {schoolId: id}
+            })
+        },
         filterFit(val) {
             let txt = ''
             if (val) {
@@ -225,10 +278,16 @@ export default {
         get() {
             this.dialogTableVisible = true
         },
-        change() {
-            this.num = !this.num
+        changeone() {
+            this.num = false
         },
-        changes() {}
+        changetwo() {
+            this.num = true
+        },
+        changes(id) {
+            this.getlists(id)
+            document.documentElement.scrollTop = document.body.scrollTop = 0
+        }
     }
 }
 </script>

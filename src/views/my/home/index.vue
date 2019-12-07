@@ -1,10 +1,12 @@
 <template>
     <div class="home">
         <swriper :type="numimg" class="swriper" />
+        <statistics class="statistics" />
         <div class="container">
-            <statistics class="statistics" />
+            <!-- <statistics class="statistics" /> -->
             <curriculumcenter />
-            <!-- <baseguide /> -->
+            <baseguide />
+            <newactivities class="newactivities" />
             <!-- <newactivities class="newactivities" />
             <baseguide />
             <latestworks />-->
@@ -31,10 +33,10 @@ export default {
             require([
                 '@/views/my/home/curriculumcenter/curriculumcenter'
             ], resolve),
-        // newactivities: resolve =>
-        //     require(['@/views/my/home/newActivities/newActivities'], resolve),
-        // baseguide: resolve =>
-        //     require(['@/views/my/home/baseguide/baseguide'], resolve),
+        newactivities: resolve =>
+            require(['@/views/my/home/newActivities/newActivities'], resolve),
+        baseguide: resolve =>
+            require(['@/views/my/home/baseguide/baseguide'], resolve),
         // latestworks: resolve =>
         //     require(['@/views/my/home/latestworks/latestworks'], resolve),
         statistics: resolve =>
@@ -55,17 +57,17 @@ export default {
 </script>
 <style lang="scss" scoped>
 .swriper {
-    margin-bottom: 180px;
+    // margin-bottom: 180px;
 }
 .container {
-    position: relative;
-    .statistics {
-        position: absolute;
-        top: -230px;
-        z-index: 10;
-    }
-    .newactivities {
-        // margin-top: 200px;
-    }
+    // position: relative;
+    // .statistics {
+    //     position: absolute;
+    //     top: -230px;
+    //     z-index: 10;
+    // }
+    // .newactivities {
+    //     // margin-top: 200px;
+    // }
 }
 </style>

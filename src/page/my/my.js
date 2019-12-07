@@ -17,6 +17,7 @@ import mixin from '@/mixin/admin-common.js'
 import ElementUI from 'element-ui'
 import Clickoutside from 'element-ui/src/utils/clickoutside'
 import VueCropper from 'vue-cropper'
+import InfiniteLoading from 'vue-infinite-loading'
 
 import '@/assets/css/index.scss'
 import '@/assets/css/theme/reset-ele-my.scss'
@@ -27,7 +28,6 @@ import VideoPlayer from 'vue-video-player'
 require('video.js/dist/video-js.css')
 require('vue-video-player/src/custom-theme.css')
 Vue.use(VideoPlayer)
-
 window.OSS = OSS
 Vue.mixin(mixin)
 Vue.use(methods)
@@ -35,6 +35,7 @@ Vue.use(ElementUI, { zIndex: 0 })
 Vue.use(VueCropper)
 Vue.use(Component)
 Vue.use(VueClipboard)
+Vue.use(InfiniteLoading)
 
 Vue.directive('clickoutside', Clickoutside)
 

@@ -3,7 +3,7 @@ import xhr from 'Axios'
 -------------------------- */
 
 // 课程分类模块
-const requestnavigation = (options = {}) => xhr.post(`/portal/activityType/getActivityTypeParent`, options)
+const requestnavigation = (options = {}) => xhr.post(`/portal/course/getPortalParent`, options)
 
 // 课程中心--列表
 const requestwebapicurriculumCenter = (options = {}, page) => xhr.post(`/portal/course/selectPager?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)

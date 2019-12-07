@@ -33,39 +33,6 @@
         class="upload-list-tips"
       >仅支持JPG、GIF、PNG、JPEG格式，文件小于 {{ imgStandardFileSize }} M。像素500 x 500比例</p>
     </el-form-item>
-
-    <!-- <el-row v-if="!isReadOnly">
-      <el-col :span="12">
-        <el-form-item label="所属地区">
-          <region type="object" @change="changeRegion" class="regions"></region>
-        </el-form-item>
-      </el-col>
-      <el-col :span="12">
-        <el-form-item label="所属基地" prop="baseId">
-          <el-select
-            filterable
-            remote
-            v-model="form.baseId"
-            placeholder="请选择所属基地"
-            :remote-method="remoteMethod"
-            @change="getUpdateRight"
-          >
-            <el-option
-              v-for="item in schoolList"
-              :label="item.name"
-              :value="item.id"
-              :key="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </el-col>
-    </el-row> -->
-
-    <el-form-item label="所属教育局" prop="baseId" v-if="isReadOnly">
-      <el-col :span="12">
-        <el-input v-model="schoolName" :disabled="isReadOnly"></el-input>
-      </el-col>
-    </el-form-item>
     <el-form-item label="备注">
       <el-col :span="20">
         <el-input
@@ -239,13 +206,13 @@ export default {
         permissListChcked: [
           { required: true, message: "请选择权限", trigger: "blur" }
         ],
-        cover: [
-          {
-            required: true,
-            message: "请选择头像",
-            trigger: ["change", "blur"]
-          }
-        ]
+        // cover: [
+        //   {
+        //     required: true,
+        //     message: "请选择头像",
+        //     trigger: ["change", "blur"]
+        //   }
+        // ]
       }
     };
   },

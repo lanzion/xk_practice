@@ -76,7 +76,6 @@ export default {
   },
   data() {
     return {
-      //   cover: [],
       resultActivityList: [],
       isClear: false,
       rules: {
@@ -106,18 +105,34 @@ export default {
     };
   },
   computed: {
-    cover() {
-      if (this.childForm.cover) {
-        return [
-          {
-            name: "2.png",
-            status: "success",
-            uploadName: "_2.png",
-            url: this.childForm.cover
-          }
-        ];
-      } else {
-        return [];
+    cover: {
+      get: function() {
+        if (this.childForm.cover) {
+          return [
+            {
+              name: "2.png",
+              status: "success",
+              uploadName: "_2.png",
+              url: this.childForm.cover
+            }
+          ];
+        } else {
+          return [];
+        }
+      },
+      set: function(v) {
+        if (this.childForm.cover) {
+          return [
+            {
+              name: "2.png",
+              status: "success",
+              uploadName: "_2.png",
+              url: this.childForm.cover
+            }
+          ];
+        } else {
+          return [];
+        }
       }
     }
   },
@@ -127,6 +142,7 @@ export default {
     },
     removecover(file) {
       this.$set(this.childForm, "cover", null);
+      this.cover = [];
     },
     remarkChange(val) {
       this.childForm.content = val;

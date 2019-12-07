@@ -43,7 +43,7 @@
       <el-table-column prop="resultTypeName" label="类型" align="center" show-overflow-tooltip />
       <el-table-column prop="createName" label="发布者" align="center" show-overflow-tooltip />
       <el-table-column prop="gmtModify" label="更新时间" align="center" sortable show-overflow-tooltip />
-      <el-table-column label="操作" align="center" :width="operateWidth">
+      <el-table-column label="操作" align="center" fixed="right" :width="operateWidth">
         <template slot-scope="scope">
           <list-operate
             :items="listBtnGroup"
@@ -92,7 +92,7 @@ export default {
         }
       ],
       form: {
-        resultType: 1
+        resultType: ''
       },
       listData: [],
       multipleSelection: []

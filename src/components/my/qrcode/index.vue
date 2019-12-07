@@ -43,6 +43,7 @@ export default {
 .qrcode {
     width: 100%;
     height: auto;
+     z-index: 100000;
     .qrcode-img {
         width: 16px;
         height: 16px;
@@ -68,6 +69,7 @@ export default {
             #canvas {
                 width: 100% !important;
                 height: auto !important;
+                z-index: 100000;
             }
         }
     }

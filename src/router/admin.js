@@ -64,6 +64,12 @@ const courseSchedule = () => import('@/views/admin/practicalManage/courseManage/
 const practicalStart = () => import('@/views/admin/practicalManage/start/index')
 const practicalList = () => import('@/views/admin/practicalManage/list/index')
 const practicalSure = () => import('@/views/admin/practicalManage/sure/index')
+const activityCalendar = () => import('@/views/admin/practicalManage/calendar/index')
+// 开放式活动
+const startOpenActivity = () => import('@/views/admin/practicalManage/openActivity/startOpenActivity')
+const openActivityList = () => import('@/views/admin/practicalManage/openActivity/openActivityList')
+const openActivityInfo = () => import('@/views/admin/practicalManage/openActivity/openActivityInfo')
+const openActivityPartake = () => import('@/views/admin/practicalManage/openActivity/openActivityPartake')
 // ------------------------------------------------------------------------------------------------
 
 // 评分管理2.0
@@ -138,6 +144,7 @@ const typeManageTypeEdit = () => import('@/views/admin/typeManage/typeEdit')
 const publishActivityfruit = () => import('@/views/admin/activityfruit/publishActivityfruit.vue')
 const activityfruitList = () => import('@/views/admin/activityfruit/activityfruitList.vue')
 const wtAuditList = () => import('@/views/admin/activityfruit/wtAuditList.vue')
+const activityfruitdraft = () => import('@/views/admin/activityfruit/activityfruitdraft.vue')
 
 Vue.use(Router)
 
@@ -376,26 +383,11 @@ export default new Router({
             children: [
                 {
                     path: 'createActivity',
-                    component: container,
-                    children: [
-                        {
-                            path: '/',
-                            component: createActivity,
-
-                        }
-                    ]
+                    component: createActivity,
                 },
                 {
                     path: 'courseManage',
-                    component: container,
-                    children: [
-                        {
-                            path: '/',
-                            component: courseManage,
-
-                        }
-                    ]
-
+                    component: courseManage,
                 },
                 {
                     path: 'courseRecord',
@@ -416,61 +408,45 @@ export default new Router({
                 },
                 {
                     path: 'courseDetail',
-                    component: container,
-                    children: [
-                        {
-                            path: '/',
-                            component: courseDetail,
-
-                        }
-                    ]
-
+                    component: courseDetail,
                 },
                 {
                     path: 'courseEdit',
-                    component: container,
-                    children: [
-                        {
-                            path: '/',
-                            component: courseEdit,
-
-                        }
-                    ]
-
+                    component: courseEdit,
                 },
                 // ------------------------------------------
                 {
                     path: 'practicalStart',
-                    component: container,
-                    children: [
-                        {
-                            path: '/',
-                            component: practicalStart
-                        }
-                    ]
-
+                    component: practicalStart,
                 },
                 {
                     path: 'practicalList',
-                    component: container,
-                    children: [
-                        {
-                            path: '/',
-                            component: practicalList
-                        }
-                    ]
+                    component: practicalList,
 
                 },
                 {
                     path: 'practicalSure',
-                    component: container,
-                    children: [
-                        {
-                            path: '/',
-                            component: practicalSure
-                        }
-                    ]
-
+                    component: practicalSure,
+                },
+                {
+                    path: 'activityCalendar',
+                    component: activityCalendar,
+                },
+                {
+                    path: 'startOpenActivity',
+                    component: startOpenActivity,
+                },
+                {
+                    path: 'openActivityList',
+                    component: openActivityList,
+                },
+                {
+                    path: 'openActivityInfo',
+                    component: openActivityInfo,
+                },
+                {
+                    path: 'openActivityPartake',
+                    component: openActivityPartake,
                 },
                 // ------------------------------------------
                 {
@@ -801,6 +777,10 @@ export default new Router({
                 {
                     path: 'wtAuditList',
                     component: wtAuditList
+                },
+                {
+                    path: 'activityfruitdraft',
+                    component: activityfruitdraft
                 },
             ]
         }

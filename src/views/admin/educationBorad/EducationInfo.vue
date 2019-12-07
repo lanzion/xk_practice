@@ -35,8 +35,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="15">
-          <el-form-item label="详细地址" prop="address">
-            <el-input v-model="form.address"></el-input>
+          <el-form-item label="详细地址" prop="street">
+            <el-input v-model="form.street"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="18">

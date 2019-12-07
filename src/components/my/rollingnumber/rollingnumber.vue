@@ -1,7 +1,7 @@
 <template>
-<div class="number-grow-warp">
-  <span ref="numberGrow" class="number-grow">0</span>
-  </div>
+    <div class="number-grow-warp">
+        <span ref="numberGrow" class="number-grow" :style="{color:numColor}">0</span>
+    </div>
 </template>
 
 <script>
@@ -15,6 +15,10 @@ export default {
         value: {
             type: Number,
             default: 1
+        },
+        numColor: {
+            type: String,
+            default: '#fff'
         }
     },
     methods: {
@@ -45,12 +49,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.number-grow-warp{
-  transform: translateZ(0);
-  .number-grow{
-      font-size: 36px;
-      color: #fff;
-  }
+.number-grow-warp {
+    transform: translateZ(0);
+    .number-grow {
+        font-size: 24px;
+        line-height: 29.5px;
+        letter-spacing: 1px;
+    }
 }
-
 </style>

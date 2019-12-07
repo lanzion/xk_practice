@@ -17,7 +17,10 @@ const requestwebapibaseDetailcourse = (options = {}, page) => xhr.post(`portal/c
 const requestwebapibaseDetailschool = (options = {}, page) => xhr.post(`portal/baseInfo/selectPartakeSchool?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 
 // 评价列表
-const requestwebapigetBaseevaluation = (options = {}, page) => xhr.post(`/portal/activity/eval/school/page?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
+const requestwebapigetBaseevaluation = (options = {}, page) => xhr.post(`/portal/activity/eval/baseinst/page?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
+
+// 所在地区
+const requestwebapiLocation = (options = {}) => xhr.post(`practice/sysArea/currentLocal`, options)
 
 export {
     requestwebapibase,
@@ -25,5 +28,6 @@ export {
     requestwebapiLongitudeAndlatitude,
     requestwebapibaseDetailcourse,
     requestwebapibaseDetailschool,
-    requestwebapigetBaseevaluation
+    requestwebapigetBaseevaluation,
+    requestwebapiLocation
 }

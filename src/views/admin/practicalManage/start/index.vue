@@ -20,11 +20,15 @@
     <div class="g-search--wrap clearfix">
       <el-form :inline="true" class="fl" @submit.native.prevent>
         <el-form-item label="课程分类">
-          <el-cascader v-model="form.values" :options="arr" :props="{ expandTrigger: 'hover' }"></el-cascader>
+          <el-cascader v-model="dataForm.values" :options="arr" :props="{ expandTrigger: 'hover' }"></el-cascader>
         </el-form-item>
 
         <el-form-item>
-          <el-input v-model="form.name" placeholder="请输入课程名称关键字" @keyup.native.enter="resetPage"></el-input>
+          <el-input
+            v-model="dataForm.name"
+            placeholder="请输入课程名称关键字"
+            @keyup.native.enter="resetPage"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="resetPage">搜索</el-button>
@@ -65,7 +69,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" align="center" :width="operateWidth">
+      <el-table-column label="操作" align="center" fixed="right" :width="operateWidth">
         <template slot-scope="scope">
           <list-operate
             :items="listBtnGroup"
@@ -73,7 +77,7 @@
             :index="scope.$index"
             v-bind="{
                         min: { callback: min },
-                         max: { callback: max },
+                         max: { query:{id:'id'} },
                     }"
           />
         </template>
@@ -212,9 +216,7 @@
                 type="info"
               >{{tag.ShowGradeName+tag.gradeName+tag.studentName}}</el-tag>
             </div>
-            <div
-              class="stu_tips"
-            >已选学生人数/最大承载量：{{selectStuNum}}人 / {{courseinfo.maxCarryingCapacity}}人</div>
+            <div class="stu_tips" v-if="maxCarryingCapacity!=-1">已选学生人数/最大承载量：{{selectStuNum}}人 / {{maxCarryingCapacity}}人</div>
           </el-form-item>
 
           <el-form-item>
@@ -272,7 +274,7 @@
         <el-button
           type="primary"
           @click="middleDialogVisible = false"
-        >确定({{selectStuNum}}/{{courseinfo.maxCarryingCapacity}})</el-button>
+        >确定({{selectStuNum}}{{maxCarryingCapacity==-1?'':'/'+maxCarryingCapacity}})</el-button>
       </el-row>
     </el-dialog>
     <!-- -------------------------------------------------------------------------------------------- -->
@@ -285,7 +287,8 @@ import { courseList, getActivityTypeParent } from "@/api/resetApi";
 import {
   activityCourseList,
   activityCourseDetail,
-  activityPublish
+  activityPublish,
+  activityLeftNum
 } from "@/api/newApi.js";
 
 import permission from "@/mixin/admin-operate";
@@ -305,7 +308,14 @@ export default {
   mixins: [permission, user],
   data() {
     return {
+      dataForm: {
+        values: [],
+        classificationParent: "",
+        classificationChildren: "",
+        cbName: ""
+      },
       selectStuNum: 0,
+      maxCarryingCapacity: 0,
       stu_id_list: {},
       courseinfo: {},
       input: "",
@@ -348,11 +358,18 @@ export default {
           {
             type: "string",
             required: true,
-            message: "请选择日期",
+            message: "请选择活动开始时间",
             trigger: "change"
           }
         ],
-        resource: [{ required: true, message: "请选择时段", trigger: "change" }]
+        resource: [
+          {
+            type: "string",
+            required: true,
+            message: "请选择上午或下午",
+            trigger: "change"
+          }
+        ]
       },
       classIdInActs: [],
       gradeIdInActs: [],
@@ -434,6 +451,13 @@ export default {
         } else {
           this.istrue = false;
         }
+        this.getLeftNum();
+      },
+      deep: true
+    },
+    "form.resource": {
+      handler(newval) {
+        this.getLeftNum();
       },
       deep: true
     }
@@ -448,7 +472,11 @@ export default {
     // 获取列表数据
     async getDatas() {
       this.isLoading = true;
-      const formList = Object.assign({}, this.form);
+      if (this.dataForm.values.length) {
+        this.dataForm.classificationParent = this.dataForm.values[0];
+        this.dataForm.classificationChildren = this.dataForm.values[1];
+      }
+      const formList = Object.assign({}, this.dataForm);
       const res = await activityCourseList(formList, this.pages);
       const { entity: datas = {} } = res.data;
       try {
@@ -458,6 +486,41 @@ export default {
         this.listData = [];
       } finally {
         this.isLoading = false;
+      }
+    },
+    // 获取基地剩余人数
+    async getLeftNum() {
+      if (this.form.date && this.form.resource) {
+        let param = {
+          courseId: this.courseinfo.id,
+          baseInstId: this.courseinfo.baseinfoId,
+          gmtStDate: this.form.date,
+          stDayAmOrPm: this.form.resource
+        };
+        let res = await activityLeftNum(param);
+        try {
+          let datas = res.data;
+          if (datas.code == 200) {
+            if (datas.appendInfo.leftNum||datas.appendInfo.leftNum==-1) {
+              this.maxCarryingCapacity = datas.appendInfo.leftNum;
+            } else {
+              this.$message({
+                message: `该时间段活动参与人数已满，请选择别的时间段`,
+                type: "error"
+              });
+            }
+          } else {
+            this.$message({
+              message: res.data.msg || `加载数据失败`,
+              type: "error"
+            });
+          }
+
+          console.log(datas);
+        } catch (err) {
+          console.log(err);
+        } finally {
+        }
       }
     },
     getActivityTypeParent() {
@@ -503,14 +566,13 @@ export default {
         }
       });
     },
-    max() {},
     submitForm(form) {
       this.$refs[form].validate(valid => {
         if (valid) {
           if (!this.selectStuNum) {
             this.$message.error("请选择参与学生");
             return;
-          } else if (this.selectStuNum > this.courseinfo.maxCarryingCapacity) {
+          } else if (this.maxCarryingCapacity!=-1&&this.selectStuNum > this.maxCarryingCapacity) {
             this.$message.error("参与学生超过最大承载量");
             return;
           }

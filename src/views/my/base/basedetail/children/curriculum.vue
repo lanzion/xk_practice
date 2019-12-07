@@ -1,11 +1,10 @@
-// 基地/机构--详情 --课程活动
 <template>
-    <div class="curriculum">
+    <div  class="curriculum">
         <div class="curriculum-fl-coure">
             <ul class="curriculum-fl-coure-ul">
-                <li v-for="(g,index) in datas" :key="index">
+                <li v-for="(g,index) in datas" :key="index" @click="gocourse(g.id)">
                     <div>
-                        <ov-image :type="3" :src-data="g.cover" :img-height="'236px'"></ov-image>
+                        <ov-image  :type="3" :src-data="g.cover" :img-height="'236px'"></ov-image>
                     </div>
                     <h3>{{g.name}}</h3>
                     <div class="curriculum-fl-coure-ul-min">
@@ -18,29 +17,47 @@
                     </div>
                 </li>
             </ul>
+            <infinite-loading @infinite="getCourselist" ref="infiniteLoading">
+                <span slot="spinner">正在加载中...</span>
+                <span slot="no-more">没有更多数据了...</span>
+                <span slot="no-results">暂无数据...</span>
+            </infinite-loading>
         </div>
+        <!-- <no-data v-if="!nomore"></no-data> -->
     </div>
 </template>
 
 <script>
-import { requestwebapibaseDetailcourse } from '@/api/webApi/base';
+import { requestwebapibaseDetailcourse } from '@/api/webApi/base'
 export default {
     name: 'curriculum',
     data() {
         return {
-            datas: []
+            datas: [],
+            nomore: false,
+            pages: {
+                pageSize: 9,
+                pageNum: 1
+            }
         }
     },
     created() {
-        this.getCourselist()
+        // this.getCourselist()
+    },
+    watch: {
+        'datas.length': {
+            handler(newval, oldval) {
+                if (newval === 0) {
+                    this.nomore = false
+                } else {
+                    this.nomore = true
+                }
+            },
+            deep: true
+        }
     },
     methods: {
-        async getCourselist() {
-            this.isLoading = true
-            let pages = {
-                pageNum: 1,
-                pageSize: 20
-            }
+        async getCourselist($state) {
             let baseId = this.$route.query.baseId
             if (baseId) {
                 this.id = baseId
@@ -49,23 +66,41 @@ export default {
             }
             const res = await requestwebapibaseDetailcourse(
                 { baseinfoId: this.id },
-                pages
+                this.pages
             )
             const { entity: datas = {} } = res.data
             try {
-                let array = datas.resultData
-                array.forEach(x => {
-                    x.fit = this.filterFit(x.fit)
-                })
-                this.datas = array || []
+                if (datas.resultData.length) {
+                    this.datas = datas.resultData || []
+                    this.datas.forEach(x => {
+                        x.fit = this.filterFit(x.fit)
+                    })
+                    $state.loaded()
+                    if (this.datas.length / 5 === 9) {
+                        $state.complete()
+                    }
+                    if (this.datas.length < this.pages.pageSize) {
+                        $state.complete()
+                    }
+                    this.pages.pageSize += 9
+                } else {
+                    $state.complete()
+                }
+                this.totalNum = datas.totalNum || 0
             } catch (error) {
                 this.datas = []
             } finally {
-                this.isLoading = false
             }
         },
+        gocourse(id) {
+            sessionStorage.setItem('courseId', id)
+            this.$router.push({
+                path: '/course/coursedetails',
+                query: { courseId: id }
+            })
+        },
         filterFit(val) {
-            let txt = '';
+            let txt = ''
             if (val) {
                 txt = val
                     .replace(/primarySchool_L/g, '小学初年级 ')
@@ -80,6 +115,8 @@ export default {
 </script>
 <style lang='scss' scoped>
 .curriculum-fl-coure {
+    margin-bottom: 50px;
+    min-height: 400px;
     .curriculum-fl-coure-ul {
         overflow: hidden;
         li {

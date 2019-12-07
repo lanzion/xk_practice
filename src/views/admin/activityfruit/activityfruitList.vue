@@ -36,16 +36,15 @@
     </div>
 
     <el-table ref="table" :data="listData" stripe align="center" v-loading="isLoading" border>
-      <el-table-column prop="title" label="活动成果标题" align="center" sortable show-overflow-tooltip />
-      <el-table-column prop="courseName" label="关联活动" align="center" show-overflow-tooltip />
+      <el-table-column prop="title" label="活动成果标题" align="center" show-overflow-tooltip />
+      <el-table-column prop="activityInfo" label="关联活动" align="center" sortable show-overflow-tooltip />
       <el-table-column
         prop="resultTypeName"
         label="类型"
         align="center"
-        sortable
         show-overflow-tooltip
       />
-      <el-table-column prop="createName" label="发布者" align="center" sortable show-overflow-tooltip />
+      <el-table-column prop="createName" label="发布者" align="center" show-overflow-tooltip />
       <el-table-column prop="gmtModify" label="更新时间" align="center" sortable show-overflow-tooltip />
       <el-table-column
         prop="publishDate"
@@ -58,7 +57,7 @@
       <el-table-column label="审核者" align="center" show-overflow-tooltip>
         <template slot-scope="scope">{{scope.row.auditUserName?scope.row.auditUserName:'-'}}</template>
       </el-table-column>
-      <el-table-column label="操作" align="center" :width="operateWidth">
+      <el-table-column label="操作" align="center" fixed="right" :width="operateWidth">
         <template slot-scope="scope">
           <list-operate
             :items="listBtnGroup"

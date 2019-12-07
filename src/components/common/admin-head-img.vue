@@ -2,6 +2,7 @@
   <div class="avatar-wrap" :style="{'height':height}">
     <div class="avatar-box">
       <default-image class="g-cover--item" :src="user.face" />
+      <span class="user-name-box table-cel">{{user.userName}}</span>
     </div>
     <ul class="menu-list--wrap">
       <li class="menu-item" v-for="(item, index) in menu" :key="index">
@@ -57,13 +58,14 @@ export default {
 
 .avatar-wrap {
   position: relative;
-  width: 80px;
-  height: $--header-height;
+  // width: 80px;
+  // height: $--header-height;
   color: $--color-text-primary;
   cursor: pointer;
   display: block;
   float: right;
   z-index: 1000;
+  margin-right: 82px;
   &:hover {
     // background-color: $--color-primary;
 
@@ -76,14 +78,21 @@ export default {
   }
 
   .avatar-box {
-    $avatar-size: 30px;
-    @include avatar($avatar-size);
-    margin: 0 auto;
-    overflow: hidden;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    // $avatar-size: 30px;
+    // @include avatar($avatar-size);
+    // margin: 0 auto;
+    // overflow: hidden;
+    // position: absolute;
+    // top: 50%;
+    // left: 50%;
+    // transform: translate(-50%, -50%);
+    img{
+      width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
+    }
   }
 }
 

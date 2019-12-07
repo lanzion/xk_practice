@@ -1,12 +1,10 @@
-// 基地/机构--详情
 <template>
     <div class="brief">
         <div class="brief-one">
             <div class="brief-fl fl">
                 <div class="brief-fl-title">
                     <h3>{{schoolDetail.schoolName}}</h3>
-                    <p id="conent">
-                        {{schoolDetail.remark}}
+                    <p id="conent" v-html="schoolDetail.remark">
                         <span></span>
                     </p>
                 </div>
@@ -27,6 +25,7 @@
                             <span>
                                 {{schoolDetail.address}}
                                 <i
+                                    @click="getMap(schoolDetail.address,schoolDetail.name)"
                                     :style="{backgroundImage:'url('+baiduditu+')'}"
                                 ></i>
                             </span>
@@ -48,6 +47,7 @@
 </template>
 
 <script>
+import { requestwebapiLongitudeAndlatitude } from '@/api/webApi/base'
 export default {
     name: 'schooldetailbrief',
     data() {
@@ -69,12 +69,36 @@ export default {
     created() {
         this.schoolDetail = JSON.parse(sessionStorage.getItem('schoolDetail'))
     },
-    methods: {}
+    methods: {
+        async getMap(address, name) {
+            const res = await requestwebapiLongitudeAndlatitude({
+                address: address
+            })
+            const { entity: datas = {} } = res.data
+            try {
+                this.lng = datas.lng || 113.27
+                this.lat = datas.lat || 23.13
+                const { href } = this.$router.resolve({
+                    name: `bmap`,
+                    query: {
+                        lng: this.lng,
+                        lat: this.lat,
+                        name: this.datas.schoolName
+                    }
+                })
+                window.open(href, '_blank')
+            } catch (error) {
+            } finally {
+                this.isLoading = false
+            }
+        }
+    }
 }
 </script>
 <style lang='scss' scoped>
 .brief {
     overflow: hidden;
+    margin-bottom: 30px;
     .brief-one {
         overflow: hidden;
         .brief-fl {

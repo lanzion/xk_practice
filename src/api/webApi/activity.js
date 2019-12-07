@@ -2,7 +2,7 @@ import xhr from 'Axios'
 /* 活动成果
 -------------------------- */
 // 成果列表
-const requestwebapiactivityresults = (options = {}, page) => xhr.post(`/portal/activity/result/page`, options)
+const requestwebapiactivityresults = (options = {}, page) => xhr.post(`/portal/activity/result/page?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 
 // 成果列表--详情
 const requestwebapiactivityresultsDetail = (options = {}) => xhr.post(`/portal/activity/result/detail`, options)

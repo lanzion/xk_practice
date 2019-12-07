@@ -7,7 +7,9 @@ function fileUrl(url, {filetype = 'image'} = {}) {
     if (url) {
         url = isFullpath ? url : (configs.fileBaseUrl + url)
     }
-
+    if (url === null || url === undefined) {
+        url = '../../../static/img/info.jpg'
+    }
     switch (filetype) {
         case 'image':
             const reg = /\.jp(e)?g|gif|png|pn|bmp$/i // 过滤文件类型

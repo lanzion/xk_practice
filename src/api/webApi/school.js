@@ -11,7 +11,7 @@ const requestwebapischoolDetail = (options = {}) => xhr.post(`/portal/baseSchool
 const requestwebapischoolDetailbase = (options = {}, page) => xhr.post(`/portal/baseSchool/selectSchBaseInfo?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 
 // 评价
-const requestwebapigetSchoolevaluation = (options = {}, page) => xhr.post(`/portal/activity/eval/baseinst/page?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
+const requestwebapigetSchoolevaluation = (options = {}, page) => xhr.post(`/portal/activity/eval/school/page?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 
 export {
     requestwebapischool,

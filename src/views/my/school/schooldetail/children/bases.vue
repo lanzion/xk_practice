@@ -2,37 +2,85 @@
     <div class="bases">
         <div class="bases-fl-evaluate">
             <ul class="bases-fl-evaluate-ul">
-                <li>
+                <li v-for="(g,index) in lists" :key="index" @click="gobase(g.baseInfoId)">
                     <div>
-                        <ov-image :type="3" :src-data="'123'" :img-height="'235px'"></ov-image>
+                        <ov-image :type="3" :src-data="g.cover" :img-height="'235px'"></ov-image>
                     </div>
-                    <h3>课程名称课程名称名称课程名称…</h3>
+                    <h3>{{g.baseInfoName}}</h3>
                     <h4>已参加课程:</h4>
                     <ul>
-                        <li>《寻找广州城市天际线》</li>
-                        <li>《寻找广州城市天际线城市天际线》</li>
-                        <li>《寻找广州城市天际线》</li>
+                        <li v-for="(t,index) in g.courseList" :key="index">《{{t.courseName}}》</li>
                     </ul>
                 </li>
             </ul>
+            <infinite-loading @infinite="getlists" ref="infiniteLoading">
+                <span slot="spinner">正在加载中...</span>
+                <span slot="no-more">没有更多数据了...</span>
+                 <span slot="no-results">暂无数据...</span>
+            </infinite-loading>
         </div>
     </div>
 </template>
 
 <script>
+import { requestwebapischoolDetailbase } from '@/api/webApi/school'
 export default {
     name: 'schooldetailbases',
     data() {
         return {
             value: 5,
             time: require('../../../../../../static/img/time.png'),
-            erweima: require('../../../../../../static/img/xikegongzhonghao.png')
+            erweima: require('../../../../../../static/img/xikegongzhonghao.png'),
+            lists: [],
+            pages: {
+                pageSize: 8,
+                pageNum: 1
+            }
         }
     },
-    created() {},
+    created() {
+    },
     methods: {
-        go() {
-            this.$router.push({ path: '/school/schooldetail/brief' })
+        async getlists($state) {
+            this.isLoading = true
+            let schoolId = this.$route.query.schoolId
+            if (schoolId) {
+                this.id = schoolId
+            } else {
+                this.id = sessionStorage.getItem('schoolId')
+            }
+            const res = await requestwebapischoolDetailbase(
+                { id: this.id },
+                this.pages
+            )
+            const { entity: datas = {} } = res.data
+            try {
+                if (datas.resultData.length) {
+                    this.lists = datas.resultData
+                    $state.loaded()
+                    if (this.lists.length / 5 === 8) {
+                        $state.complete()
+                    }
+                    if (this.lists.length < this.pages.pageSize) {
+                        $state.complete()
+                    }
+                    this.pages.pageSize += 8
+                } else {
+                    $state.complete()
+                }
+                this.totalNum = datas.totalNum || 0
+            } catch (error) {
+                this.lists = []
+            } finally {
+                this.isLoading = false
+            }
+        },
+        gobase(id) {
+            sessionStorage.setItem('baseId', id)
+            this.$router.push({
+                path: '/base/basedetail',
+                query: { baseId: id }
+            })
         }
     }
 }
@@ -40,6 +88,7 @@ export default {
 <style lang='scss' scoped>
 .bases {
     overflow: hidden;
+    min-height: 400px;
     .bases-fl-evaluate {
         margin-bottom: 90px;
         margin-top: 28px;
@@ -79,6 +128,7 @@ export default {
         }
         .bases-fl-evaluate-ul {
             overflow: hidden;
+            margin-bottom: 30px;
             li {
                 width: 380px;
                 height: 388px;

@@ -5,11 +5,11 @@
     <header class="header table-layout">
       <h1 class="logo table-cell">
         <a :href="page.index.url">
-          <img src="~@assets/image/logo14.png" class="logo-img" />
+          <img src="~@assets/image/logo2.png" class="logo-img" />
           <!-- <span class="logo-txt">社会实践大课堂平台</span> -->
         </a>
       </h1>
-      <span class="user-name-box table-cel">{{userInfo.userName}}</span>
+      <!-- <span class="user-name-box table-cel">{{userInfo.userName}}</span> -->
       <user-avatar class="table-cell" />
     </header>
 
@@ -18,10 +18,10 @@
       <el-menu
         ref="menu"
         class="aside"
-        text-color="#fff"
+        text-color="#333"
         :router="true"
         :default-active="defaultActiveMenu"
-        :background-color="$style.navBg"
+        background-color="#fff"
         :active-text-color="$style.navActiveText"
         :unique-opened="true"
       >
@@ -206,7 +206,7 @@ $--nav-active-text: $--color-primary;
 @import "~@/assets/css/base/base-variables.scss";
 @import "~@/assets/css/base/utils.scss";
 .user-name-box {
-  color: #fff;
+  color: #000;
   position: absolute;
   height: 40px;
   line-height: 40px;
@@ -223,6 +223,7 @@ $--user-info-height: 60px;
   flex-direction: column;
   height: 100%;
   flex: 1;
+  background: #f5f8ff;
 }
 
 .main-box {
@@ -230,6 +231,17 @@ $--user-info-height: 60px;
   flex: 1;
   padding-top: 70px;
   padding-left: 231px;
+  /deep/ .el-menu-item i,
+  /deep/ .el-submenu__title i {
+    color: #333;
+  }
+  /deep/ .el-menu {
+    .el-menu-item.is-active.is-active {
+      span {
+        border-bottom: 1px solid #008aff;
+      }
+    }
+  }
 }
 
 .header {
@@ -237,11 +249,13 @@ $--user-info-height: 60px;
   width: 100%;
   height: $--header-height;
   line-height: $--header-height;
-  background-color: #212121;
+  background-color: #fff;
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 10000;
+  z-index: 300;
+  min-width: 1200px;
+  border-bottom: 1px solid #f3f3f3;
 
   .logo {
     padding-left: 56px;
@@ -277,6 +291,15 @@ $--user-info-height: 60px;
 
   .is-level-1 {
     font-size: 16px;
+  }
+  /deep/ .el-submenu.is-active {
+    .is-level-1 {
+      color: #fff;
+    }
+    .el-menu-item i,
+    /deep/ .el-submenu__title i {
+      color: #fff;
+    }
   }
 
   .el-menu-item.is-active {

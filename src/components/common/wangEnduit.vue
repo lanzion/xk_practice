@@ -191,12 +191,15 @@ export default {
 };
 </script>
 
-<style lang="css">
+<style lang="scss" scoped>
 .editor {
   width: 100%;
   margin: 0 auto;
   position: relative;
   z-index: 0;
+  /deep/ .wangEditor-container{
+    border: 1px solid #eee;
+  }
 }
 .toolbar{
     min-height: 200px;

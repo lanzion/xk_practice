@@ -98,13 +98,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="已发起活动场次" align="center">
+      <el-table-column label="已发起活动场次" align="center" width="160">
         <template slot-scope="scope">{{scope.row.activityNum}}场</template>
       </el-table-column>
 
       <!-- <el-table-column prop="courseDesigner" label="发布者" align="center"></el-table-column> -->
 
-      <el-table-column prop="createDate" align="center" label="发布时间" show-overflow-tooltip />
+      <el-table-column prop="createDate" align="center" label="发布时间" sortable show-overflow-tooltip />
 
       <el-table-column label="状态" align="center">
         <template slot-scope="scope">
@@ -112,7 +112,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" align="center" :width="operateWidth">
+      <el-table-column label="操作" align="center" fixed="right" :width="operateWidth">
         <template slot-scope="scope">
           <list-operate
             :items="listBtnGroup"
@@ -222,7 +222,7 @@ export default {
       const formList = Object.assign({}, this.form);
       if (formList.values) {
         formList.classificationParent = formList.values[0];
-        formList.classificationChildren = formList.values[0];
+        formList.classificationChildren = formList.values[1];
       }
       const res = await courseList(formList, this.pages);
 
@@ -278,8 +278,8 @@ export default {
         return;
       }
       this.form.provinceId = value[0].code;
-      this.form.cityId = value[0].code;
-      this.form.areaId = value[0].code;
+      this.form.cityId = value[1].code;
+      this.form.areaId = value[2].code;
     },
     showOrHide(data, status) {
       let txt = status?'显示':'屏蔽'

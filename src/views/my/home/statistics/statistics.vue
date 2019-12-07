@@ -2,7 +2,6 @@
     <div class="rollingnumbers">
         <div class="select">
             <div class="select_e">
-                <!-- ———— -->
                 <span class="select_r" type="text" @mouseenter="getistrue" @mouseleave="setistrue">
                     {{select}}
                     <i class="select_i" :style="{backgroundImage:'url('+jiantou+')'}"></i>
@@ -17,48 +16,65 @@
                 </span>
             </div>
         </div>
-        <ul class="rollingnumbers_r">
-            <li>
-                <div class="rollingnumbers_p"></div>
-                <div class="rollingnumbers_k">
-                    <h3 class="title">参与学生人数</h3>
-                    <rollingnumber :time="3" :value="999999" />
-                    <img :src="img04" alt />
-                </div>
-            </li>
-            <li>
-                <div class="rollingnumbers_p"></div>
-                <div class="rollingnumbers_k">
-                    <h3 class="title">参与学校数量</h3>
-                    <rollingnumber :time="3" :value="888888" />
-                    <img :src="img03" alt />
-                </div>
-            </li>
-            <li>
-                <div class="rollingnumbers_p"></div>
-                <div class="rollingnumbers_k">
-                    <h3 class="title">参与基地/机构数量</h3>
-                    <rollingnumber :time="3" :value="77777" />
-                    <img :src="img05" alt />
-                </div>
-            </li>
-            <li>
-                <div class="rollingnumbers_p"></div>
-                <div class="rollingnumbers_k">
-                    <h3 class="title">活动总次数</h3>
-                    <rollingnumber :time="3" :value="666666" />
-                    <img :src="img02" alt />
-                </div>
-            </li>
-            <li>
-                <div class="rollingnumbers_p"></div>
-                <div class="rollingnumbers_k">
-                    <h3 class="title">学习总时长</h3>
-                    <rollingnumber :time="3" :value="55555" />
-                    <img :src="img01" alt />
-                </div>
-            </li>
-        </ul>
+        <div class="container">
+            <ul class="rollingnumbers_r">
+                <li>
+                    <div class="rollingnumbers_k">
+                        <div class="fl">
+                            <img :src="xueshengrenci" alt />
+                        </div>
+                        <div class="fl">
+                            <h3 class="title">参与学生人次</h3>
+                            <rollingnumber :time="3" :value="15684" :num-color="'#f26565'"/>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="rollingnumbers_k">
+                        <div class="fl">
+                            <img :src="xuexiaoshuliang" alt />
+                        </div>
+                        <div class="fl">
+                            <h3 class="title">参与学校数量</h3>
+                            <rollingnumber :time="3" :value="564541" :num-color="'#ffb25b'" />
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="rollingnumbers_k">
+                        <div class="fl">
+                            <img :src="jidishuliang" alt />
+                        </div>
+                        <div class="fl">
+                            <h3 class="title">参与基地/机构数量</h3>
+                            <rollingnumber :time="3" :value="481516" :num-color="'#3fc1c9'" />
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="rollingnumbers_k">
+                        <div class="fl">
+                            <img :src="huodongzongchangci" alt />
+                        </div>
+                        <div class="fl">
+                            <h3 class="title">活动总场次</h3>
+                            <rollingnumber :time="3" :value="456551" :num-color="'#328fdd'" />
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="rollingnumbers_k">
+                        <div class="fl">
+                            <img :src="xuexizongkeshi" alt />
+                        </div>
+                        <div class="fl">
+                            <h3 class="title">学习总课时</h3>
+                            <rollingnumber :time="3" :value="48425" :num-color="'#7c8d3c'" />
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 <script>
@@ -67,12 +83,12 @@ export default {
     data() {
         return {
             istrue: false,
-            jiantou: require('../../../../../static/img/jiantou.png'),
-            img01: require('../../../../../static/img/001.png'),
-            img02: require('../../../../../static/img/002.png'),
-            img03: require('../../../../../static/img/003.png'),
-            img04: require('../../../../../static/img/004.png'),
-            img05: require('../../../../../static/img/005.png'),
+            jiantou: require('../../../../../static/img/xinxaila.png'),
+            xueshengrenci: require('../../../../../static/img/xueshengrenci.png'),
+            xuexiaoshuliang: require('../../../../../static/img/xuexiaoshuliang.png'),
+            jidishuliang: require('../../../../../static/img/jidishuliang.png'),
+            huodongzongchangci: require('../../../../../static/img/huodongzongchangci.png'),
+            xuexizongkeshi: require('../../../../../static/img/xuexizongkeshi.png'),
             arr: [
                 {
                     name: '001',
@@ -133,38 +149,39 @@ export default {
 <style lang="scss" scoped>
 .rollingnumbers {
     width: 100%;
-    height: 200px;
-    background: #2099ff;
+    height: auto;
+    border: 1px solid #f8f8f8;
+    margin-bottom: 46px;
     .select {
-        background: #2099ff;
-        color: #fff;
-        font-size: 16px;
         text-align: center;
-        height: 50px;
-        line-height: 50px;
+        height: 48px;
+        line-height: 48px;
+        font-size: 18px;
+        letter-spacing: 0px;
+        color: #374a66;
         .select_e {
             width: 100%;
             height: 100%;
-            background: #2099ff;
             .select_r {
                 display: inline-block;
                 text-align: center;
-                font-weight: 600;
-                color: #fff;
+                font-weight: 500;
                 font-size: 18px;
-                width: 236px;
+                width: 100%;
                 height: 100%;
                 cursor: pointer;
                 position: relative;
+                letter-spacing: 0px;
+                color: #262626;
 
-                &::before {
-                    content: "——";
-                    margin-right: 20px;
-                }
-                &::after {
-                    content: "——";
-                    margin-left: 20px;
-                }
+                // &::before {
+                //     content: "——";
+                //     margin-right: 20px;
+                // }
+                // &::after {
+                //     content: "——";
+                //     margin-left: 20px;
+                // }
                 &:hover {
                     .select_i {
                         -moz-transform: rotate(180deg);
@@ -184,72 +201,152 @@ export default {
                 }
                 .select_u {
                     position: absolute;
-                    left: 26px;
+                    left: 45%;
                     height: 0px;
                     top: 100%;
                     width: 180px;
                     overflow: hidden;
-                    background: #2099ff;
                     z-index: 1000;
+                    // background: #fff;
                     .select_l {
                         width: 180px;
                         height: 30px;
                         line-height: 30px;
                         font-size: 14px;
                         cursor: pointer;
-                        background: rgba(0, 0, 0, 0.4);
+                        background: #f8f8f8;
                         &:hover {
-                            background: rgba(0, 0, 0, 0.6);
+                            background: #eee;
+                        }
+                        &::after {
+                            content: none;
                         }
                     }
                 }
             }
         }
     }
-    .rollingnumbers_r {
-        li {
-            width: 240px;
-            height: 150px;
-            float: left;
-            padding: 18px;
-            box-sizing: border-box;
-            position: relative;
-            background: #2099ff;
-            &:nth-child(2n-1) {
-                background: #1694ff;
-            }
-            .title {
-                color: #fff;
-                margin-bottom: 10px;
-                font-size: 14px;
-                z-index: 1000;
-            }
-            .rollingnumbers_p {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                top: 0;
-                left: 0;
-            }
-            .rollingnumbers_k {
-                position: absolute;
+    .container {
+        overflow: hidden;
+        .rollingnumbers_r {
+           overflow: hidden;
+            li {
+                width: 240px;
+                height: 110px;
+                float: left;
                 box-sizing: border-box;
-                padding: 18px;
-                width: 100%;
-                height: 100%;
-                top: 0px;
-                left: 0px;
-                img {
-                    position: absolute;
-                    right: 20px;
-                    bottom: 20px;
-                    width: 50px;
-                    height: 50px;
+                position: relative;
+                &:nth-child(1) {
+                    position: relative;
+                    text-align: center;
+                    .select {
+                        text-align: center;
+                        height: 62px;
+                        line-height: 62px;
+                        font-size: 18px;
+                        letter-spacing: 0px;
+                        color: #374a66;
+                        .select_e {
+                            width: 100%;
+                            height: 100%;
+                            .select_r {
+                                display: inline-block;
+                                text-align: center;
+                                font-weight: 400;
+                                color: #374a66;
+                                font-size: 18px;
+                                width: 100%;
+                                height: 100%;
+                                cursor: pointer;
+                                position: relative;
+
+                                // &::before {
+                                //     content: "——";
+                                //     margin-right: 20px;
+                                // }
+                                // &::after {
+                                //     content: "——";
+                                //     margin-left: 20px;
+                                // }
+                                &:hover {
+                                    .select_i {
+                                        -moz-transform: rotate(180deg);
+                                        -webkit-transform: rotate(180deg);
+                                        transform: rotate(180deg);
+                                        filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+                                    }
+                                }
+                                .select_i {
+                                    display: inline-block;
+                                    width: 20px;
+                                    height: 20px;
+                                    background-position: center;
+                                    background-repeat: no-repeat;
+                                    background-size: 20px;
+                                    vertical-align: middle;
+                                }
+                                .select_u {
+                                    position: absolute;
+                                    left: 26px;
+                                    height: 0px;
+                                    top: 100%;
+                                    width: 180px;
+                                    overflow: hidden;
+                                    z-index: 1000;
+                                    background: #fff;
+                                    .select_l {
+                                        width: 180px;
+                                        height: 30px;
+                                        line-height: 30px;
+                                        font-size: 14px;
+                                        cursor: pointer;
+                                        background: #fff;
+                                        &:hover {
+                                            background: #ccc;
+                                        }
+                                        &::after {
+                                            content: none;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-            }
-            &:hover {
-                .rollingnumbers_p {
-                    background: rgba(255, 255, 255, 0.2);
+                .title {
+                    font-size: 14px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    line-height: 29.5px;
+                    letter-spacing: 0px;
+                    color: #262626;
+                }
+                // .rollingnumbers_p {
+                //     position: absolute;
+                //     width: 100%;
+                //     height: 100%;
+                //     top: 0;
+                //     left: 0;
+                // }
+                .rollingnumbers_k {
+                    margin-top: 20px;
+                    box-sizing: border-box;
+                    width: 100%;
+                    height: 100%;
+                    text-align: center;
+                    div {
+                        &:nth-child(1) {
+                            margin-right: 10px;
+                            margin-left: 20px;
+                        }
+                        &:nth-child(2) {
+                        }
+                    }
+                }
+                &:hover {
+                    .rollingnumbers_p {
+                        background: rgba(255, 255, 255, 0.2);
+                    }
                 }
             }
         }

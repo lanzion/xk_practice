@@ -34,7 +34,7 @@
       <el-table-column label="选择" align="center" type="selection" width="55"></el-table-column>
       <el-table-column prop="account" label="帐号" align="center" sortable show-overflow-tooltip />
       <el-table-column prop="userName" label="用户名" align="center" sortable show-overflow-tooltip />
-      <el-table-column prop="remark" label="备注" align="center" />
+      <el-table-column prop="remark" label="备注" align="center" show-overflow-tooltip/>
       <el-table-column prop="orgName" label="所属学校" align="center" />
       <el-table-column prop="lockStatus" label="状态" align="center">
         <template slot-scope="scope">
@@ -51,6 +51,8 @@
             v-bind="{
                         edit: { query: { id: 'id' ,identity:'identity'} },
                         del: { callback: doDel },
+                        shieid: {visible:scope.row.lockStatus==0,callback:chengStatus},
+                         open: {visible:scope.row.lockStatus==1,callback:chengStatus},
                     }"
           />
         </template>
@@ -69,7 +71,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import { selectUserList } from "@/api/newApi";
+import { selectUserList,modifyUserStatus } from "@/api/newApi";
 import { delUser } from "@/api/resetApi";
 import permission from "@/mixin/admin-operate";
 import user from "@/mixin/admin-user";
@@ -210,27 +212,40 @@ export default {
         });
       }
     },
-
-    doStop() {
-      console.log("停止！！");
-      this.$confirm("是否确认终止?", "提示", {
+    chengStatus(data) {
+      let txt, lockStatus;
+      lockStatus = data.data.lockStatus == 0 ? 1 : 0;
+      txt = lockStatus ? "停用" : "启用";
+      this.$confirm(`${txt}后此账号将${lockStatus?'不':''}能正常使用，确定要${txt}？`, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
-        center: true
+        type: "warning"
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
+          modifyUserStatus({ id: data.data.id, lockStatus: lockStatus }).then(
+            res => {
+              try {
+                let _data = res.data;
+                if (_data.code == 200) {
+                  this.$message({
+                    type: "success",
+                    message: `${txt}成功!`
+                  });
+                  data.data.lockStatus = lockStatus;
+                } else {
+                  this.$message({
+                    type: "success",
+                    message: _data.msg || `${txt}失败!`
+                  });
+                }
+              } catch (err) {
+                console.log(err);
+              } finally {
+              }
+            }
+          );
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
+        .catch(() => {});
     }
   }
 };

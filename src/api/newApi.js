@@ -13,7 +13,7 @@ const searchBaselist = (options = {}, page) => xhr.post(`/practice/activity/sear
 // 基地服务列表
 const baseinfoList = (options = {}, page) => xhr.post(`/admin/baseinfoProject/selectPager?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 // 基地详情
-const adminBaseInfoDetail = (options = {}) => xhr.post('/admin/adminBaseInfo/selectDetail', options)
+const adminBaseInfoDetail = (options = {}) => xhr.post('/practice/adminBaseInfo/selectDetail', options)
 // 修改基地详情
 const adminBaseInfoEdit = (options = {}) => xhr.post('/admin/adminBaseInfo/modify', options)
 // 新增基地详情
@@ -72,9 +72,13 @@ const studentList = (options = {}) => xhr.post('/practice/activity/school/studen
 const schoolDetail = (options = {}) => xhr.post('/practice/baseSchool/selectDetail', options)
 // 修改学校信息
 const schoolModify = (options = {}) => xhr.post('/practice/baseSchool/modify', options)
+// 根据名称搜索学校
+const searchSchoollist = (options = {}, page) => xhr.post(`/practice/activity/search-school`, options)
 
 // 发起活动
 const activityPublish = (options = {}) => xhr.post('/practice/activity/school/publish', options)
+// 发起活动 - 课程基地剩余人数
+const activityLeftNum = (options = {}) => xhr.post('/practice/activity/course/left-num', options)
 // 查看确认书
 const cbookView = (options = {}) => xhr.post('/practice/activity/cbook/view', options)
 // 删除活动
@@ -99,6 +103,8 @@ const resultActivityCommit = (options = {}) => xhr.post('/practice/activity/resu
 const activityResultList = (options = {}, page) => xhr.post(`/practice/activity/result/page?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 // 待审核成果列表
 const activityResultWtAuditList = (options = {}, page) => xhr.post(`/practice/activity/result/wt-audit-page?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
+// 草稿成果列表
+const activityResultDraftUnPassList = (options = {}, page) => xhr.post(`/practice/activity/result/draft-unpass-page?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 // 成果列表-已发布、已屏蔽
 const activityResultPublishLockList = (options = {}, page) => xhr.post(`/practice/activity/result/publish-lock-page?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 // 成果删除
@@ -111,12 +117,18 @@ const resultActivityUpdate = (options = {}) => xhr.post('/practice/activity/resu
 const resultAuditPass = (options = {}) => xhr.post('/practice/activity/result/audit/pass', options)
 // 成果审核通过(批量)
 const resultAuditBatchPass = (options = {}) => xhr.post('/practice/activity/result/audit/batch-pass', options)
+// 成果提交审核(批量)
+const resultAuditBatchCommit = (options = {}) => xhr.post('/practice/activity/result/batch-commit', options)
 // 成果审核不通过(单)
 const resultAuditUnPass = (options = {}) => xhr.post('/practice/activity/result/audit/un-pass', options)
 // 成果审核不通过(批量)
 const resultAuditBatchUnPass = (options = {}) => xhr.post('/practice/activity/result/audit/batch-un-pass', options)
 // 成果屏蔽或启用
 const resultLockChange = (options = {}) => xhr.post('/practice/activity/result/lock/change', options)
+// [活动日历]-月-场次列表
+const schoolActivityDayTimes = (options = {}) => xhr.post('/practice/statistics/activity/school/day-times', options)
+// [活动日历]-月-场次列表
+const schoolActivityDayDetail = (options = {}) => xhr.post('/practice/statistics/activity/school/day-detail', options)
 
 export {
     selectUserList,
@@ -148,6 +160,7 @@ export {
     classList,
     studentList,
     activityPublish,
+    activityLeftNum,
     cbookView,
     delActivity,
     activityDetail,
@@ -159,6 +172,7 @@ export {
     baseModify,
     schoolDetail,
     schoolModify,
+    searchSchoollist,
     resultActivityList,
     resultActivityDraft,
     resultActivityCommit,
@@ -167,10 +181,14 @@ export {
     resultActivityDetail,
     resultActivityUpdate,
     activityResultWtAuditList,
+    activityResultDraftUnPassList,
+    resultAuditBatchCommit,
     resultAuditPass,
     resultAuditBatchPass,
     resultAuditUnPass,
     resultAuditBatchUnPass,
     activityResultPublishLockList,
-    resultLockChange
+    resultLockChange,
+    schoolActivityDayTimes,
+    schoolActivityDayDetail
 }

@@ -41,20 +41,39 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="基地/机构">
+        <el-form-item label="基地/机构" v-if="identity!=13">
           <el-select
+            clearable
             v-model="form.baseInstId"
             remote
             reserve-keyword
             :remote-method="getBaseList"
             filterable
-            placeholder="请输入关键词或直接选择"
+            placeholder="请输入关键词"
           >
             <el-option
               v-for="item in beasList"
               :key="item.baseInstId"
               :label="item.baseInstName"
               :value="item.baseInstId"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="学校名称" v-if="identity!=9">
+          <el-select
+            clearable
+            v-model="form.schoolId"
+            remote
+            reserve-keyword
+            :remote-method="getSchoolList"
+            filterable
+            placeholder="请输入关键词"
+          >
+            <el-option
+              v-for="item in schoolList"
+              :key="item.schoolId"
+              :label="item.schoolName"
+              :value="item.schoolId"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -70,8 +89,20 @@
           slot-scope="scope"
         >{{scope.row.classificationParentName+'>'+scope.row.classificationChildrenName}}</template>
       </el-table-column>
-      <el-table-column prop="baseInstName" label="基地/机构" align="center" show-overflow-tooltip v-if="identity=='9'||identity=='6'||identity=='7'||identity=='10'"/>
-      <el-table-column prop="schoolName" label="参与学校" align="center" show-overflow-tooltip v-if="identity=='13'||identity=='6'||identity=='7'||identity=='10'"/>
+      <el-table-column
+        prop="baseInstName"
+        label="基地/机构"
+        align="center"
+        show-overflow-tooltip
+        v-if="identity=='9'||identity=='6'||identity=='7'||identity=='10'"
+      />
+      <el-table-column
+        prop="schoolName"
+        label="参与学校"
+        align="center"
+        show-overflow-tooltip
+        v-if="identity=='13'||identity=='6'||identity=='7'||identity=='10'"
+      />
       <!-- <el-table-column prop="orgName" label="发布教育局" align="center" show-overflow-tooltip></el-table-column> -->
       <el-table-column
         prop="startTime"
@@ -120,7 +151,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" align="center" :width="operateWidth">
+      <el-table-column
+        label="操作"
+        align="center"
+        :width="operateWidth"
+        fixed="right"
+        v-if="listBtnGroup.length"
+      >
         <template slot-scope="scope">
           <list-operate
             :items="listBtnGroup"
@@ -142,7 +179,7 @@
       <div id="printMe">
         <div class="box" ref="print">
           <div class="pos" :class="'pos'+pos">{{pos|filterPos}}</div>
-          <div class="title">《园中生智,研来如此》活动确认书</div>
+          <div class="title">《{{confirmation.courseName}}》活动确认书</div>
           <div class="center">
             <div class="name">学校信息</div>
             <el-row>
@@ -221,7 +258,12 @@
         </div>
       </div>
     </el-dialog>
-    <el-dialog title="园中生智,研来如此" :visible.sync="commentDialogVisible" width="840px" center>
+    <el-dialog
+      :title="activityData.courseName"
+      :visible.sync="commentDialogVisible"
+      width="840px"
+      center
+    >
       <div class="comment_conten">
         <div class="comment_info">
           <el-row>
@@ -284,7 +326,12 @@
         <el-button type="primary" @click="addComment">确 定</el-button>
       </span>
     </el-dialog>
-    <el-dialog title="园中生智,研来如此" :visible.sync="seyCommentDialogVisible" width="840px" center>
+    <el-dialog
+      :title="seyCommentData.courseName"
+      :visible.sync="seyCommentDialogVisible"
+      width="840px"
+      center
+    >
       <div class="comment_conten" v-if="seyCommentDialogVisible">
         <div class="comment_info">
           <el-row>
@@ -320,7 +367,9 @@
               <div class="comment_say_info_left">
                 <div class="comment_say_info_title">
                   学校对基地评价
-                  <span v-if="seyCommentData.schBaseEval">({{seyCommentData.schBaseEval.totalScoreStr}})</span>
+                  <span
+                    v-if="seyCommentData.schBaseEval"
+                  >({{seyCommentData.schBaseEval.totalScoreStr}})</span>
                 </div>
                 <div class="comment_say_info_left_list">
                   <div class="none_comment" v-if="!seyCommentData.schBaseEval">还没有评价</div>
@@ -341,7 +390,12 @@
             </el-col>
             <el-col :span="12">
               <div class="comment_say_info_right">
-                <div class="comment_say_info_title">基地对学校评价<span v-if="seyCommentData.baseSchEval">({{seyCommentData.baseSchEval.totalScoreStr}})</span></div>
+                <div class="comment_say_info_title">
+                  基地对学校评价
+                  <span
+                    v-if="seyCommentData.baseSchEval"
+                  >({{seyCommentData.baseSchEval.totalScoreStr}})</span>
+                </div>
                 <div class="comment_say_info_left_list">
                   <div class="none_comment" v-if="!seyCommentData.baseSchEval">还没有评价</div>
                   <div class="evalpointsbox" v-else>
@@ -378,7 +432,8 @@ import {
   delActivity,
   activityDetail,
   addActivityEval,
-  evalActivityView
+  evalActivityView,
+  searchSchoollist
 } from "@/api/newApi";
 
 import {
@@ -396,8 +451,9 @@ export default {
 
   data() {
     return {
-      pos:'0',
+      pos: "0",
       beasList: [],
+      schoolList: [],
       active: 1,
       activityState: activityState,
       activityStatus: [
@@ -418,7 +474,7 @@ export default {
       },
       confirmation: {},
       activityData: {},
-      evalPointsTitle:'',
+      evalPointsTitle: "",
       evalPoints: {},
       comment: "",
       seyCommentData: {}
@@ -451,10 +507,10 @@ export default {
           .replace(/highSchool/g, "高中");
       return txt;
     },
-    filterPos(val){
-      if(val==0) return "基地/机构未确认"
-      if(val==2) return "教育局已确认"
-      if(val==1) return "活动双方已确认"
+    filterPos(val) {
+      if (val == 0) return "基地/机构未确认";
+      if (val == 2) return "教育局已确认";
+      if (val == 1) return "活动双方已确认";
     }
   },
   computed: {
@@ -462,24 +518,26 @@ export default {
       identity: state => state.identity || {}
     })
   },
-  watch:{
-    commentDialogVisible(newval){
-      if(!newval){
-        this.comment = '';
-        this.activityData.evalPoints.forEach(v=>{
+  watch: {
+    commentDialogVisible(newval) {
+      if (!newval) {
+        this.comment = "";
+        this.activityData.evalPoints.forEach(v => {
           this.evalPoints[v.pointCode] = 0;
-        })
+        });
       }
     }
   },
   created() {
     this.getDatas();
-    if(this.$route.query.activityId){
+    this.getBaseList();
+    this.getSchoolList();
+    if (this.$route.query.activityId) {
       let id = this.$route.query.activityId;
-      this.cbook(id)
-    };
-    if(this.identity==9) this.evalPointsTitle = "学校对基地评价";
-    else this.evalPointsTitle = "基地/机构对学校评价"
+      this.cbook(id);
+    }
+    if (this.identity == 9) this.evalPointsTitle = "学校对基地评价";
+    else this.evalPointsTitle = "基地/机构对学校评价";
   },
   methods: {
     selectList() {
@@ -487,14 +545,20 @@ export default {
     },
     // 获取基地列表
     getBaseList(query) {
-      if (query != "") {
-        searchBaselist({ baseInstName: query }).then(res => {
-          let _data = res.data;
-          if (_data.code == 200) {
-            this.beasList = _data.appendInfo.baseInsts;
-          }
-        });
-      }
+      searchBaselist({ baseInstName: query }).then(res => {
+        let _data = res.data;
+        if (_data.code == 200) {
+          this.beasList = _data.appendInfo.baseInsts;
+        }
+      });
+    },
+    getSchoolList(query) {
+      searchSchoollist({ schoolName: query }).then(res => {
+        let _data = res.data;
+        if (_data.code == 200) {
+          this.schoolList = _data.appendInfo.schools;
+        }
+      });
     },
     // 重置分页
     resetPage() {
@@ -535,13 +599,17 @@ export default {
         console.log(err);
       }
     },
-    cbook(activityId){
+    cbook(activityId) {
       cbookView({ activityId: activityId }).then(res => {
         try {
           let _datas = res.data;
           if (_datas.code == 200) {
             this.confirmation = _datas.entity;
-            this.confirmation.baseInstAuditStatus?(this.confirmation.eduAgencyAuditStatus?this.pos="2":this.pos="1"):this.pos="0"
+            this.confirmation.baseInstAuditStatus
+              ? this.confirmation.eduAgencyAuditStatus
+                ? (this.pos = "2")
+                : (this.pos = "1")
+              : (this.pos = "0");
             this.centerDialogVisible = true;
           } else {
             this.$message({
@@ -555,7 +623,7 @@ export default {
       });
     },
     min(data) {
-      this.cbook(data.data.id)
+      this.cbook(data.data.id);
     },
     mid(data) {
       evalActivityView({ activityId: data.data.id }).then(res => {
@@ -613,7 +681,7 @@ export default {
                 }
               } catch (err) {
                 console.log(err);
-              }finally {
+              } finally {
                 instance.confirmButtonLoading = false;
               }
             });
@@ -674,6 +742,7 @@ export default {
   height: 50px;
   margin-top: 10px;
   padding: 0 10px;
+  min-width: 1300px;
   .start-title {
     float: left;
     height: 50px;
@@ -692,14 +761,15 @@ export default {
     .start-stups-num {
       display: inline-block;
       text-align: center;
-      margin-top: 10px;
       margin-right: 10px;
-      width: 30px;
-      height: 30px;
+      width: 20px;
+      height: 20px;
       line-height: 30px;
       color: #ccc;
       border: 2px solid #ccc;
       border-radius: 50%;
+      vertical-align: middle;
+      line-height: 20px;
     }
     .start-stups-rows {
       display: inline-block;
@@ -710,7 +780,7 @@ export default {
     .start-stups-width {
       display: inline-block;
       border: 1px solid #ccc;
-      width: 90px;
+      width: 35px;
       vertical-align: middle;
     }
     .active {
@@ -742,10 +812,10 @@ export default {
     -webkit-transform: rotate(45deg);
     -o-transform: rotate(45deg);
   }
-  .pos1{
+  .pos1 {
     color: #8bb703;
   }
-  .pos2{
+  .pos2 {
     color: #d9001b;
   }
   .title {

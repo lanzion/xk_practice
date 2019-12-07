@@ -8,6 +8,7 @@
                             v-model="values"
                             :options="arr"
                             placeholder="课程分类"
+                            @change="resetPage"
                             :props="{ expandTrigger: 'hover' }"
                         ></el-cascader>
                     </el-form-item>
@@ -61,8 +62,9 @@
                     </el-form-item>
                 </el-form>
                 <el-form :inline="true" class="fr" @submit.native.prevent>
-                    <el-form-item>
+                    <el-form-item class="basename">
                         <el-input
+                            class="el-input-l"
                             v-model="name"
                             placeholder="请输入课程、基地/机构关键字"
                             @keyup.native.enter="resetPage"
@@ -85,11 +87,13 @@
                         <ov-image :src-data="getFileUrl(g.cover)" :img-height="'178px'"></ov-image>
                     </div>
                     <div class="cord-of">
-                        <span>{{g.name}}</span>
+                        <h3>{{g.name}}</h3>
                     </div>
                     <div class="cord-sl">
                         <i :style="{'backgroundImage':'url('+dengji+')'}"></i>
-                        <span>省级</span>
+                        <span v-if="g.publishingUnitLevel == 'A'">省级</span>
+                        <span v-else-if="g.publishingUnitLevel == 'B'">市级</span>
+                        <span v-else-if="g.publishingUnitLevel == 'C'">区级</span>
                     </div>
                     <div class="cord-sl">
                         <i :style="{'backgroundImage':'url('+jidi+')'}"></i>
@@ -101,30 +105,26 @@
                     </div>
                     <div class="cord-sl">
                         <i :style="{'backgroundImage':'url('+kechengleixing+')'}"></i>
-                        <span>必修(开放课程)</span>
+                        <span v-if="g.courseType == 'A'">必修</span>
+                        <span v-else-if="g.courseType == 'B'">选修</span>
                     </div>
                 </li>
             </ul>
-            <no-data v-if="nomore"></no-data>
+            <infinite-loading @infinite="getlists" ref="infiniteLoading">
+                <span slot="spinner">正在加载中...</span>
+                <span slot="no-more">没有更多数据了...</span>
+                <span slot="no-results">暂无数据...</span>
+            </infinite-loading>
         </div>
-        <pagination
-            v-if="!nomore"
-            :style="{'textAlign':'right'}"
-            :param="pages"
-            :page-sizes="[10, 16, 24]"
-            :total="totalNum"
-            @change="getlists"
-        ></pagination>
     </div>
 </template>
 
 <script>
-// import { requestMultField } from '@/api/common'
 import {
-    // requestnavigation,
+    requestnavigation,
     requestwebapicurriculumCenter
-} from '@/api/webApi/curriculumCenter';
-import { fit, courseType, Courselevel } from '@/utils/utility/dict.js';
+} from '@/api/webApi/curriculumCenter'
+import { fit, courseType, Courselevel } from '@/utils/utility/dict.js'
 export default {
     data() {
         return {
@@ -137,7 +137,7 @@ export default {
             isCoursetype: '',
             isCourselevel: '',
             pages: {
-                pageSize: 16,
+                pageSize: 12,
                 pageNum: 1
             },
             arr: [],
@@ -153,9 +153,8 @@ export default {
         }
     },
     created() {
-        // this.requestnavigation()
-        this.getlists()
-        // this.getActivityTypeParent()
+        this.requestnavigation()
+        // this.getlists()
     },
     watch: {
         'datas.length': {
@@ -170,55 +169,68 @@ export default {
         }
     },
     methods: {
-        // requestnavigation() {
-        //     requestnavigation({})
-        //         .then(res => {
-        //             const datas = res.data
-        //             console.log(datas)
-        //             if (datas) {
-        //                 let arrBox = []
-        //                 datas.typelist.forEach(o => {
-        //                     let arr = o.dicDetailList.map(k => {
-        //                         return {
-        //                             value: k.code,
-        //                             label: k.name
-        //                         }
-        //                     })
-        //                     arrBox.push({
-        //                         value: o.code,
-        //                         label: o.name,
-        //                         children: arr
-        //                     })
-        //                 })
+        requestnavigation() {
+            requestnavigation({})
+                .then(res => {
+                    const datas = res.data
+                    if (datas) {
+                        let arrBox = []
+                        datas.typelist.forEach(o => {
+                            let arr = o.dicDetailList.map(k => {
+                                return {
+                                    value: k.code,
+                                    label: k.name
+                                }
+                            })
+                            arrBox.push({
+                                value: o.code,
+                                label: o.name,
+                                children: arr
+                            })
+                        })
 
-        //                 this.arr = arrBox
-        //             }
-        //         })
-        //         .finally(() => {})
-        // },
+                        this.arr = arrBox
+                    }
+                })
+                .finally(() => {})
+        },
         // 重置分页
         resetPage() {
-            this.$set(this.pages, 'pageNum', 1)
-            this.getlists()
+            this.datas = []
+            this.$nextTick(() => {
+                this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset')
+            })
         },
-        async getlists() {
+        async getlists($state) {
             this.isLoading = true
             let form = {
-                classificationParent: '',
-                classificationChildren: '',
+                classificationParent: this.values[0],
+                classificationChildren: this.values[1],
                 provinceId: '',
                 cityId: '',
                 areaId: '',
                 name: this.name,
                 fit: this.isCompulsory,
-                publishingUnitLevel: this.isCourselevel
+                publishingUnitLevel: this.isCourselevel,
+                courseType: this.isCoursetype
             }
             const res = await requestwebapicurriculumCenter(form, this.pages)
             const { entity: datas = {} } = res.data
             try {
-                this.datas = datas.resultData || []
+                if (datas.resultData.length) {
+                    this.datas = datas.resultData
+                    $state.loaded()
+                    if (this.datas.length / 5 === 12) {
+                        $state.complete()
+                    }
+                    if (this.datas.length < this.pages.pageSize) {
+                        $state.complete()
+                    }
+                    this.pages.pageSize += 12
+                } else {
+                    $state.complete()
+                }
                 this.totalNum = datas.totalNum || 0
-                console.log(this.datas)
             } catch (error) {
                 this.datas = []
             } finally {
@@ -229,7 +241,10 @@ export default {
             sessionStorage.setItem('courseId', id)
             this.$router.push({
                 path: '/course/coursedetails',
-                query: { id: id, classificationParent: classificationParent }
+                query: {
+                    courseId: id,
+                    classificationParent: classificationParent
+                }
             })
         }
     }
@@ -244,6 +259,7 @@ export default {
 .cord {
     width: 100%;
     overflow: hidden;
+    margin-bottom: 50px;
     .cord-img {
     }
     ul {
@@ -257,6 +273,7 @@ export default {
             background: #fff;
             overflow: hidden;
             border: solid 1px #ededed;
+            border-radius: 4px;
             cursor: pointer;
             overflow: hidden;
             &:nth-child(4n) {
@@ -268,6 +285,19 @@ export default {
                 padding: 0 10px;
                 box-sizing: border-box;
                 margin-bottom: 8px;
+                h3 {
+                    height: 30px;
+                    line-height: 30px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    font-weight: 700;
+                    font-size: 16px;
+                    font-weight: normal;
+                    font-stretch: normal;
+                    letter-spacing: 1.6px;
+                    color: #262626;
+                }
                 span {
                     display: inline-block;
                     line-height: 36px;
@@ -277,6 +307,10 @@ export default {
                     font-stretch: normal;
                     letter-spacing: 1.6px;
                     color: #262626;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+
                     overflow: hidden;
                     text-overflow: ellipsis;
                     white-space: nowrap;
@@ -319,6 +353,16 @@ export default {
     .el-form-item {
         width: 138px;
         height: 32px;
+    }
+}
+.basename {
+    width: 230px;
+    /deep/.el-form-item {
+        width: 230px;
+        height: 32px;
+        .el-input-l {
+            width: 230px;
+        }
     }
 }
 </style>

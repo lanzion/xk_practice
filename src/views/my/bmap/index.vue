@@ -16,12 +16,12 @@ export default {
     },
     mounted() {
         this.$nextTick(() => {
-            var map = new BMap.Map('allmap') // 初始化map, 绑定id=allmap
-            var point = new BMap.Point(
+            let map = new BMap.Map('allmap') // 初始化map, 绑定id=allmap
+            let point = new BMap.Point(
                 Number(this.$route.query.lng),
                 Number(this.$route.query.lat)
             ) // 初始化point, 给定一个默认x,y值
-            map.centerAndZoom(point, 20) // 将point点放入map中，展示在页面中心展示，10=缩放程度
+            map.centerAndZoom(point, 15) // 将point点放入map中，展示在页面中心展示，10=缩放程度
             map.enableScrollWheelZoom() // 开启滚动鼠标滑轮
             map.addControl(new BMap.NavigationControl())
             map.addControl(new BMap.ScaleControl())
@@ -47,7 +47,7 @@ export default {
                     title: 'Hello' + i // 信息窗口标题
                 })
                 // 将data中的name加入地图中
-                var label = new BMap.Label(e.name, {
+                let label = new BMap.Label(e.name, {
                     offset: new BMap.Size(25, 5)
                 })
                 markerFun(pointNumber, infoWindow, label)
@@ -64,10 +64,10 @@ export default {
             }
 
             // 获取当前地理位置
-            // var geolocation = new BMap.Geolocation()
+            // let geolocation = new BMap.Geolocation()
             // geolocation.getCurrentPosition(function (r) {
             //     if (this.getStatus() == BMAP_STATUS_SUCCESS) {
-            //         var mk = new BMap.Marker(r.point)
+            //         let mk = new BMap.Marker(r.point)
             //         map.addOverlay(mk)
             //         map.panTo(r.point)
             //         // alert('您的位置：' + r.point.lng + ',' + r.point.lat);

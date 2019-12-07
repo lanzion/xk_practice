@@ -70,6 +70,9 @@ const activityresultdetail = () => import('@/views/my/activity/activityresults/a
 // 活动中心--活动报名
 const activityregistration = () => import('@/views/my/activity/activityregistration/index')
 
+// 活动中心--活动报名--详情
+const activityregistrationdetail = () => import('@/views/my/activity/activityregistration/activityregistrationdetail')
+
 // ---------------------------------------------------------------------------------------
 
 // 通知公告
@@ -326,6 +329,11 @@ export default new Router({
         path: '/activity/activityregistration', // 活动报名
         name: 'activityregistration',
         component: activityregistration,
+    },
+    {
+        path: '/activity/activityregistration/activityregistrationdetail', // 活动报名--详情
+        name: 'activityregistrationdetail',
+        component: activityregistrationdetail,
     },
         // ------------------------------------------------------------
 

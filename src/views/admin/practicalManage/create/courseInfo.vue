@@ -24,10 +24,7 @@
         :on-change="uploadCover"
         @remove="remove"
       ></ali-upload>
-      <div class="upload_tips">
-        web端实践详情页的banner图, 仅支持JPG、GIF、PNG、JPEG格式，文件小于 5 M。
-        建议上传的图片像素为 600 x 370
-      </div>
+      <div class="upload_tips">仅支持JPG、GIF、PNG、JPEG格式，文件小于 5 M。建议上传的图片像素为 600 x 370</div>
     </el-form-item>
 
     <el-form-item label="适合学段" prop="fit">

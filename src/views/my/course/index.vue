@@ -1,6 +1,6 @@
 <template>
   <div class="course">
-    <swriper :type="imgnum" />
+    <!-- <swriper :type="imgnum" /> -->
     <div class="container">
       <courselist />
     </div>
@@ -15,8 +15,8 @@ export default {
         }
     },
     components: {
-        swriper: resolve =>
-            require(['@/components/my/swriper/swriper'], resolve),
+        // swriper: resolve =>
+        //     require(['@/components/my/swriper/swriper'], resolve),
         courselist: resolve =>
             require(['@/views/my/course/courselist/courselist'], resolve),
     }

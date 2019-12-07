@@ -58,7 +58,6 @@
             :props="defaultProps"
             :check-strictly="isCheckStrictly"
             :filter-node-method="filterNode"
-            :default-checked-keys="form.permissList"
             @check-change="getPermiss"
             v-loading="isLoading1"
           ></el-tree>
@@ -234,6 +233,11 @@ export default {
           const { code, entity: datas } = res.data;
           if (code === 200 && datas) {
             this.datas = datas[0].children;
+            setTimeout(()=>{
+              this.form.permissList.forEach(value=>{
+                this.$refs.tree.setChecked(value,true,false)
+              })
+            },500)
           }
         })
         .finally(() => {

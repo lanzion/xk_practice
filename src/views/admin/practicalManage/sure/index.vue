@@ -1,30 +1,22 @@
 <template>
   <div class="sure">
+    <!-- <div class="tab" v-if="identity!=13">
+      <el-menu
+        :default-active="activeIndex"
+        class="el-menu-demo"
+        mode="horizontal"
+        @select="handleSelect"
+      >
+        <el-menu-item index="1">课程活动</el-menu-item>
+        <el-menu-item index="2">开放式活动</el-menu-item>
+      </el-menu>
+    </div> -->
     <div class="start-stups">
       <div class="start-title">活动进度:</div>
-      <div class="start-stups-col">
-        <span :class="active > 0 ? 'start-stups-num active':'start-stups-num' ">1</span>
-        <span :class="active > 0 ? 'start-stups-rows active':'start-stups-rows' ">学校发起活动</span>
-        <span :class="active > 0 ? 'start-stups-width active':'start-stups-width' "></span>
-      </div>
-      <div class="start-stups-col">
-        <span :class="active > 1 ? 'start-stups-num active':'start-stups-num' ">2</span>
-        <span :class="active > 1 ? 'start-stups-rows active':'start-stups-rows' ">基地/机构确认活动</span>
-        <span :class="active > 1 ? 'start-stups-width active':'start-stups-width' "></span>
-      </div>
-      <div class="start-stups-col">
-        <span :class="active > 2 ? 'start-stups-num active':'start-stups-num' ">3</span>
-        <span :class="active > 2 ? 'start-stups-rows active':'start-stups-rows' ">教育局确认活动</span>
-        <span :class="active > 2 ? 'start-stups-width active':'start-stups-width' "></span>
-      </div>
-      <div class="start-stups-col">
-        <span :class="active > 3 ? 'start-stups-num active':'start-stups-num' ">4</span>
-        <span :class="active > 3 ? 'start-stups-rows active':'start-stups-rows' ">开展实践活动</span>
-        <span :class="active > 3 ? 'start-stups-width active':'start-stups-width' "></span>
-      </div>
-      <div class="start-stups-col">
-        <span :class="active > 4 ? 'start-stups-num active':'start-stups-num' ">5</span>
-        <span :class="active > 4 ? 'start-stups-rows active':'start-stups-rows' ">活动评价</span>
+      <div class="start-stups-col" v-for="(item,index) in progress" :key="index">
+        <span :class="active > index ? 'start-stups-num active':'start-stups-num' ">{{index+1}}</span>
+        <span :class="active > index ? 'start-stups-rows active':'start-stups-rows' ">{{item}}</span>
+        <span :class="active > index ? 'start-stups-width active':'start-stups-width' "></span>
       </div>
     </div>
 
@@ -37,7 +29,16 @@
                 }"
       />
     </section>
-    <el-table ref="table" :data="listData" stripe align="center" v-loading="isLoading" border @selection-change="changeSelection">
+    <!-- 课程活动 -->
+    <el-table
+      ref="table"
+      :data="listData"
+      stripe
+      align="center"
+      v-loading="isLoading"
+      border
+      @selection-change="changeSelection"
+    >
       <el-table-column type="selection" align="center" width="55"></el-table-column>
       <el-table-column prop="courseName" label="课程名称" align="center" show-overflow-tooltip />
       <el-table-column label="课程分类" align="center" show-overflow-tooltip>
@@ -102,7 +103,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" align="center" :width="operateWidth">
+      <el-table-column label="操作" align="center" fixed="right" :width="operateWidth">
         <template slot-scope="scope">
           <list-operate
             :items="listBtnGroup"
@@ -115,6 +116,8 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 开放式活动 -->
+
     <pagination :param="pages" :total="totalNum" @change="getDatas"></pagination>
 
     <el-dialog title :visible.sync="centerDialogVisible" width="965px" center>
@@ -192,12 +195,15 @@
           v-print="'#printMe'"
           v-if="confirmation.baseInstAuditStatus==1&&confirmation.eduAgencyAuditStatus==1"
         >打印</el-button>
-          <el-button
+        <el-button
           v-if="!(confirmation.baseInstAuditStatus==1&&confirmation.eduAgencyAuditStatus==1)"
-            type="primary"
-            style="background-color: rgba(51,161,255,0.5);border-color:rgba(51,161,255,0.5);"
-          >打印</el-button>
-          <p class="print_tips" v-if="!(confirmation.baseInstAuditStatus==1&&confirmation.eduAgencyAuditStatus==1)">基地/机构、教育局确认后方可打印</p>
+          type="primary"
+          style="background-color: rgba(51,161,255,0.5);border-color:rgba(51,161,255,0.5);"
+        >打印</el-button>
+        <p
+          class="print_tips"
+          v-if="!(confirmation.baseInstAuditStatus==1&&confirmation.eduAgencyAuditStatus==1)"
+        >基地/机构、教育局确认后方可打印</p>
       </div>
     </el-dialog>
   </div>
@@ -225,8 +231,10 @@ export default {
 
   data() {
     return {
+      progress:['学校发起活动','基地/机构确认活动','教育局确认活动','开展实践活动','活动评价'],
+      activeIndex: '1',
       pos: "0",
-      active: 1,
+      active: 2,
       activityState: activityState,
       listData: [],
       centerDialogVisible: false,
@@ -279,10 +287,20 @@ export default {
   },
   created() {
     this.getDatas();
-    if(this.identity=='13') this.active = 2
-    else this.active = 3
+    if (this.identity == "13") this.active = 2;
+    else this.active = 3;
   },
   methods: {
+    handleSelect(key, keyPath) {
+      console.log(this.activeIndex);
+      if(key==1){
+        this.progress = ['学校发起活动','基地/机构确认活动','教育局确认活动','开展实践活动','活动评价'];
+        this.active = 3;
+      }else{
+        this.progress = ['基地/机构发起活动','教育局确认活动','开展实践活动','活动评价'];
+        this.active = 2;
+      }
+    },
     // 重置分页
     resetPage() {
       this.$set(this.pages, "pageNum", 1);
@@ -311,12 +329,12 @@ export default {
     overshow() {
       if (!this.multipleSelection.length) {
         this.$message({
-          message: '最少要选择一个活动',
+          message: "最少要选择一个活动",
           type: "warning"
         });
-        return
+        return;
       }
-      this.confirmActivity(true)
+      this.confirmActivity(true);
     },
     confirmActivity(isBatch) {
       let ids = [];
@@ -327,9 +345,12 @@ export default {
       } else {
         ids = [this.confirmation.activityId];
       }
-      let txt = ''
-      if(this.identity=='13') txt = "确认活动审核通过吗？确认后活动将提交教育局审核。";
-      else txt = "确认活动审核通过吗？确认后学校、基地/机构将遵照确认书开展实践活动。";
+      let txt = "";
+      if (this.identity == "13")
+        txt = "确认活动审核通过吗？确认后活动将提交教育局审核。";
+      else
+        txt =
+          "确认活动审核通过吗？确认后学校、基地/机构将遵照确认书开展实践活动。";
       const h = this.$createElement;
       this.$msgbox({
         title: "",
@@ -361,7 +382,7 @@ export default {
                 }
               } catch (err) {
                 console.log(err);
-              }finally {
+              } finally {
                 instance.confirmButtonLoading = false;
               }
             });
@@ -407,6 +428,7 @@ export default {
   margin-top: 10px;
   margin-bottom: 20px;
   padding: 0 10px;
+  min-width: 1300px;
   .start-title {
     float: left;
     height: 50px;
@@ -425,14 +447,15 @@ export default {
     .start-stups-num {
       display: inline-block;
       text-align: center;
-      margin-top: 10px;
       margin-right: 10px;
-      width: 30px;
-      height: 30px;
+      width: 20px;
+      height: 20px;
       line-height: 30px;
       color: #ccc;
       border: 2px solid #ccc;
       border-radius: 50%;
+      vertical-align: middle;
+      line-height: 20px;
     }
     .start-stups-rows {
       display: inline-block;
@@ -443,7 +466,7 @@ export default {
     .start-stups-width {
       display: inline-block;
       border: 1px solid #ccc;
-      width: 90px;
+      width: 35px;
       vertical-align: middle;
     }
     .active {
@@ -516,5 +539,8 @@ export default {
 }
 .print_tips {
   color: #d9001b;
+}
+.tab{
+  margin-top: 20px;
 }
 </style>
