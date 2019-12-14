@@ -3,7 +3,7 @@
         <div class="nimi">
             <div class="g-search--wrap clearfix">
                 <el-form :inline="true" class="el-form-l fl" @submit.native.prevent>
-                    <el-form-item>
+                    <!-- <el-form-item>
                         <el-cascader
                             v-model="values"
                             :options="arr"
@@ -11,7 +11,18 @@
                             @change="resetPage"
                             :props="{ expandTrigger: 'hover' }"
                         ></el-cascader>
-                    </el-form-item>
+                    </el-form-item> -->
+
+                     <el-form-item class="el-form-item-wd">
+                    <el-cascader
+                        v-model="values"
+                        placeholder="课程分类"
+                        :props="prop"
+                        @change="resetPage"
+                        :show-all-levels="false"
+                        class="font_pla"
+                    ></el-cascader>
+                </el-form-item>
 
                     <el-form-item>
                         <el-select
@@ -101,7 +112,7 @@
                     </div>
                     <div class="cord-sl">
                         <i :style="{'backgroundImage':'url('+kechengfenlei+')'}"></i>
-                        <span>{{g.parentName}}>{{g.childrenName}}</span>
+                        <span>{{g.parentName}}</span>
                     </div>
                     <div class="cord-sl">
                         <i :style="{'backgroundImage':'url('+kechengleixing+')'}"></i>
@@ -149,11 +160,53 @@ export default {
             dengji: require('../../../../../static/img/dengji.png'),
             jidi: require('../../../../../static/img/jidi.png'),
             kechengfenlei: require('../../../../../static/img/kechengfenlei.png'),
-            kechengleixing: require('../../../../../static/img/kechengleixing.png')
+            kechengleixing: require('../../../../../static/img/kechengleixing.png'),
+            prop: {
+                lazy: true,
+                lazyLoad(node, resolve) {
+                    setTimeout(() => {
+                        if (node.level == 0) {
+                            requestnavigation()
+                                .then(res => {
+                                    console.log(res.data.typelist)
+                                    const cities = res.data.typelist.map(
+                                        (value, i) => ({
+                                            value: value.code,
+                                            label: value.name,
+                                            leaf: node.level >= 0
+                                        })
+                                    )
+                                    // 通过调用resolve将子节点数据返回，通知组件数据加载完成
+                                    resolve(cities)
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                })
+                        }
+                        // if (node.level == 1) {
+                        //     requestRegion({ pcode: node.value })
+                        //         .then(res => {
+                        //             const areas = res.data.appendInfo.list.map(
+                        //                 (value, i) => ({
+                        //                     value: value.code,
+                        //                     label: value.name,
+                        //                     leaf: node.level >= 1
+                        //                 })
+                        //             )
+                        //             // 通过调用resolve将子节点数据返回，通知组件数据加载完成
+                        //             resolve(areas)
+                        //         })
+                        //         .catch(err => {
+                        //             console.log(err)
+                        //         })
+                        // }
+                    }, 500)
+                }
+            }
         }
     },
     created() {
-        this.requestnavigation()
+        // this.requestnavigation()
         // this.getlists()
     },
     watch: {

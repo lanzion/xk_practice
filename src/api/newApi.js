@@ -125,10 +125,24 @@ const resultAuditUnPass = (options = {}) => xhr.post('/practice/activity/result/
 const resultAuditBatchUnPass = (options = {}) => xhr.post('/practice/activity/result/audit/batch-un-pass', options)
 // 成果屏蔽或启用
 const resultLockChange = (options = {}) => xhr.post('/practice/activity/result/lock/change', options)
-// [活动日历]-月-场次列表
-const schoolActivityDayTimes = (options = {}) => xhr.post('/practice/statistics/activity/school/day-times', options)
-// [活动日历]-月-场次列表
-const schoolActivityDayDetail = (options = {}) => xhr.post('/practice/statistics/activity/school/day-detail', options)
+// [活动日历]-月-场次列表-学校
+const schoolActivityDayTimes = (options = {}) => xhr.post('/practice/activity/calendar/school/day-times', options)
+// [活动日历]-日-活动统计-学校
+const schoolActivityDayDetail = (options = {}) => xhr.post('/practice/activity/calendar/school/day-detail', options)
+// [活动日历]-月-场次列表-基地
+const baseinstActivityDayTimes = (options = {}) => xhr.post('/practice/activity/calendar/baseinst/day-times', options)
+// [活动日历]-日-活动统计-基地
+const baseinstActivityDayDetail = (options = {}) => xhr.post('/practice/activity/calendar/baseinst/day-detail', options)
+// [活动日历]-月-场次列表-教育局
+const areaActivityDayTimes = (options = {}) => xhr.post('/practice/activity/calendar/area/day-times', options)
+// [活动日历]-日-活动统计-教育局
+const areatActivityDayDetail = (options = {}) => xhr.post('/practice/activity/calendar/area/day-detail', options)
+// 获取开放式活动列表 - 基地
+const openActivityPager = (options = {}, page) => xhr.post(`/practice/openActivity/selectPager?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
+// 参与情况
+const openActivitySignupPager = (options = {}, page) => xhr.post(`/practice/openActivitySignup/selectPager?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
+// 查看确认书
+const openActivityCheckConfirmationById = (options = {}) => xhr.post(`/practice/openActivity/CheckConfirmationById`, options)
 
 export {
     selectUserList,
@@ -190,5 +204,12 @@ export {
     activityResultPublishLockList,
     resultLockChange,
     schoolActivityDayTimes,
-    schoolActivityDayDetail
+    schoolActivityDayDetail,
+    baseinstActivityDayTimes,
+    baseinstActivityDayDetail,
+    areaActivityDayTimes,
+    areatActivityDayDetail,
+    openActivityPager,
+    openActivitySignupPager,
+    openActivityCheckConfirmationById
 }

@@ -3,35 +3,33 @@
 import 'babel-polyfill'
 import Vue from 'vue'
 import App from './App'
+import ElementUI from 'element-ui'
 import router from '@/router/admin'
 import store from '@/store/index'
 import '@utils/lib/aliyun-upload-sdk-1.4.0.min.js'
 import OSS from 'ali-oss'
-
-import '@utils/filter/index'
 import methods from '@/utils/method/index'
 import Component from '@/components/admin/index'
 import mixin from '@/mixin/admin-common'
 import Cookies from '@utils/utility/cookies'
 import Axios from 'Axios'
-import ElementUI from 'element-ui'
 import Clickoutside from 'element-ui/src/utils/clickoutside'
 import VueCropper from 'vue-cropper'
-
 import echarts from 'echarts'
-
+import '@utils/filter/index'
 import '@/assets/css/index.scss'
 import '@/assets/css/theme/reset-ele-admin.scss'
 import '@/assets/css/common/admin-common.scss'
 import { showLoading, hideLoading } from '@/assets/js/loading.js'
 import Print from 'vue-print-nb'
+Vue.use(ElementUI, { size: 'small', zIndex: 0 })
 Vue.use(Print)
 window.OSS = OSS
 
 Vue.config.productionTip = false
 
 Vue.mixin(mixin)
-Vue.use(ElementUI, { size: 'small', zIndex: 0 })
+
 Vue.use(Component)
 Vue.use(VueCropper)
 Vue.use(methods)

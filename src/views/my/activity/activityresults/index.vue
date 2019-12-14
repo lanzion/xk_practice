@@ -17,8 +17,8 @@
                         <ov-image :src-data="g.cover" :type="3" :img-height="'222px'"></ov-image>
                     </div>
                     <div class="activityresults-li-conent">
-                        <h3 :style="{'-webkit-box-orient':'vertical'}">{{g.title}}</h3>
-                        <p :style="{'-webkit-box-orient':'vertical'}">{{g.summary}}</p>
+                        <h3>{{cutString(g.title,120)}}</h3>
+                        <p>{{cutString(g.summary,160)}}</p>
                         <ul>
                             <li>
                                 <i :style="{backgroundImage:'url('+plo+')'}"></i>
@@ -145,9 +145,6 @@ export default {
                         line-height: 29px;
                         letter-spacing: 0px;
                         color: #333333;
-                        display: -webkit-box;
-                        -webkit-box-orient: vertical;
-                        -webkit-line-clamp: 2;
                         overflow: hidden;
                         word-break: break-all;
                     }
@@ -159,9 +156,6 @@ export default {
                         letter-spacing: 0px;
                         color: #333333;
                         line-height: 26px;
-                        display: -webkit-box;
-                        -webkit-box-orient: vertical;
-                        -webkit-line-clamp: 2;
                         overflow: hidden;
                         word-break: break-all;
                     }

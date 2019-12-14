@@ -208,6 +208,7 @@ export default {
                 line-height: 25px;
                 letter-spacing: 1px;
                 color: #333333;
+                word-break: break-all;
             }
         }
     }

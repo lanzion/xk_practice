@@ -136,7 +136,7 @@ export default {
                 box-sizing: border-box;
                 float: left;
                 margin-right: 30px;
-                &:nth-last-child(1) {
+                &:nth-last-child(3n) {
                     margin-right: 0px;
                 }
                 h3 {

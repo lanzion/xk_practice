@@ -2,13 +2,26 @@
   <el-form ref="form" class="g-form--wrap" label-width="100px" :model="form" :rules="rules">
     <div class="title">课程基本信息</div>
     <el-form-item label="基地/机构" prop="baseinfoId">
-      <el-select v-model="form.baseinfoId" filterable placeholder="请选择基地/机构" v-el-select-loadmore="loadmore">
+      <el-select
+        v-model="form.baseinfoId"
+        filterable
+        placeholder="请选择基地/机构"
+        v-el-select-loadmore="loadmore"
+      >
         <el-option v-for="item in beasList" :key="item.id" :label="item.name" :value="item.id"></el-option>
       </el-select>
     </el-form-item>
 
-    <el-form-item label="课程分类" prop="values">
-      <el-cascader v-model="form.values" :options="options" :props="{ expandTrigger: 'hover' }" placeholder="请选择课程分类"></el-cascader>
+    <el-form-item label="课程分类" prop="classificationParent">
+      <!-- <el-cascader v-model="form.values" :options="options" :props="{ expandTrigger: 'hover' }" placeholder="请选择课程分类"></el-cascader> -->
+      <el-select v-model="form.classificationParent" filterable placeholder="请选择课程分类">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
+      </el-select>
     </el-form-item>
 
     <el-form-item label="课程名称" prop="name">
@@ -122,7 +135,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import { activityList,BaseList } from "@/api/newApi";
+import { activityList, BaseList } from "@/api/newApi";
 import {
   courseEdit,
   courseAdd,
@@ -157,18 +170,21 @@ export default {
     EditorBar: EditorBar
   },
   directives: {
-    'el-select-loadmore': {
-      bind(el, binding) {
-        const SELECTWRAP_DOM = el.querySelector('.el-select-dropdown .el-select-dropdown__wrap');
-        SELECTWRAP_DOM.addEventListener('scroll', function () {
-          const condition = this.scrollHeight - this.scrollTop <= this.clientHeight;
-          if (condition) {
-            binding.value();
-          }
-        });
-      }
-    }
-  },
+    "el-select-loadmore": {
+      bind(el, binding) {
+        const SELECTWRAP_DOM = el.querySelector(
+          ".el-select-dropdown .el-select-dropdown__wrap"
+        );
+        SELECTWRAP_DOM.addEventListener("scroll", function() {
+          const condition =
+            this.scrollHeight - this.scrollTop <= this.clientHeight;
+          if (condition) {
+            binding.value();
+          }
+        });
+      }
+    }
+  },
   data() {
     return {
       auditStatus: auditStatus,
@@ -238,7 +254,7 @@ export default {
             trigger: ["change"]
           }
         ],
-        values: [
+        classificationParent: [
           {
             required: true,
             message: "请选择课程分类",
@@ -291,11 +307,11 @@ export default {
           }
         ]
       },
-      baseData:{
+      baseData: {
         pageIndex: 1,
-        pageSize: 20,
+        pageSize: 20
       },
-      beasList:[]
+      beasList: []
     };
   },
   watch: {},
@@ -303,7 +319,7 @@ export default {
     this.getActivityTypeParent();
     this.getDetailData();
   },
-  mounted () {
+  mounted() {
     this.getBaseList(this.baseData);
   },
   methods: {
@@ -311,12 +327,12 @@ export default {
       this.baseData.pageIndex++;
       this.getBaseList(this.baseData);
     },
-    getBaseList(baseData){
-      BaseList({},baseData).then(res=>{
+    getBaseList(baseData) {
+      BaseList({}, baseData).then(res => {
         const { entity: datas = {} } = res.data;
         let _list = datas.resultData || [];
-        this.beasList = [...this.beasList,..._list]
-      })
+        this.beasList = [...this.beasList, ..._list];
+      });
     },
     coursePreparationChange(val) {
       this.form.coursePreparation = val;
@@ -345,7 +361,7 @@ export default {
                 }
               ];
               this.form = datas;
-              let _resourceList = []
+              let _resourceList = [];
               datas.resourceList.forEach(o => {
                 _resourceList.push({
                   name: o.resourceName,
@@ -360,7 +376,7 @@ export default {
                 datas.classificationParent,
                 datas.classificationChildren
               ];
-              this.form.fit = datas.fit.split(',')
+              this.form.fit = datas.fit.split(",");
               console.log(this.form);
             } else {
               this.$message({
@@ -395,7 +411,6 @@ export default {
             });
 
             this.options = arrBox;
-            
           }
         })
         .finally(() => {});
@@ -418,10 +433,10 @@ export default {
           });
           formList.resourceList = resourceList;
           formList.cover = this.getFileUrl(formList.cover[0]);
-          formList.classificationParent = formList.values[0];
-          formList.classificationChildren = formList.values[1];
+          // formList.classificationParent = formList.values[0];
+          // formList.classificationChildren = formList.values[1];
           if (!formList.auditStatus) formList.auditStatus = "A";
-          formList.fit = formList.fit.join(',')
+          formList.fit = formList.fit.join(",");
           console.log(formList);
           if (formList.id) {
             head = courseEdit;

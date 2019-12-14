@@ -2,6 +2,7 @@
     <div class="rollingnumbers">
         <div class="select">
             <div class="select_e">
+                <i :style="{backgroundImage:'url('+zuo+')'}"></i>
                 <span class="select_r" type="text" @mouseenter="getistrue" @mouseleave="setistrue">
                     {{select}}
                     <i class="select_i" :style="{backgroundImage:'url('+jiantou+')'}"></i>
@@ -14,6 +15,7 @@
                         >{{g.value}}</li>
                     </ul>
                 </span>
+                <i :style="{backgroundImage:'url('+you+')'}"></i>
             </div>
         </div>
         <div class="container">
@@ -89,6 +91,8 @@ export default {
             jidishuliang: require('../../../../../static/img/jidishuliang.png'),
             huodongzongchangci: require('../../../../../static/img/huodongzongchangci.png'),
             xuexizongkeshi: require('../../../../../static/img/xuexizongkeshi.png'),
+            zuo: require('../../../../../static/img/zuo.png'),
+            you: require('../../../../../static/img/you.png'),
             arr: [
                 {
                     name: '001',
@@ -162,18 +166,34 @@ export default {
         .select_e {
             width: 100%;
             height: 100%;
+            i{
+                display: inline-block;
+                height: 18px;
+                width: 18px;
+                background-repeat: no-repeat;
+                background-size: 18px;
+                background-position: center;
+                vertical-align: middle;
+                &:nth-child(1){
+                    margin-left: 14px;
+                }
+                &:nth-child(1){
+                    margin-right: 14px;
+                }
+            }
             .select_r {
                 display: inline-block;
+                margin: 0 auto;
                 text-align: center;
                 font-weight: 500;
                 font-size: 18px;
-                width: 100%;
+                width: 134px;
                 height: 100%;
                 cursor: pointer;
                 position: relative;
                 letter-spacing: 0px;
                 color: #262626;
-
+                vertical-align: middle;
                 // &::before {
                 //     content: "——";
                 //     margin-right: 20px;
@@ -197,11 +217,11 @@ export default {
                     background-position: center;
                     background-repeat: no-repeat;
                     background-size: 20px;
-                    vertical-align: middle;
+                    // vertical-align: middle;
                 }
                 .select_u {
                     position: absolute;
-                    left: 45%;
+                    left: -25%;
                     height: 0px;
                     top: 100%;
                     width: 180px;
@@ -337,7 +357,7 @@ export default {
                     div {
                         &:nth-child(1) {
                             margin-right: 10px;
-                            margin-left: 20px;
+                            margin-left: 4px;
                         }
                         &:nth-child(2) {
                         }

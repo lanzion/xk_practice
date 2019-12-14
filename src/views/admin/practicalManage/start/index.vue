@@ -20,7 +20,15 @@
     <div class="g-search--wrap clearfix">
       <el-form :inline="true" class="fl" @submit.native.prevent>
         <el-form-item label="课程分类">
-          <el-cascader v-model="dataForm.values" :options="arr" :props="{ expandTrigger: 'hover' }"></el-cascader>
+          <!-- <el-cascader v-model="dataForm.values" :options="arr" :props="{ expandTrigger: 'hover' }"></el-cascader> -->
+          <el-select v-model="form.classificationParent" clearable filterable placeholder="请选择课程分类">
+            <el-option
+              v-for="item in arr"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item>
@@ -39,9 +47,7 @@
     <el-table ref="table" :data="listData" stripe align="center" v-loading="isLoading" border>
       <el-table-column prop="name" label="课程名称" align="center" show-overflow-tooltip />
       <el-table-column label="课程分类" align="center" show-overflow-tooltip>
-        <template
-          slot-scope="scope"
-        >{{scope.row.classificationParentName+'>'+scope.row.classificationChildrenName}}</template>
+        <template slot-scope="scope">{{scope.row.classificationParentName}}</template>
       </el-table-column>
       <el-table-column prop="baseInstName" label="基地/机构" align="center" show-overflow-tooltip />
       <el-table-column prop="eduName" label="发布教育局" align="center" show-overflow-tooltip></el-table-column>
@@ -110,7 +116,7 @@
         <el-row :gutter="20">
           <el-col :span="8">
             <span>课程分类:</span>
-            <span>{{courseinfo.classificationParentName+'>'+courseinfo.classificationChildrenName}}</span>
+            <span>{{courseinfo.classificationParentName}}</span>
           </el-col>
           <el-col :span="8">
             <span>适合学段:</span>

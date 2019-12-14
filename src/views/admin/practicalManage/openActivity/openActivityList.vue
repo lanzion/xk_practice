@@ -2,33 +2,33 @@
   <div class="openactivitylist">
     <div class="g-search--wrap clearfix">
       <el-form :inline="true" class="fl elFrom" @submit.native.prevent>
-        <el-form-item label="活动分类">
-          <el-select v-model="form.activityStatus" placeholder="请选择" clearable>
+        <!-- <el-form-item label="活动分类">
+          <el-select v-model="form.activityTypeParent" placeholder="请选择" clearable>
             <el-option
-              v-for="item in activityStatus"
-              :key="item.code"
-              :label="item.name"
-              :value="item.code"
+              v-for="item in activityTypeParent"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
             ></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="活动状态">
-          <el-select v-model="form.activityStatus" placeholder="请选择" clearable>
+          <el-select v-model="form.status" placeholder="请选择" clearable>
             <el-option
-              v-for="item in activityStatus"
-              :key="item.code"
-              :label="item.name"
-              :value="item.code"
+              v-for="item in status"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
             ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="是否收费">
-          <el-select v-model="form.activityStatus" placeholder="请选择" clearable>
+          <el-select v-model="form.free" placeholder="请选择" clearable>
             <el-option
-              v-for="item in activityStatus"
-              :key="item.code"
-              :label="item.name"
-              :value="item.code"
+              v-for="item in free"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -39,37 +39,45 @@
         <el-button type="primary" @click="selectList" plain>搜索</el-button>
       </el-form>
     </div>
-    <iTable :data="listData" :col-configs="colConfigs" :loading="true" row-key="id">
-      <el-table-column slot="selection" type="selection"></el-table-column>
-      <el-table-column slot="status" label="状态" align="center">
-        <template slot-scope="scope">
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="scope"
-            placement="bottom-start"
-          >
-          <el-button type="text">{{scope.row.status}}</el-button>
-          </el-tooltip>
-        </template>
-      </el-table-column>
+    <el-table ref="table" :data="listData" stripe align="center" v-loading="isLoading" border>
+      <el-table-column prop="name" label="课程名称" align="center" show-overflow-tooltip />
 
-      <el-table-column slot="operate" label="操作" fixed="right" :width="operateWidth" align="center">
+      <el-table-column prop="typeParentName" label="活动分类" align="center" show-overflow-tooltip />
+      <el-table-column label="报名时间" align="center" sortable show-overflow-tooltip>
+        <template slot-scope="scope">{{scope.row.enrollStartDate}}至{{scope.row.enrollEndDate}}</template>
+      </el-table-column>
+      <el-table-column label="活动时间" align="center" sortable show-overflow-tooltip>
+        <template
+          slot-scope="scope"
+        >{{scope.row.activityStartDate}}至{{scope.row.activityEndDate}} 共{{scope.row.actDateNum}}场</template>
+      </el-table-column>
+      <el-table-column label="每场人数限制" align="center" sortable show-overflow-tooltip>
+        <template slot-scope="scope">{{scope.row.enrollMaxNum}}人</template>
+      </el-table-column>
+      <el-table-column label="是否收费" align="center" sortable show-overflow-tooltip>
+        <template slot-scope="scope">{{scope.row.free?scope.row.price+'元':'免费'}}</template>
+      </el-table-column>
+      <el-table-column label="教育局确认状态" align="center" show-overflow-tooltip>
+        <template slot-scope="scope">{{scope.row.status|filterStatus}}</template>
+      </el-table-column>
+      <el-table-column prop="actStatusName" label="活动状态" align="center" show-overflow-tooltip />
+
+      <el-table-column label="操作" fixed="right" :width="operateWidth" align="center">
         <template slot-scope="scope">
           <list-operate
             :items="listBtnGroup"
             :data="scope.row"
             :index="scope.$index"
             v-bind="{
-                        edit: { query: { id: 'id'} },// 编辑
+                        edit: {visible:scope.row.status!='2', query: { id: 'id'} },// 编辑
                          look: { callback: look }, // 
                          partake: { query: { id: 'id'} }, // 参与情况
-                         confirm: { query: { id: 'id'} }, 
+                         confirm: {visible:scope.row.status=='0', query: { id: 'id'} }, 
                     }"
           />
         </template>
       </el-table-column>
-    </iTable>
+    </el-table>
     <pagination :param="pages" :total="totalNum" @change="getDatas"></pagination>
 
     <el-dialog title :visible.sync="centerDialogVisible" width="965px" center>
@@ -137,45 +145,98 @@
 </template>
 
 <script>
-import iTable from "@/components/admin/common/iTable";
 import { mapState, mapActions } from "vuex";
 import permission from "@/mixin/admin-operate";
 import user from "@/mixin/admin-user";
+import { getActivityTypeParent } from "@/api/resetApi";
+import { openActivityPager } from "@/api/newApi";
 export default {
-  components: { iTable },
   mixins: [permission, user],
   data() {
     return {
-      totalNum:0,
-      activityStatus: [],
-      form: {},
-      listData: [{ name: "1233333333333333333333333333333333333333", id: 1, status: 0 }],
-      colConfigs: [
-        { slot: "selection" },
-        { prop: "name", label: "活动名称" },
-        { prop: "name", label: "活动分类" },
-        { prop: "name", label: "基地/机构" },
-        { prop: "name", label: "报名时间" },
-        { prop: "name", label: "活动时间" },
-        { prop: "name", label: "每场人数限制" },
-        { prop: "name", label: "是否收费" },
-        { prop: "name", label: "教育局确认状态" },
-        { slot: "status", label: "活动状态" },
-        { prop: "name", label: "报名人数" },
-        { prop: "name", label: "参加人数" },
-        { slot: "operate" }
+      totalNum: 0,
+      activityTypeParent: [],
+      status: [
+        { value: 1, label: "未确认" },
+        { value: 2, label: "已确认" },
+        { value: 3, label: "不通过" }
       ],
+      free: [{ value: 0, label: "免费" }, { value: 1, label: "收费" }],
+      form: {},
+      listData: [],
       confirmation: {},
       centerDialogVisible: false
     };
   },
+  filters: {
+    filterStatus(val) {
+      let txt = "";
+      switch (val) {
+        case '1':
+          txt = "未确认";
+          break;
+        case '2':
+          txt = "已确认";
+          break;
+        case '3':
+          txt = "不通过";
+          break;
+        default:
+      }
+      return txt;
+    }
+  },
   methods: {
+    getActivityTypeParent() {
+      getActivityTypeParent({})
+        .then(res => {
+          const datas = res.data;
+          if (datas) {
+            let arrBox = [];
+            datas.typelist.forEach(o => {
+              let arr = o.dicDetailList.map(k => {
+                return {
+                  value: k.code,
+                  label: k.name
+                };
+              });
+              arrBox.push({
+                value: o.code,
+                label: o.name,
+                children: arr
+              });
+            });
+
+            this.activityTypeParent = arrBox;
+          }
+        })
+        .finally(() => {});
+    },
     selectList() {},
     edit(data) {},
     look(data) {
       this.centerDialogVisible = true;
     },
-    getDatas() {}
+    getDatas() {
+      this.isLoading = true
+      openActivityPager(this.form, this.pages).then(res => {
+        try {
+          let data = res.data;
+          if (data.code == 200) {
+            this.totalNum = data.totalNum;
+            this.listData = data.entity.resultData;
+          }
+        } catch (err) {
+          console.log(err);
+        } finally {
+          this.isLoading = false
+        }
+      });
+    }
+  },
+  created() {
+    this.getActivityTypeParent();
+    this.getDatas();
   }
 };
 </script>
@@ -232,7 +293,8 @@ export default {
     .el-row {
       margin-bottom: 20px;
     }
-    span,p {
+    span,
+    p {
       font-size: 16px;
       color: #333;
     }

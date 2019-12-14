@@ -5,24 +5,24 @@
                 <div class="page-fl-title">
                     <h3>{{schoolDetail.schoolName}}</h3>
                     <p id="conent" v-html="schoolDetail.remark">
-                        
-                        <span></span>
+                        <!-- <span></span> -->
                     </p>
+                    <span class="spanover"></span>
                     <h4 @click="go()">点击查看详情>></h4>
                 </div>
             </div>
             <div class="page-fr fr">
                 <div class="page-fr-one">
                     <ul>
-                        <li>
+                        <li v-if="schoolDetail.linkName !== null">
                             <i :style="{backgroundImage:'url('+plo+')'}"></i>
                             <span>{{schoolDetail.linkName}}</span>
                         </li>
-                        <li>
+                        <li v-if="schoolDetail.phone !== null">
                             <i :style="{backgroundImage:'url('+dianhua+')'}"></i>
                             <span>{{schoolDetail.phone}}</span>
                         </li>
-                        <li>
+                        <li v-if="schoolDetail.address !== null">
                             <i :style="{backgroundImage:'url('+dizhi+')'}"></i>
                             <span>
                                 {{schoolDetail.address}}
@@ -32,14 +32,14 @@
                                 ></i>
                             </span>
                         </li>
-                        <li>
+                        <li v-if="schoolDetail.pathUrl !== null">
                             <i :style="{backgroundImage:'url('+guanwang+')'}"></i>
                             <span>
                                 <a :href="schoolDetail.pathUrl">{{schoolDetail.pathUrl}}</a>
                             </span>
                         </li>
                     </ul>
-                    <div class>
+                    <div class v-if="schoolDetail.officialAccounts !== null">
                         <img :src="schoolDetail.officialAccounts" alt />
                     </div>
                 </div>
@@ -61,12 +61,8 @@
                         <ov-image :type="3" :src-data="g.cover" :img-height="'168px'"></ov-image>
                     </div>
                     <div class="page-fl-coure-ul-connet">
-                        <h3
-                            :style="{'-webkit-box-orient':'vertical'}"
-                        >{{g.title}}</h3>
-                        <p :style="{'-webkit-box-orient':'vertical'}">
-                           {{g.summary}}
-                        </p>
+                        <h3>{{cutString(g.title,50)}}</h3>
+                        <p>{{cutString(g.summary,120)}}</p>
                     </div>
                 </li>
             </ul>
@@ -101,9 +97,9 @@
 </template>
 
 <script>
-import { requestwebapischoolDetailbase } from '@/api/webApi/school'
-import { requestwebapiactivityresults } from '@/api/webApi/activity'
-import { requestwebapiLongitudeAndlatitude } from '@/api/webApi/base'
+import { requestwebapischoolDetailbase } from '@/api/webApi/school';
+import { requestwebapiactivityresults } from '@/api/webApi/activity';
+import { requestwebapiLongitudeAndlatitude } from '@/api/webApi/base';
 export default {
     name: 'schooldetailpage',
     data() {
@@ -133,7 +129,7 @@ export default {
         datas: {
             type: String,
             default() {
-                return ''
+                return '';
             }
         }
     },
@@ -153,7 +149,7 @@ export default {
                 }
             },
             deep: true
-        },
+        }
     },
     created() {
         this.schoolDetail = JSON.parse(sessionStorage.getItem('schoolDetail'))
@@ -232,7 +228,6 @@ export default {
                         lng: this.lng,
                         lat: this.lat,
                         name: this.datas.schoolName
-                                                 
                     }
                 })
                 window.open(href, '_blank')
@@ -266,7 +261,7 @@ export default {
                 path: '/activity/activityresult/activityresultdetail',
                 query: { activityresultsId: id }
             })
-        },
+        }
     }
 }
 </script>
@@ -279,6 +274,7 @@ export default {
             width: 862px;
             height: auto;
             .page-fl-title {
+                position: relative;
                 h3 {
                     width: 100%;
                     font-size: 26px;
@@ -297,19 +293,32 @@ export default {
                     height: 148px;
                     position: relative;
                     overflow: hidden;
-                    span {
-                        position: absolute;
-                        background: linear-gradient(
-                            to top,
-                            #fff,
-                            rgba(255, 255, 255, 0.5)
-                        );
-                        display: block;
-                        width: 100%;
-                        height: 30px;
-                        bottom: 0;
-                        left: 0;
-                    }
+                    // span {
+                    //     position: absolute;
+                    //     background: linear-gradient(
+                    //         to top,
+                    //         #fff,
+                    //         rgba(255, 255, 255, 0.5)
+                    //     );
+                    //     display: block;
+                    //     width: 100%;
+                    //     height: 30px;
+                    //     bottom: 0;
+                    //     left: 0;
+                    // }
+                }
+                .spanover {
+                    position: absolute;
+                    background: linear-gradient(
+                        to top,
+                        #fff,
+                        rgba(255, 255, 255, 0.5)
+                    );
+                    display: block;
+                    width: 100%;
+                    height: 30px;
+                    bottom: 38px;
+                    left: 0;
                 }
                 h4 {
                     font-size: 16px;
@@ -496,20 +505,16 @@ export default {
                         line-height: 24px;
                         letter-spacing: 0px;
                         color: #262626;
-                        display: -webkit-box;
-                        -webkit-box-orient: vertical;
-                        -webkit-line-clamp: 2;
                         overflow: hidden;
+                        word-break: break-all;
                     }
                     p {
                         font-size: 14px;
                         line-height: 25px;
                         letter-spacing: 0px;
                         color: #666666;
-                        display: -webkit-box;
-                        -webkit-box-orient: vertical;
-                        -webkit-line-clamp: 4;
                         overflow: hidden;
+                        word-break: break-all;
                     }
                 }
             }

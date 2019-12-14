@@ -3,9 +3,10 @@
         <div class="page-fl fl">
             <div class="page-fl-title">
                 <h3>{{baseDetail.name}}</h3>
-                <p id="conent" v-html="baseDetail.remark">
-                    <span></span>
+                <p  id="conent" v-html="baseDetail.remark">
+                    <!-- <span></span> -->
                 </p>
+                <span class="spanover"></span>
                 <h4 @click="go()">点击查看详情>></h4>
             </div>
             <div class="page-fl-coure">
@@ -30,7 +31,7 @@
                         <h3>{{g.name}}</h3>
                         <div class="page-fl-coure-ul-min">
                             <span>课程分类:</span>
-                            <span>{{g.parentName}}>>{{g.childrenName}}</span>
+                            <span>{{g.parentName}}</span>
                         </div>
                         <div class="page-fl-coure-ul-max">
                             <span>适合学段:</span>
@@ -81,15 +82,15 @@
         <div class="page-fr fr">
             <div class="page-fr-one">
                 <ul>
-                    <li>
+                    <li v-if="baseDetail.linkMan !== null">
                         <i :style="{backgroundImage:'url('+plo+')'}"></i>
                         <span>{{baseDetail.linkMan}}</span>
                     </li>
-                    <li>
+                    <li v-if="baseDetail.linkPhone !== null">
                         <i :style="{backgroundImage:'url('+dianhua+')'}"></i>
                         <span>{{baseDetail.linkPhone}}</span>
                     </li>
-                    <li>
+                    <li v-if="baseDetail.address !== null">
                         <i :style="{backgroundImage:'url('+dizhi+')'}"></i>
                         <span>
                             {{baseDetail.address}}
@@ -99,11 +100,11 @@
                             ></i>
                         </span>
                     </li>
-                    <li>
+                    <li v-if="baseDetail.transport !== null">
                         <i :style="{backgroundImage:'url('+jiaotong+')'}"></i>
                         <span>{{baseDetail.transport}}</span>
                     </li>
-                    <li>
+                    <li v-if="baseDetail.publishingUnitLevel !== null">
                         <i :style="{backgroundImage:'url('+dengji+')'}"></i>
                         <span v-if="baseDetail.publishingUnitLevel == 'A'">省级</span>
                         <span v-else-if="baseDetail.publishingUnitLevel == 'B'">市级</span>
@@ -111,16 +112,16 @@
                     </li>
                     <li>
                         <i :style="{backgroundImage:'url('+pingfeng+')'}"></i>
-                        <span>{{numFilter(baseDetail.scorse === null ? 5 : baseDetail.scorse )}}</span>
+                        <span>{{numFilter(baseDetail.scorse === null ? 5 : baseDetail.scorse )}}分</span>
                     </li>
-                    <li>
+                    <li v-if="baseDetail.pathUrl !== null">
                         <i :style="{backgroundImage:'url('+guanwang+')'}"></i>
                         <span>
                             <a :href="baseDetail.pathUrl">{{baseDetail.pathUrl}}</a>
                         </span>
                     </li>
                 </ul>
-                <div class>
+                <div class  v-if="baseDetail.officialAccounts !== null">
                     <img :src="baseDetail.officialAccounts" alt />
                 </div>
             </div>
@@ -404,6 +405,7 @@ export default {
         width: 862px;
         height: auto;
         .page-fl-title {
+            position: relative;
             h3 {
                 width: 100%;
                 font-size: 26px;
@@ -420,9 +422,22 @@ export default {
                 letter-spacing: 0px;
                 color: #333333;
                 height: 148px;
-                position: relative;
                 overflow: hidden;
-                span {
+                // .spanover {
+                //     position: absolute;
+                //     background: linear-gradient(
+                //         to top,
+                //         #fff,
+                //         rgba(255, 255, 255, 0.5)
+                //     );
+                //     display: block;
+                //     width: 100%;
+                //     height: 30px;
+                //     bottom: 0;
+                //     left: 0;
+                // }
+            }
+            .spanover {
                     position: absolute;
                     background: linear-gradient(
                         to top,
@@ -432,10 +447,9 @@ export default {
                     display: block;
                     width: 100%;
                     height: 30px;
-                    bottom: 0;
+                    bottom: 38px;
                     left: 0;
                 }
-            }
             h4 {
                 font-size: 16px;
                 line-height: 29px;
@@ -620,6 +634,7 @@ export default {
                         line-height: 25px;
                         letter-spacing: 1px;
                         color: #333333;
+                        word-break: break-all;
                     }
                 }
             }

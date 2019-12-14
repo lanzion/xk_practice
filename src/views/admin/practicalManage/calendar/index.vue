@@ -215,7 +215,11 @@ import moment from "moment";
 import {
   schoolActivityDayTimes,
   schoolActivityDayDetail,
-  cbookView
+  cbookView,
+  baseinstActivityDayTimes,
+  baseinstActivityDayDetail,
+  areaActivityDayTimes,
+  areatActivityDayDetail
 } from "@/api/newApi.js";
 
 import {
@@ -327,6 +331,10 @@ export default {
       let haed;
       if (this.identity == 9) {
         haed = schoolActivityDayTimes;
+      }else if(this.identity==13){
+         haed = baseinstActivityDayTimes;
+      }else{
+        haed = areaActivityDayTimes;
       }
       if (!haed) return;
       let res = await haed({ month });
@@ -345,6 +353,10 @@ export default {
       let haed;
       if (this.identity == 9) {
         haed = schoolActivityDayDetail;
+      }else if(this.identity==13){
+        haed = baseinstActivityDayDetail
+      }else{
+        haed = areatActivityDayDetail
       }
       if (!haed) return;
       let res = await haed({ day });

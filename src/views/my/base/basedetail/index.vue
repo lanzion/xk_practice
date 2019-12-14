@@ -30,21 +30,21 @@
                 <div class="brief-fl fl">
                     <div class="brief-fl-title">
                         <h3>{{datas.name}}</h3>
-                        <p id="conent">{{datas.remark}}</p>
+                        <p id="conent" v-html="datas.remark"></p>
                     </div>
                 </div>
                 <div class="brief-fr fr">
                     <div class="brief-fr-one">
                         <ul>
-                            <li>
+                            <li v-if="datas.linkMan !== null">
                                 <i :style="{backgroundImage:'url('+plo+')'}"></i>
                                 <span>{{datas.linkMan}}</span>
                             </li>
-                            <li>
+                            <li v-if="datas.linkPhone !== null">
                                 <i :style="{backgroundImage:'url('+dianhua+')'}"></i>
                                 <span>{{datas.linkPhone}}</span>
                             </li>
-                            <li>
+                            <li v-if="datas.address !== null">
                                 <i :style="{backgroundImage:'url('+dizhi+')'}"></i>
                                 <span>
                                     {{datas.address}}
@@ -54,26 +54,28 @@
                                     ></i>
                                 </span>
                             </li>
-                            <li>
+                            <li v-if="datas.transport !== null">
                                 <i :style="{backgroundImage:'url('+jiaotong+')'}"></i>
                                 <span>{{datas.transport}}</span>
                             </li>
-                            <li>
+                            <li v-if="datas.publishingUnitLevel !== null">
                                 <i :style="{backgroundImage:'url('+dengji+')'}"></i>
-                                <span>省级</span>
+                                <span v-if="datas.publishingUnitLevel == 'A'">省级</span>
+                                <span v-else-if="datas.publishingUnitLevel == 'B'">市级</span>
+                                <span v-else-if="datas.publishingUnitLevel == 'C'">区县级</span>
                             </li>
                             <li>
                                 <i :style="{backgroundImage:'url('+pingfeng+')'}"></i>
-                                <span>{{numFilter(datas.scorse === null ? 5:datas.scorse )}}</span>
+                                <span>{{numFilter(datas.scorse === null ? 5:datas.scorse )}}分</span>
                             </li>
-                            <li>
+                            <li v-if="datas.pathUrl !== null">
                                 <i :style="{backgroundImage:'url('+guanwang+')'}"></i>
                                 <span>
                                     <a :href="datas.pathUrl">{{datas.pathUrl}}</a>
                                 </span>
                             </li>
                         </ul>
-                        <div class>
+                        <div class v-if="datas.officialAccounts !== null">
                             <img :src="datas.officialAccounts" alt />
                         </div>
                     </div>

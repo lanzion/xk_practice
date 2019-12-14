@@ -20,9 +20,9 @@
                         <div>
                             <ov-image :type="3" :src-data="g.cover" :img-height="'170px'"></ov-image>
                         </div>
-                        <h3 :style="{'-webkit-box-orient':'vertical'}">{{g.title}}</h3>
+                        <h3>{{cutString(g.title,46)}}</h3>
                         <div class="page-fl-coure-ul-min">
-                            <p :style="{'-webkit-box-orient':'vertical'}">{{g.summary}}</p>
+                            <p>{{cutString(g.summary,144)}}</p>
                         </div>
                     </li>
                 </ul>
@@ -46,12 +46,13 @@
                             <i></i>
                             <span :style="{'-webkit-box-orient':'vertical'}">
                                 <em>【天河区】</em>
-                                教育局召开中小学社会实教育局召开中小学社会实
+
+                              {{cutString('广州市天河区华阳小学 参加了“园林的知识”活动',48)}}
                             </span>
                         </div>
                         <div>
                             <span>广州</span>
-                            <span>2019-11-30</span>
+                            <span>2019-11-30 上午</span>
                         </div>
                     </li>
                     <li>
@@ -59,12 +60,13 @@
                             <i></i>
                             <span :style="{'-webkit-box-orient':'vertical'}">
                                 <em>【天河区】</em>
-                                教育局召开中小学社会实教育局召开中小学社会实
+
+                              {{cutString('广州市天河区华阳小学 参加了“园林的知识”活动',48)}}
                             </span>
                         </div>
                         <div>
                             <span>广州</span>
-                            <span>2019-11-30</span>
+                            <span>2019-11-30 上午</span>
                         </div>
                     </li>
                     <li>
@@ -72,12 +74,13 @@
                             <i></i>
                             <span :style="{'-webkit-box-orient':'vertical'}">
                                 <em>【天河区】</em>
-                                教育局召开中小学社会实教育局召开中小学社会实
+
+                              {{cutString('广州市天河区华阳小学 参加了“园林的知识”活动',48)}}
                             </span>
                         </div>
                         <div>
                             <span>广州</span>
-                            <span>2019-11-30</span>
+                            <span>2019-11-30 上午</span>
                         </div>
                     </li>
                     <li>
@@ -85,25 +88,26 @@
                             <i></i>
                             <span :style="{'-webkit-box-orient':'vertical'}">
                                 <em>【天河区】</em>
-                                教育局召开中小学社会实教育局召开中小学社会实
+
+                              {{cutString('广州市天河区华阳小学 参加了“园林的知识”活动',48)}}
                             </span>
                         </div>
                         <div>
                             <span>广州</span>
-                            <span>2019-11-30</span>
+                            <span>2019-11-30 上午</span>
                         </div>
-                    </li>
-                    <li>
+                    </li><li>
                         <div>
                             <i></i>
                             <span :style="{'-webkit-box-orient':'vertical'}">
                                 <em>【天河区】</em>
-                                教育局召开中小学社会实教育局召开中小学社会实
+
+                              {{cutString('广州市天河区华阳小学 参加了“园林的知识”活动',48)}}
                             </span>
                         </div>
                         <div>
                             <span>广州</span>
-                            <span>2019-11-30</span>
+                            <span>2019-11-30 上午</span>
                         </div>
                     </li>
                 </ul>
@@ -248,9 +252,6 @@ export default {
                     padding: 0 10px;
                     box-sizing: border-box;
                     margin-top: 8px;
-                    display: -webkit-box;
-                    -webkit-box-orient: vertical;
-                    -webkit-line-clamp: 2;
                     overflow: hidden;
                     word-break: break-all;
                 }
@@ -267,9 +268,9 @@ export default {
                         line-height: 25.5px;
                         letter-spacing: 0.6px;
                         color: #666666;
-                        display: -webkit-box;
-                        -webkit-box-orient: vertical;
-                        -webkit-line-clamp: 5;
+                        // display: -webkit-box;
+                        // -webkit-box-orient: vertical;
+                        // -webkit-line-clamp: 5;
                         overflow: hidden;
                         word-break: break-all;
                     }
@@ -338,7 +339,7 @@ export default {
             width: 0px;
             height: 416px;
             background-image: linear-gradient(0deg, #f8f9f9 0%, #f9fafb 100%);
-            border: dashed 1px #b9b9b9;
+            border-left: dashed 1px #b9b9b9;
         }
         ul {
             overflow: hidden;

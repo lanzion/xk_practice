@@ -17,6 +17,9 @@
             <img @load="imageLoad" @error="imageErr" :src="imageSrc" />
             <slot v-if="istrue" name="spans" />
         </div>
+        <div :style="{height: imgHeight}" v-if="type === 10" class="thr">
+            <img @load="imageLoad" @error="imageErr" :src="imageSrc" />
+        </div>
     </div>
 </template>
  
@@ -24,7 +27,8 @@
 const defaultImage2 = '../../../../static/img/info2.jpg'
 const defaultImage = '../../../../static/img/info.jpg'
 const defaultImage3 = '../../../../static/img/basepage.jpg' // 基地主页图
-const defaultImage4 = '../../../../static/img/schoolpage.jpg' // 学校主页图
+const defaultImage4 = '../../../../static/img/schoolpage.jpg' // 学校主页图 renwumoren
+const defaultImage10 = '../../../../static/img/renwumoren.png'
 export default {
     name: 'ov-image',
     data() {
@@ -76,6 +80,8 @@ export default {
             } else if (this.type === 5) {
                 this.srcData && (this.imageSrc = defaultImage4)
                 this.istrue = true
+            } else if (this.type === 10) {
+                this.srcData && (this.imageSrc = defaultImage10)
             } else {
                 this.srcData && (this.imageSrc = defaultImage)
             }

@@ -12,15 +12,15 @@
             <div class="brief-fr fr">
                 <div class="brief-fr-one">
                     <ul>
-                        <li>
+                        <li v-if="schoolDetail.linkName !== null">
                             <i :style="{backgroundImage:'url('+plo+')'}"></i>
                             <span>{{schoolDetail.linkName}}</span>
                         </li>
-                        <li>
+                        <li v-if="schoolDetail.phone !== null">
                             <i :style="{backgroundImage:'url('+dianhua+')'}"></i>
                             <span>{{schoolDetail.phone}}</span>
                         </li>
-                        <li>
+                        <li v-if="schoolDetail.address !== null">
                             <i :style="{backgroundImage:'url('+dizhi+')'}"></i>
                             <span>
                                 {{schoolDetail.address}}
@@ -30,14 +30,14 @@
                                 ></i>
                             </span>
                         </li>
-                        <li>
+                        <li v-if="schoolDetail.pathUrl !== null">
                             <i :style="{backgroundImage:'url('+guanwang+')'}"></i>
                             <span>
                                 <a :href="schoolDetail.pathUrl">{{schoolDetail.pathUrl}}</a>
                             </span>
                         </li>
                     </ul>
-                    <div class>
+                    <div class v-if="schoolDetail.officialAccounts !== null">
                         <img :src="schoolDetail.officialAccounts" alt />
                     </div>
                 </div>
@@ -83,13 +83,12 @@ export default {
                     query: {
                         lng: this.lng,
                         lat: this.lat,
-                        name: this.datas.schoolName
+                        name: name
                     }
                 })
                 window.open(href, '_blank')
             } catch (error) {
             } finally {
-                this.isLoading = false
             }
         }
     }

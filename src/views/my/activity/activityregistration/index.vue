@@ -297,7 +297,7 @@
                             <span>人数限制:</span>
                         </div>
                         <div class="activityregistration-li-show-box">
-                            <div class="activityregistration-li-show-box-thr">报名截止</div>
+                            <div class="activityregistration-li-show-box-thr" disabled>报名截止</div>
                         </div>
                     </div>
                 </li>

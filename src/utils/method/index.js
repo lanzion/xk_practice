@@ -1,5 +1,6 @@
 // vue公共方法池
 import fileUrl from '@utils/utility/fileUrl.js'
+import cutString from '@utils/utility/ellipsis.js'
 import dateFormat from '@utils/utility/dateFormat.js'
 // import ellipsis from '@utils/utility/textOverflow.js'
 import translate from '@utils/utility/translateDataDict.js'
@@ -20,5 +21,6 @@ export default {
         Vue.prototype.flatten = flatten
         Vue.prototype.merge = merge
         Vue.prototype.formatFileName = formatAliUploadFileName
+        Vue.prototype.cutString = cutString
     }
 }

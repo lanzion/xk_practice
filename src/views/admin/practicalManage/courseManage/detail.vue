@@ -6,7 +6,7 @@
     </div>
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">课程分类</span>
-      <div class="school-detail-list-redource">{{data.parentName}}/{{data.childrenName}}</div>
+      <div class="school-detail-list-redource">{{data.parentName}}</div>
     </div>
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">课程名称</span>

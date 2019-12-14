@@ -10,11 +10,11 @@
                 <ov-image :src-data="getFileUrl(datas.cover)" :img-height="'370px'"></ov-image>
             </div>
             <div class="dlest-fr">
-                <h3 :style="{'-webkit-box-orient':'vertical'}">{{datas.name}}</h3>
+                <h3>{{cutString(datas.name,88)}}</h3>
                 <el-row>
                     <el-col class="dlest-fr-title">
                         <span>课程分类:</span>
-                        <span>{{datas.parentName}} > {{datas.childrenName}}</span>
+                        <span>{{datas.parentName}}</span>
                     </el-col>
                 </el-row>
                 <el-row>
@@ -102,12 +102,12 @@
                 border
                 :header-cell-style="{background:'#f2f5fb',color:'#666666'}"
             >
-                <el-table-column label="学校名称" align="center">
+                <el-table-column width="569px" label="学校名称" align="center">
                     <template slot-scope="scope">
                         <span @click="goschool(scope.row.schoolId)">{{scope.row.schoolName}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="schoolAddress" label="地区" align="center"></el-table-column>
+                <el-table-column width="569px" prop="schoolAddress" label="地区" align="center"></el-table-column>
             </el-table>
             <div class="more">
                 <span v-if="totalNum >= 10" @click="get()">查看全部学校>></span>
@@ -318,16 +318,11 @@ export default {
             box-sizing: border-box;
             h3 {
                 margin-top: 7px;
-                font-weight: normal;
-                font-stretch: normal;
                 line-height: 29px;
                 letter-spacing: 0px;
                 color: #333333;
                 font-size: 22px;
                 margin-bottom: 30px;
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 2;
                 overflow: hidden;
             }
             .dlest-fr-title {

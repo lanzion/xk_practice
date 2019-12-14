@@ -4,7 +4,15 @@
     <div class="g-search--wrap clearfix">
       <el-form :inline="true" class="fl" @submit.native.prevent>
         <el-form-item label="课程分类">
-          <el-cascader v-model="form.values" :options="arr" :props="{ expandTrigger: 'hover' }"></el-cascader>
+          <!-- <el-cascader v-model="form.values" :options="arr" :props="{ expandTrigger: 'hover' }"></el-cascader> -->
+          <el-select v-model="form.classificationParent" clearable filterable placeholder="请选择课程分类">
+            <el-option
+              v-for="item in arr"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item label="基地/机构所属地区">
@@ -70,7 +78,8 @@
       <el-table-column type="selection" align="center" width="55"></el-table-column>
       <el-table-column prop="name" label="课程名称" align="center" sortable show-overflow-tooltip />
       <el-table-column label="课程分类" align="center" show-overflow-tooltip>
-        <template slot-scope="scope">{{scope.row.parentName+'>'+scope.row.childrenName}}</template>
+        <!-- <template slot-scope="scope">{{scope.row.parentName+'>'+scope.row.childrenName}}</template> -->
+        <template slot-scope="scope">{{scope.row.parentName}}</template>
       </el-table-column>
       <el-table-column prop="baseinfoName" label="基地/机构" align="center" show-overflow-tooltip />
       <el-table-column prop="orgName" label="发布教育局" align="center" show-overflow-tooltip></el-table-column>
@@ -104,7 +113,13 @@
 
       <!-- <el-table-column prop="courseDesigner" label="发布者" align="center"></el-table-column> -->
 
-      <el-table-column prop="createDate" align="center" label="发布时间" sortable show-overflow-tooltip />
+      <el-table-column
+        prop="createDate"
+        align="center"
+        label="发布时间"
+        sortable
+        show-overflow-tooltip
+      />
 
       <el-table-column label="状态" align="center">
         <template slot-scope="scope">
@@ -267,9 +282,11 @@ export default {
       this.selection = val;
     },
     shield(data) {
-      this.showOrHide(data,0)
+      this.showOrHide(data, 0);
     },
-    display(data) {this.showOrHide(data,1)},
+    display(data) {
+      this.showOrHide(data, 1);
+    },
     getaddres(value) {
       if (!value.length) {
         this.form.provinceId = "";
@@ -282,8 +299,8 @@ export default {
       this.form.areaId = value[2].code;
     },
     showOrHide(data, status) {
-      let txt = status?'显示':'屏蔽'
-      let txt1 = status?'可以':'无法'
+      let txt = status ? "显示" : "屏蔽";
+      let txt1 = status ? "可以" : "无法";
       let list = [];
       if (data.data) {
         list = [data.data.id];

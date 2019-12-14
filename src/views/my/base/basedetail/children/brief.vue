@@ -9,26 +9,29 @@
         <div class="brief-fr fr">
             <div class="brief-fr-one">
                 <ul>
-                    <li>
+                    <li v-if="baseDetail.linkMan !== null">
                         <i :style="{backgroundImage:'url('+plo+')'}"></i>
                         <span>{{baseDetail.linkMan}}</span>
                     </li>
-                    <li>
+                    <li v-if="baseDetail.linkPhone !== null">
                         <i :style="{backgroundImage:'url('+dianhua+')'}"></i>
                         <span>{{baseDetail.linkPhone}}</span>
                     </li>
-                    <li>
+                    <li v-if="baseDetail.address !== null">
                         <i :style="{backgroundImage:'url('+dizhi+')'}"></i>
                         <span>
                             {{baseDetail.address}}
-                            <i :style="{backgroundImage:'url('+baiduditu+')'}"></i>
+                            <i
+                                @click="getMap(baseDetail.address,baseDetail.name)"
+                                :style="{backgroundImage:'url('+baiduditu+')'}"
+                            ></i>
                         </span>
                     </li>
-                    <li>
+                    <li v-if="baseDetail.transport !== null">
                         <i :style="{backgroundImage:'url('+jiaotong+')'}"></i>
                         <span>{{baseDetail.transport}}</span>
                     </li>
-                    <li>
+                    <li v-if="baseDetail.publishingUnitLevel !== null">
                         <i :style="{backgroundImage:'url('+dengji+')'}"></i>
                         <span v-if="baseDetail.publishingUnitLevel == 'A'">省级</span>
                         <span v-else-if="baseDetail.publishingUnitLevel == 'B'">市级</span>
@@ -36,16 +39,16 @@
                     </li>
                     <li>
                         <i :style="{backgroundImage:'url('+pingfeng+')'}"></i>
-                        <span>{{numFilter(baseDetail.scorse)}}</span>
+                        <span>{{numFilter(baseDetail.scorse === null ? 5 : baseDetail.scorse )}}分</span>
                     </li>
-                    <li>
+                    <li v-if="baseDetail.pathUrl !== null">
                         <i :style="{backgroundImage:'url('+guanwang+')'}"></i>
                         <span>
                             <a :href="baseDetail.pathUrl">{{baseDetail.pathUrl}}</a>
                         </span>
                     </li>
                 </ul>
-                <div class>
+                <div class v-if="baseDetail.officialAccounts !== null">
                     <img :src="baseDetail.officialAccounts" alt />
                 </div>
             </div>
@@ -54,6 +57,7 @@
 </template>
 
 <script>
+import { requestwebapiLongitudeAndlatitude } from '@/api/webApi/base'
 export default {
     name: 'brief',
     data() {
@@ -80,9 +84,25 @@ export default {
             let realVal = parseFloat(value).toFixed(1)
             return realVal
         },
-        // go() {
-        //     this.$router.push({ path: '/base/basedetail/brief' })
-        // }
+        async getMap(address, name) {
+            const res = await requestwebapiLongitudeAndlatitude({
+                address: address
+            })
+            const { entity: datas = {} } = res.data
+            try {
+                console.log(datas)
+                this.lng = datas.lng || 113.27
+                this.lat = datas.lat || 23.13
+                const { href } = this.$router.resolve({
+                    name: `bmap`,
+                    query: { lng: this.lng, lat: this.lat, name: name }
+                })
+                window.open(href, '_blank')
+            } catch (error) {
+            } finally {
+                this.isLoading = false
+            }
+        }
     }
 }
 </script>

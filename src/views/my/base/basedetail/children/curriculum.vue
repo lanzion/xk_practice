@@ -9,7 +9,7 @@
                     <h3>{{g.name}}</h3>
                     <div class="curriculum-fl-coure-ul-min">
                         <span>课程分类:</span>
-                        <span>{{g.parentName}}>>{{g.childrenName}}</span>
+                        <span>{{g.parentName}}</span>
                     </div>
                     <div class="curriculum-fl-coure-ul-max">
                         <span>适合学段:</span>

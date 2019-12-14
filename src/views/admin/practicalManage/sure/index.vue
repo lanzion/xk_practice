@@ -16,7 +16,7 @@
       <div class="start-stups-col" v-for="(item,index) in progress" :key="index">
         <span :class="active > index ? 'start-stups-num active':'start-stups-num' ">{{index+1}}</span>
         <span :class="active > index ? 'start-stups-rows active':'start-stups-rows' ">{{item}}</span>
-        <span :class="active > index ? 'start-stups-width active':'start-stups-width' "></span>
+        <span :class="active > index ? 'start-stups-width active':'start-stups-width' " v-if="index!=progress.length-1"></span>
       </div>
     </div>
 
@@ -44,7 +44,7 @@
       <el-table-column label="课程分类" align="center" show-overflow-tooltip>
         <template
           slot-scope="scope"
-        >{{scope.row.classificationParentName+'>'+scope.row.classificationChildrenName}}</template>
+        >{{scope.row.classificationParentName}}</template>
       </el-table-column>
       <el-table-column
         prop="baseInstName"

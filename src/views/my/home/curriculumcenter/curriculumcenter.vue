@@ -48,80 +48,80 @@
                 <ul>
                     <li>
                         <div>
-                            <i :style="{backgroundImage:'url('+gonggaozixun+')'}"></i>
-                            <span :style="{'-webkit-box-orient':'vertical'}">
+                            <i></i>
+                            <span>
                                 <em>【天河区】</em>
-                                教育局召开中小学社会实教育局召开中小学社会实
+                                {{cutString('关于开展首批天河区中小学生社会实践大课堂资源基地申报工作的通知',48)}}
                             </span>
                         </div>
                         <div>
                             <span>广州</span>
-                            <span>2019-11-30</span>
+                            <span>2019-12-09</span>
                         </div>
                     </li>
                     <li>
                         <div>
-                            <i :style="{backgroundImage:'url('+gonggaozixun+')'}"></i>
-                            <span :style="{'-webkit-box-orient':'vertical'}">
+                            <i></i>
+                            <span>
                                 <em>【天河区】</em>
-                                教育局召开中小学社会实教育局召开中小学社会实
+                                {{cutString('关于开展首批天河区中小学生社会实践大课堂资源基地申报工作的通知',48)}}
                             </span>
                         </div>
                         <div>
                             <span>广州</span>
-                            <span>2019-11-30</span>
+                            <span>2019-12-09</span>
                         </div>
                     </li>
                     <li>
                         <div>
-                            <i :style="{backgroundImage:'url('+gonggaozixun+')'}"></i>
-                            <span :style="{'-webkit-box-orient':'vertical'}">
+                            <i></i>
+                            <span>
                                 <em>【天河区】</em>
-                                教育局召开中小学社会实教育局召开中小学社会实
+                                {{cutString('关于开展首批天河区中小学生社会实践大课堂资源基地申报工作的通知',48)}}
                             </span>
                         </div>
                         <div>
                             <span>广州</span>
-                            <span>2019-11-30</span>
+                            <span>2019-12-09</span>
                         </div>
                     </li>
                     <li>
                         <div>
-                            <i :style="{backgroundImage:'url('+gonggaozixun+')'}"></i>
-                            <span :style="{'-webkit-box-orient':'vertical'}">
+                            <i></i>
+                            <span>
                                 <em>【天河区】</em>
-                                教育局召开中小学社会实教育局召开中小学社会实
+                                {{cutString('关于开展首批天河区中小学生社会实践大课堂资源基地申报工作的通知',48)}}
                             </span>
                         </div>
                         <div>
                             <span>广州</span>
-                            <span>2019-11-30</span>
+                            <span>2019-12-09</span>
                         </div>
                     </li>
                     <li>
                         <div>
-                            <i :style="{backgroundImage:'url('+gonggaozixun+')'}"></i>
-                            <span :style="{'-webkit-box-orient':'vertical'}">
+                            <i></i>
+                            <span>
                                 <em>【天河区】</em>
-                                教育局召开中小学社会实教育局召开中小学社会实
+                                {{cutString('关于开展首批天河区中小学生社会实践大课堂资源基地申报工作的通知',48)}}
                             </span>
                         </div>
                         <div>
                             <span>广州</span>
-                            <span>2019-11-30</span>
+                            <span>2019-12-09</span>
                         </div>
                     </li>
                     <li>
                         <div>
-                            <i :style="{backgroundImage:'url('+gonggaozixun+')'}"></i>
-                            <span :style="{'-webkit-box-orient':'vertical'}">
+                            <i></i>
+                            <span>
                                 <em>【天河区】</em>
-                                教育局召开中小学社会实教育局召开中小学社会实
+                                {{cutString('关于开展首批天河区中小学生社会实践大课堂资源基地申报工作的通知',48)}}
                             </span>
                         </div>
                         <div>
                             <span>广州</span>
-                            <span>2019-11-30</span>
+                            <span>2019-12-09</span>
                         </div>
                     </li>
                 </ul>
@@ -310,11 +310,13 @@ export default {
         width: 300px;
         overflow: hidden;
         .curriculumcenter-title {
-            font-size: 22px;
-            line-height: 31.5px;
+            font-size: 18px;
             letter-spacing: 0px;
             color: #333333;
             margin-bottom: 18px;
+            font-weight: 500;
+            margin-left: 20px;
+            line-height: 31px;
         }
         ul {
             overflow: hidden;
@@ -344,9 +346,6 @@ export default {
                             line-height: 23px;
                             letter-spacing: 1px;
                             color: #666666;
-                            display: -webkit-box;
-                            -webkit-box-orient: vertical;
-                            -webkit-line-clamp: 2;
                             overflow: hidden;
                             word-break: break-all;
                             em {

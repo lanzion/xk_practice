@@ -27,8 +27,7 @@
                     <div class="brief-fl fl">
                         <div class="brief-fl-title">
                             <h3>{{datas.schoolName}}</h3>
-                            <p id="conent">
-                                {{datas.remark}}
+                            <p id="conent" v-html="datas.remark">
                                 <span></span>
                             </p>
                         </div>
@@ -36,15 +35,15 @@
                     <div class="brief-fr fr">
                         <div class="brief-fr-one">
                             <ul>
-                                <li>
+                                <li v-if="datas.linkName !== null">
                                     <i :style="{backgroundImage:'url('+plo+')'}"></i>
                                     <span>{{datas.linkName}}</span>
                                 </li>
-                                <li>
+                                <li v-if="datas.phone !== null">
                                     <i :style="{backgroundImage:'url('+dianhua+')'}"></i>
                                     <span>{{datas.phone}}</span>
                                 </li>
-                                <li>
+                                <li v-if="datas.address !== null">
                                     <i :style="{backgroundImage:'url('+dizhi+')'}"></i>
                                     <span>
                                         {{datas.address}}
@@ -54,14 +53,14 @@
                                         ></i>
                                     </span>
                                 </li>
-                                <li>
+                                <li v-if="datas.pathUrl !== null">
                                     <i :style="{backgroundImage:'url('+guanwang+')'}"></i>
                                     <span>
                                         <a :href="datas.pathUrl">{{datas.pathUrl}}</a>
                                     </span>
                                 </li>
                             </ul>
-                            <div class>
+                            <div class v-if="datas.officialAccounts !== null">
                                 <img :src="datas.officialAccounts" alt />
                             </div>
                         </div>

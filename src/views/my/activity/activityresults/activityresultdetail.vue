@@ -62,7 +62,7 @@
                                 <ov-image :type="3" :src-data="g.cover" :img-height="'54px'" />
                             </div>
                             <div class="activityresultdetail-conent-fr-two-name">
-                                <h4 :style="{'-webkit-box-orient':'vertical'}">{{g.title}}</h4>
+                                <h4>{{cutString(g.title,32)}}</h4>
                             </div>
                         </li>
                     </ul>
@@ -341,10 +341,6 @@ export default {
                                 letter-spacing: 0px;
                                 color: #333333;
                                 border: none;
-                                display: -webkit-box;
-                                -webkit-box-orient: vertical;
-                                -webkit-line-clamp: 2;
-                                overflow: hidden;
                                 word-break: break-all;
                             }
                         }

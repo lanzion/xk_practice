@@ -50,7 +50,7 @@
                         <ov-image :type="1" :src-data="getFileUrl(g.cover)" :img-height="'222px'"></ov-image>
                     </div>
                     <div class="base-li-conent fl">
-                        <h3 :style="{'-webkit-box-orient':'vertical'}" @click="go(g.id)">{{g.name}}</h3>
+                        <h3  @click="go(g.id)">{{cutString(g.name,140)}}</h3>
                         <div class="base-li-conent-box">
                             <span>认定级别:</span>
                             <span v-if="g.publishingUnitLevel == 'A'">省级</span>
@@ -305,11 +305,7 @@ export default {
                         line-height: 29px;
                         letter-spacing: 0px;
                         color: #333333;
-                        display: -webkit-box;
-                        -webkit-box-orient: vertical;
-                        -webkit-line-clamp: 2;
                         overflow: hidden;
-                        font-weight: normal;
                     }
                     .base-li-conent-box {
                         height: 34px;

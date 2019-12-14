@@ -4,12 +4,12 @@
             <h4>参与学校({{num}}所)</h4>
         </div>
         <el-table v-if="nomore" class="header" :data="datas" border :header-cell-style="{background:'#f2f5fb',color:'#666666'}">
-            <el-table-column label="学校名称" align="center">
+            <el-table-column width="599px" label="学校名称" align="center">
                 <template slot-scope="scope">
                     <span @click="goschool(scope.row.schoolId)">{{scope.row.schoolName}}</span>
                 </template>
             </el-table-column>
-            <el-table-column property="schoolAddress" label="地区" align="center"></el-table-column>
+            <el-table-column  width="599px" property="schoolAddress" label="地区" align="center"></el-table-column>
         </el-table>
         <infinite-loading @infinite="getSchoollist" ref="infiniteLoading">
             <span slot="spinner">正在加载中...</span>
@@ -98,6 +98,7 @@ export default {
 <style lang='scss' scoped>
 .schools {
     min-height: 500px;
+    width: 100%;
     .title {
         text-align: center;
         font-size: 22px;
@@ -107,6 +108,7 @@ export default {
     }
     .header{
         margin-bottom: 30px;
+        width: 100%;
     }
 }
 </style>

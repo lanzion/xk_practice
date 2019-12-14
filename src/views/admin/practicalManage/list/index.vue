@@ -87,7 +87,7 @@
       <el-table-column label="课程分类" align="center" show-overflow-tooltip>
         <template
           slot-scope="scope"
-        >{{scope.row.classificationParentName+'>'+scope.row.classificationChildrenName}}</template>
+        >{{scope.row.classificationParentName}}</template>
       </el-table-column>
       <el-table-column
         prop="baseInstName"

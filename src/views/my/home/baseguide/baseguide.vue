@@ -16,7 +16,7 @@
                     <div>
                         <ov-image :type="3" :src-data="getFileUrl(g.cover)" :img-height="'178px'"></ov-image>
                     </div>
-                    <h3 :style="{'-webkit-box-orient':'vertical'}">{{g.name}}</h3>
+                    <h3>{{cutString(g.name,48)}}</h3>
                     <div class="page-fl-coure-ul-min">
                         <i :style="{backgroundImage:'url('+dizhi+')'}"></i>
                         <p>{{g.address}}</p>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { requestwebapibase } from '@/api/webApi/base';
+import { requestwebapibase } from '@/api/webApi/base'
 export default {
     name: '',
     data() {
