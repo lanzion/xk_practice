@@ -235,12 +235,13 @@
             },
             // 选择文件值改变
             changeHandler(event) {
+                let _this = this;
                 const file = event.target.files[0]
                 if (!file) {
                     return
                 }
                 // 上传前回调函数检测文件
-                if (this.beforeUpload && !this.beforeUpload({ file, fileList: this.uploadList })) {
+                if (_this.beforeUpload && !_this.beforeUpload({ file, fileList: _this.uploadList })) {
                     return
                 }
 
@@ -257,15 +258,15 @@
                             lastModified: file.lastModified
                         }
                     }
-                    const uploadName = `${this.$cookies.get('uid')}-${new Date().getTime()}__${file.name}`
-                    const fileItem = { name: file.name, size: file.size, file: _file, status: 'ready', uploadName: uploadName }
-                    this.uploadList.push(fileItem)
+                    const uploadName = `${_this.$cookies.get('uid')}-${new Date().getTime()}__${file.name}`
+                    const fileItem = { name: file.name, size: file.size, file: file, status: 'ready', uploadName: uploadName }
+                    _this.uploadList.push(fileItem)
 
-                    if (this.autoUpload) {
-                        this.upload(fileItem)
+                    if (_this.autoUpload) {
+                        _this.upload(fileItem)
                     }
-                    this.change({ file: fileItem, fileList: this.uploadList })
-                    this.$refs.uploader.value = ''
+                    _this.change({ file: fileItem, fileList: _this.uploadList })
+                    _this.$refs.uploader.value = ''
                 }, { once: true })
             },
             // 删除列表文件
@@ -294,15 +295,16 @@
 
                 const _this = this
                 let _file = file
+                console.log(1,file.file);
+                console.log(1,file);
 
                 const fileType = Object.prototype.toString.call(file.file)
-                if (fileType !== '[object File]') {
-                    const { processed, option } = file.file
-                    _file = new File([processed], file.uploadName, option)
-                }
-
+                // if (fileType !== '[object File]') {
+                //     const { processed, option } = file.file
+                //     _file = new File([processed], file.uploadName, option)
+                // }
                 co(function* () {
-                    const result = yield _this.client.multipartUpload(_this.dir + file.uploadName, _file, {
+                    const result = yield _this.client.multipartUpload(_this.dir + file.uploadName, file.file, {
                         progress: function* (p) {
                             // 记录进度
                             _this.$set(file, 'percentage', Math.floor(p * 100))

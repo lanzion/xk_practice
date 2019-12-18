@@ -281,7 +281,7 @@ export default {
                     let fileItem = {
                         name: file.name,
                         size: file.size,
-                        file: _file,
+                        file: file,
                         status: 'ready',
                         uploadName: uploadName,
                         isVideo
@@ -335,14 +335,14 @@ export default {
             let _file = file
 
             const fileType = Object.prototype.toString.call(file.file)
-            if (fileType !== '[object File]') {
-                const { processed, option } = file.file
-                _file = new File([processed], file.uploadName, option)
-                file.file = _file
-            }
+            // if (fileType !== '[object File]') {
+            //     const { processed, option } = file.file
+            //     _file = new File([processed], file.uploadName, option)
+            //     file.file = _file
+            // }
 
             if (file.isVideo) {
-                this.uploadVideo(_file)
+                this.uploadVideo(file.file)
                 this.videoUploader.startUpload()
             } else if (file.isFilePrev) {
                 this.bosUploadStart()
