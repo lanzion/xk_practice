@@ -85,7 +85,7 @@ export default {
             $file.id = `input_${btnId}`
             $file.type = 'file'
             $file.accept = accept.map(x => `.${x}`).join()
-            $file.style = 'display: none'
+            $file.style.display = 'none'
 
             $container.appendChild($file)
 
@@ -119,8 +119,8 @@ export default {
 
             $img.onload = () => {
                 const html = '<img src="' + src + '" style="max-width:100%;"/>'
-                this.editor.command(null, 'insertHtml', html)
-
+                // this.editor.command(null, 'insertHtml', html)
+                this.editor.command(null, 'insertImage', src)
                 wangEditor.log('已插入图片，地址 ' + src)
                 $img = null
             }
@@ -181,6 +181,7 @@ export default {
                 'unlink',
                 'table',
                 'img',
+                'code',
                 'undo',
                 'redo'
             ]
