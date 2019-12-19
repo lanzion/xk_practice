@@ -100,7 +100,7 @@ router.beforeEach((to, from, next) => {
             next('/space/classroom')
         }
         if (store.state.login.identity === '0') {
-            next('/space/mycourse')
+            next('/space/myactivities')
         }
         return
     }

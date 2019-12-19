@@ -3,6 +3,7 @@
         <slot></slot>
         <el-button type="primary" class="operate-btn-item"
             v-for="(item) in items" :key="item.id"
+            v-show="checkIsActive(item.menuId, 'visible')"
             @click="doOperate(item)">{{ item.name }}</el-button>
     </section>
 </template>
@@ -39,6 +40,19 @@ export default {
             handler = handler || defHandler
             let options = { model }
             handler(options)
+        },
+        // 判断按钮是否可用(active)/可见(visible)
+        checkIsActive(model, key = 'active') {
+            let callback = (this.$attrs[model] || {})[key]
+            let flag = callback === undefined
+            if (!flag) {
+                if (typeof callback === 'function') {
+                    flag = this.$attrs[model][key](this.data, { model: model })
+                } else {
+                    flag = !!callback
+                }
+            }
+            return flag
         }
     }
 }

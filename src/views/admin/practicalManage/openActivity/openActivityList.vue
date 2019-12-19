@@ -3,7 +3,7 @@
     <div class="g-search--wrap clearfix">
       <el-form :inline="true" class="fl elFrom" @submit.native.prevent>
         <!-- <el-form-item label="活动分类">
-          <el-select v-model="form.activityTypeParent" placeholder="请选择" clearable>
+          <el-select v-model="form.typeParent" filterable placeholder="请选择活动分类">
             <el-option
               v-for="item in activityTypeParent"
               :key="item.value"
@@ -11,11 +11,11 @@
               :value="item.value"
             ></el-option>
           </el-select>
-        </el-form-item>-->
+        </el-form-item> -->
         <el-form-item label="活动状态">
-          <el-select v-model="form.status" placeholder="请选择" clearable>
+          <el-select v-model="form.actStatus" placeholder="请选择" clearable>
             <el-option
-              v-for="item in status"
+              v-for="item in actStatus"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -36,13 +36,20 @@
           <el-input v-model="form.name" placeholder="请输入活动名称"></el-input>
         </el-form-item>
 
-        <el-button type="primary" @click="selectList" plain>搜索</el-button>
+        <el-button type="primary" @click="selectList">搜索</el-button>
       </el-form>
     </div>
     <el-table ref="table" :data="listData" stripe align="center" v-loading="isLoading" border>
       <el-table-column prop="name" label="课程名称" align="center" show-overflow-tooltip />
 
       <el-table-column prop="typeParentName" label="活动分类" align="center" show-overflow-tooltip />
+      <el-table-column
+        prop="baseInfoName"
+        label="基地/机构"
+        align="center"
+        show-overflow-tooltip
+        v-if="identity!=13"
+      />
       <el-table-column label="报名时间" align="center" sortable show-overflow-tooltip>
         <template slot-scope="scope">{{scope.row.enrollStartDate}}至{{scope.row.enrollEndDate}}</template>
       </el-table-column>
@@ -58,7 +65,20 @@
         <template slot-scope="scope">{{scope.row.free?scope.row.price+'元':'免费'}}</template>
       </el-table-column>
       <el-table-column label="教育局确认状态" align="center" show-overflow-tooltip>
-        <template slot-scope="scope">{{scope.row.status|filterStatus}}</template>
+        <template slot-scope="scope">
+          <div :class="scope.row.status==2?'statusActive':''">
+            {{scope.row.status|filterStatus}}
+            <el-tooltip
+              class="item"
+              effect="dark"
+              :content="scope.row.content"
+              placement="bottom-start"
+              v-if="scope.row.status==3"
+            >
+              <span class="item_tisp">？</span>
+            </el-tooltip>
+          </div>
+        </template>
       </el-table-column>
       <el-table-column prop="actStatusName" label="活动状态" align="center" show-overflow-tooltip />
 
@@ -69,10 +89,11 @@
             :data="scope.row"
             :index="scope.$index"
             v-bind="{
-                        edit: {visible:scope.row.status!='2', query: { id: 'id'} },// 编辑
-                         look: { callback: look }, // 
-                         partake: { query: { id: 'id'} }, // 参与情况
-                         confirm: {visible:scope.row.status=='0', query: { id: 'id'} }, 
+                        edit: {visible:scope.row.status!='2'&&identity==13, query: { id: 'id'} },// 编辑
+                         look: {visible:scope.row.status=='2', callback: look }, // 
+                         partake: {visible:scope.row.actStatus=='5'||scope.row.actStatus=='6'||scope.row.actStatus=='7'||scope.row.actStatus=='8'||scope.row.actStatus=='9'||scope.row.actStatus=='10', query: { id: 'id'} }, // 参与情况
+                         confirm: {visible:scope.row.status=='1', query: { id: 'id'} }, 
+                         lookAct: {visible:scope.row.status!='1', query: { id: 'id'} }, 
                     }"
           />
         </template>
@@ -84,29 +105,37 @@
       <div id="printMe">
         <div class="box" ref="print">
           <div class="pos pos2">教育局已确认</div>
-          <div class="title">《博物馆展览活动》活动确认书</div>
+          <div class="title">《{{confirmation.name}}》活动确认书</div>
           <div class="center">
             <div class="name">活动信息</div>
             <el-row>
               <el-col>
                 <span>活动名称:</span>
-                <span>博物馆展览活动</span>
+                <span>{{confirmation.name}}</span>
               </el-col>
               <el-col>
                 <span>报名时间:</span>
-                <span>2019-11-20 14:00 至 2019-11-25 18:00</span>
+                <span>{{confirmation.enrollStartDate}} 至 {{confirmation.enrollEndDate}}</span>
               </el-col>
               <el-col :span="3">
                 <span>活动时间:</span>
               </el-col>
-              <el-col :span="21">
-                <p>2019-11-29 10:00-12:00</p>
-                <p>2019-11-29 14:00-16:00</p>
-                <p>2019-11-30 10:00-12:00</p>
+              <el-col :span="21" class="activity_box">
+                <el-col :span="18">
+                  <p
+                    v-for="item in confirmation.dateDtoList"
+                    :key="item.id"
+                  >{{item.activityStartDate}} - {{item.activityEndDate}}</p>
+                </el-col>
+                <el-col
+                  :span="4"
+                  v-if="confirmation.dateDtoList"
+                  class="activity_num"
+                >共{{confirmation.dateDtoList.length}}场</el-col>
               </el-col>
               <el-col>
                 <span>每场人数限制:</span>
-                <span>200人</span>
+                <span>{{confirmation.enrollMaxNum}}人</span>
               </el-col>
             </el-row>
 
@@ -114,23 +143,23 @@
             <el-row>
               <el-col>
                 <span>基地/机构:</span>
-                <span>中国科学院华南植物园</span>
+                <span>{{confirmation.baseInfoName}}</span>
               </el-col>
             </el-row>
             <el-row>
               <el-col>
                 <span>联系人及电话:</span>
-                <span>王先生 13636363223</span>
+                <span>{{confirmation.contactName}} {{confirmation.contactPhone}}</span>
               </el-col>
             </el-row>
             <el-row>
               <el-col>
                 <span>活动地点:</span>
-                <span>广州市天河区广州市天河区兴科路723号</span>
+                <span>{{confirmation.address}}</span>
               </el-col>
               <el-col>
                 <span>集合地点:</span>
-                <span>广州市天河区广州市天河区兴科路723号正门</span>
+                <span>{{confirmation.place}}</span>
               </el-col>
             </el-row>
           </div>
@@ -149,17 +178,27 @@ import { mapState, mapActions } from "vuex";
 import permission from "@/mixin/admin-operate";
 import user from "@/mixin/admin-user";
 import { getActivityTypeParent } from "@/api/resetApi";
-import { openActivityPager } from "@/api/newApi";
+import {
+  openActivityPager,
+  openActivityCheckConfirmationById
+} from "@/api/newApi";
 export default {
   mixins: [permission, user],
   data() {
     return {
       totalNum: 0,
       activityTypeParent: [],
-      status: [
+      actStatus: [
         { value: 1, label: "未确认" },
         { value: 2, label: "已确认" },
-        { value: 3, label: "不通过" }
+        { value: 3, label: "不通过" },
+        { value: 4, label: "即将开始报名" },
+        { value: 5, label: "报名中" },
+        { value: 6, label: "名额已满" },
+        { value: 7, label: "时间截止" },
+        { value: 8, label: "未开始" },
+        { value: 9, label: "进行中" },
+        { value: 10, label: "已结束" }
       ],
       free: [{ value: 0, label: "免费" }, { value: 1, label: "收费" }],
       form: {},
@@ -172,19 +211,24 @@ export default {
     filterStatus(val) {
       let txt = "";
       switch (val) {
-        case '1':
+        case "1":
           txt = "未确认";
           break;
-        case '2':
+        case "2":
           txt = "已确认";
           break;
-        case '3':
+        case "3":
           txt = "不通过";
           break;
         default:
       }
       return txt;
     }
+  },
+  computed: {
+    ...mapState("login", {
+      identity: state => state.identity || {}
+    })
   },
   methods: {
     getActivityTypeParent() {
@@ -212,24 +256,44 @@ export default {
         })
         .finally(() => {});
     },
-    selectList() {},
+    selectList() {
+      this.pages.pageNum = 1;
+      this.getDatas();
+    },
     edit(data) {},
     look(data) {
+      let id = data.data.id;
+      openActivityCheckConfirmationById({ id }).then(res => {
+        try {
+          let _data = res.data;
+          if (_data.code == 200) {
+            this.confirmation = _data.entity;
+          } else {
+            this.$message({
+              message: res.data.msg || `加载失败`,
+              type: "error"
+            });
+          }
+        } catch (err) {
+          console.log(err);
+        } finally {
+        }
+      });
       this.centerDialogVisible = true;
     },
     getDatas() {
-      this.isLoading = true
+      this.isLoading = true;
       openActivityPager(this.form, this.pages).then(res => {
         try {
           let data = res.data;
           if (data.code == 200) {
-            this.totalNum = data.totalNum;
+            this.totalNum = data.entity.totalNum;
             this.listData = data.entity.resultData;
           }
         } catch (err) {
           console.log(err);
         } finally {
-          this.isLoading = false
+          this.isLoading = false;
         }
       });
     }
@@ -237,6 +301,9 @@ export default {
   created() {
     this.getActivityTypeParent();
     this.getDatas();
+    if (this.$route.query.id) {
+      this.look({ data: { id: this.$route.query.id } });
+    }
   }
 };
 </script>
@@ -246,6 +313,30 @@ export default {
   text-align: initial;
   padding: 25px 25px 30px;
 }
+.activity_box {
+  position: relative;
+  .activity_num {
+    position: absolute;
+    bottom: 0;
+    left: 75%;
+  }
+}
+.openactivitylist {
+  .item_tisp {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    min-width: 20px;
+    text-align: end;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    display: inline-block;
+  }
+}
+.statusActive {
+  color: #70b603;
+}
+
 .box {
   width: 90%;
   border: 1px solid #ccc;

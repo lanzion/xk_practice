@@ -81,95 +81,29 @@ const notice = () => import('@/views/my/notice/index')
 
 // 我的空间
 const space = () => import('@/views/my/space/index')
+
+// 我的空间--学生
+
+// 学生--我的活动
+const myactivities = () => import('@/views/my/space/student/myactivities/index')
+const registrationactivities = () => import('@/views/my/space/student/myactivities/children/registrationactivities')
+const schoolactivity = () => import('@/views/my/space/student/myactivities/children/schoolactivity')
+
+// 学生--我的作品
+const mywork = () => import('@/views/my/space/student/mywork/index')
+
+// 学生--我的收藏
+const mycollection = () => import('@/views/my/space/student/mycollection/index')
 // ---------------------------------------------------------------------------------------
 
-// const course = () => import('@/views/my/curriculumcenter/course/course') // 课程中心--课程
-// const textdetail = () => import('@/views/my/curriculumcenter/course/children/textdetail') // 课程中心--课程--课程详情
-// const textworks = () => import('@/views/my/curriculumcenter/course/children/textworks') // 课程中心--课程--实践作品
-// const workdetail = () => import('@/views/my/curriculumcenter/course/workdetail') // 课程中心--课程--实践作品--作品详情
-// const textevaluate = () => import('@/views/my/curriculumcenter/course/children/textevaluate') // 课程中心--课程--课程评论
-// const courseintroduction = () => import('@/views/my/curriculumcenter/coursedetails/courseintroduction/courseintroduction') // 课程介绍
-// const participatinginstitutions = () => import('@/views/my/curriculumcenter/coursedetails/participatinginstitutions/participatinginstitutions') // 参与院校
-// const practicalcurriculum = () => import('@/views/my/curriculumcenter/coursedetails/practicalcurriculum/practicalcurriculum') // 实践课程
-// const activityreview = () => import('@/views/my/curriculumcenter/coursedetails/activityreview/activityreview') // 活动点评
-// ---------------------------------------------------------------------------------------
-// const work = () => import('@/views/my/work/index') // 基地/机构
-// const basedetails = () => import('@/views/my/work/basedetails/index') // 基地/机构详情
-// const relatedcourses = () => import('@/views/my/work/basedetails/relatedcourses/relatedcourses') // 相关课程
-// const relatedcoursesdetails = () => import('@/views/my/work/basedetails/relatedcourses/relatedcoursesdetails') // 相关课程--详情
-// const relatedinformation = () => import('@/views/my/work/basedetails/relatedinformation/relatedinformation') // 相关资讯
-// const relatedinformationdetails = () => import('@/views/my/work/basedetails/relatedinformation/relatedinformationdetails') // 相关资讯--详情
-// const baseevaluation = () => import('@/views/my/work/basedetails/baseevaluation/baseevaluation') // 基地/机构评价
-// ---------------------------------------------------------------------------------------
-// const participation = () => import('@/views/my/participation/index') // 学校专栏
-// const participationdetails = () => import('@/views/my/participation/participationdetails/index') // 学校专栏--详情
-// const schoolhomepage = () => import('@/views/my/participation/participationdetails/schoolhomepage/schoolhomepage') // 学校专栏--详情（首页）
-// const schoolcurriculum = () => import('@/views/my/participation/participationdetails/schoolcurriculum/schoolcurriculum') // 学校专栏--详情（课程）
-// const schoolinformation = () => import('@/views/my/participation/participationdetails/schoolinformation/schoolinformation') // 学校专栏--详情（资讯）
-// const schoolinformationdetails = () => import('@/views/my/participation/participationdetails/schoolinformation/schoolinformationdetails') // 学校专栏--详情（资讯--详情）
-// ---------------------------------------------------------------------------------------
-// const activity = () => import('@/views/my/activity/index') // 通知公告
-// const activitydetails = () => import('@/views/my/activity/activitydetails/activitydetails') // 通知公告--详情
-// ---------------------------------------------------------------------------------------
-// const space = () => import('@/views/my/space/index') // 我的空间
+// 基本资料
+const bsinfor = () => import('@/views/my/space/common/bsinfor/index')
 
-// const bsinfor = () => import('@/views/my/space/common/bsinfor/index') // 基本资料（公用）
-// const avatar = () => import('@/views/my/space/common/avatar/index') // 头像设置（公用）
-// const accountsecurity = () => import('@/views/my/space/common/accountsecurity/index') // 账号安全（公用）
-// const pswd = () => import('@/views/my/space/common/accountsecurity/pswd/index') // 账号安全（公用）--密码
-// const phone = () => import('@/views/my/space/common/accountsecurity/phone/index') // 账号安全（公用）--手机
-// const email = () => import('@/views/my/space/common/accountsecurity/email/index') // 账号安全（公用）--邮箱
+// 头像设置
+const avatar = () => import('@/views/my/space/common/avatar/index')
 
-// const classroom = () => import('@/views/my/space/teacher/classroom/index') // 实践课堂（教师）
-// const curriculumdetails = () => import('@/views/my/space/teacher/classroom/curriculumdetails') // 实践课堂（教师）--课程详情
-// const curriculumevaluation = () => import('@/views/my/space/teacher/classroom/curriculumevaluation') // 实践课堂（教师）--课程评价
-// const abtd = () => import('@/views/my/space/teacher/classroom/children/abtd') // 实践课堂（教师）--未开始
-// const giss = () => import('@/views/my/space/teacher/classroom/children/giss') // 实践课堂（教师）--进行中
-// const ptba = () => import('@/views/my/space/teacher/classroom/children/ptba') // 实践课堂（教师）--已完成
-// const teacherstobeevaluated = () => import('@/views/my/space/teacher/classroom/children/teacherstobeevaluated') // 实践课堂（教师）--待评价
-
-// const agment = () => import('@/views/my/space/teacher/agment/index') // 作品管理（教师）
-// const workdetails = () => import('@/views/my/space/teacher/agment/workdetails') // 作品管理（教师）--详情
-// const tbuploaded = () => import('@/views/my/space/teacher/agment/children/tbuploaded') // 作品管理（教师）--待上传
-// const noaudited = () => import('@/views/my/space/teacher/agment/children/noaudited') // 作品管理（教师）--未审核
-// const audited = () => import('@/views/my/space/teacher/agment/children/audited') // 作品管理（教师）--已审核
-
-// const wscoring = () => import('@/views/my/space/teacher/wscoring/index') // 作品评分（教师）
-// const evaluationdetails = () => import('@/views/my/space/teacher/wscoring/evaluationdetails') // 作品评分（教师）--评分详情
-// const origs = () => import('@/views/my/space/teacher/wscoring/children/origs') // 作品评分（教师）--未评分
-// const heorigs = () => import('@/views/my/space/teacher/wscoring/children/heorigs') // 作品评分（教师）--已评分
-
-// const mgtudent = () => import('@/views/my/space/teacher/mgtudent/index') // 学生管理（教师）
-// const viewworks = () => import('@/views/my/space/teacher/mgtudent/viewworks') // 学生管理--查看作品（教师）
-
-// ---------------------------------------------------------------------------------------
-
-// const mycourse = () => import('@/views/my/space/student/mycourse/index') // 我的课程（学生）
-// const activityevaluation = () => import('@/views/my/space/student/mycourse/activityevaluation') // 我的课程（学生）--活动评价
-// const studentcoursedetails = () => import('@/views/my/space/student/mycourse/studentcoursedetails') // 我的课程（学生）--详情
-// const notstarted = () => import('@/views/my/space/student/mycourse/children/notstarted') // 我的课程（学生）--未开始
-// const haveinhand = () => import('@/views/my/space/student/mycourse/children/haveinhand') // 我的课程（学生）--进行中
-// const completed = () => import('@/views/my/space/student/mycourse/children/completed') // 我的课程（学生）--已完成
-// const coursestobeevaluated = () => import('@/views/my/space/student/mycourse/children/coursestobeevaluated') // 我的课程（学生）--待评价
-
-// const mywork = () => import('@/views/my/space/student/mywork/index') // 我的作品（学生）
-// const studentworkdetails = () => import('@/views/my/space/student/mywork/studentworkdetails') // 我的作品（学生）--作品详情
-// const submissionofworks = () => import('@/views/my/space/student/mywork/submissionofworks') // 我的作品（学生）--上传作品--详情
-// const uploadworks = () => import('@/views/my/space/student/mywork/children/uploadworks') // 我的作品（学生）--上传作品
-// const beaudited = () => import('@/views/my/space/student/mywork/children/beaudited') // 我的作品（学生）--待审核
-// const adopteder = () => import('@/views/my/space/student/mywork/children/adopteder') // 我的作品（学生）--已通过
-
-// const selfevaluation = () => import('@/views/my/space/student/selfevaluation/index') // 自我评价（学生）
-// const detailsofselfevaluation = () => import('@/views/my/space/student/selfevaluation/detailsofselfevaluation') // 自我评价（学生）--评价详情
-// const ungradedstudents = () => import('@/views/my/space/student/selfevaluation/children/ungradedstudents') // 自我评价（学生）--未评分
-// const studentshavebeengraded = () => import('@/views/my/space/student/selfevaluation/children/studentshavebeengraded') // 自我评价（学生）--已评分
-
-// const evaluatingothers = () => import('@/views/my/space/student/evaluatingothers/index') // 评价他人（学生）
-// const evaluateotherswithoutscoring = () => import('@/views/my/space/student/evaluatingothers/children/evaluateotherswithoutscoring') // 自我评价（学生）--未评分
-// const evaluateothersiscores = () => import('@/views/my/space/student/evaluatingothers/children/evaluateothersiscores') // 自我评价（学生）--已评分
-
-// const archives = () => import('@/views/my/space/student/archives/index') // 档案袋（学生）
-
+// 账号安全
+const accountsecurity = () => import('@/views/my/space/common/accountsecurity/index')
 // ---------------------------------------------------------------------------------------
 
 export default new Router({
@@ -348,6 +282,50 @@ export default new Router({
         path: '/space', // 我的空间
         name: 'space',
         component: space,
+        children: [
+            {
+                path: '/space/myactivities', // 我的活动
+                name: 'myactivities',
+                component: myactivities,
+                redirect: '/space/myactivities/schoolactivity',
+                children: [{
+                    path: '/space/myactivities/schoolactivity', // 我的活动-学校活动
+                    name: 'schoolactivity',
+                    component: schoolactivity,
+                },
+                {
+                    path: '/space/myactivities/registrationactivities', // 我的活动-报名活动
+                    name: 'registrationactivities',
+                    component: registrationactivities,
+                }]
+            },
+            {
+                path: '/space/mywork', // 我的作品
+                name: 'mywork',
+                component: mywork,
+            },
+            {
+                path: '/space/mycollection', // 我的收藏
+                name: 'mycollection',
+                component: mycollection,
+            },
+            {
+                path: '/space/bsinfor', // 基本资料
+                name: 'bsinfor',
+                component: bsinfor,
+            },
+            {
+                path: '/space/avatar', // 头像设置
+                name: 'avatar',
+                component: avatar,
+            },
+            {
+                path: '/space/accountsecurity', // 账号安全
+                name: 'accountsecurity',
+                component: accountsecurity,
+            }
+
+        ]
     },
         // ------------------------------------------------------------
 

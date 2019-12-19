@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import sortCourse from './admin/sortCourse'
+
 const container = () => import('@/views/admin/container')
 
 // 首页
@@ -640,7 +642,8 @@ export default new Router({
 
             ]
 
-        }, {
+        },
+        {
             name: 'baseManage',
             path: '/baseManage',
             component: container,
@@ -783,7 +786,8 @@ export default new Router({
                     component: activityfruitdraft
                 },
             ]
-        }
-
+        },
+        // 排课
+        ...sortCourse
     ]
 })

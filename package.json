@@ -55,7 +55,7 @@
     "css-loader": "^0.28.0",
     "element-theme": "^2.0.1",
     "element-theme-chalk": "^2.10.0",
-    "element-ui": "^2.9.1",
+    "element-ui": "^2.13.0",
     "eslint": "^4.15.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",

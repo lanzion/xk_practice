@@ -308,7 +308,7 @@ export default {
         ]
       },
       baseData: {
-        pageIndex: 1,
+        pageNum: 1,
         pageSize: 20
       },
       beasList: []
@@ -324,7 +324,7 @@ export default {
   },
   methods: {
     loadmore() {
-      this.baseData.pageIndex++;
+      this.baseData.pageNum++;
       this.getBaseList(this.baseData);
     },
     getBaseList(baseData) {

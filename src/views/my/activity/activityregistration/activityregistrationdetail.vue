@@ -479,9 +479,7 @@ export default {
         }
     },
     computed: {
-        ...mapState('login', {
-            identity: state => state.identity || {}
-        })
+ 
     },
     created() {
         this.userId = localStorage.getItem('xk_practice_uid') || ''

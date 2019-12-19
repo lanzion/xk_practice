@@ -1,6 +1,6 @@
 <template>
   <div class="sure">
-    <!-- <div class="tab" v-if="identity!=13">
+    <div class="tab" v-if="identity==6||identity==7||identity==10">
       <el-menu
         :default-active="activeIndex"
         class="el-menu-demo"
@@ -10,13 +10,16 @@
         <el-menu-item index="1">课程活动</el-menu-item>
         <el-menu-item index="2">开放式活动</el-menu-item>
       </el-menu>
-    </div> -->
+    </div>
     <div class="start-stups">
       <div class="start-title">活动进度:</div>
       <div class="start-stups-col" v-for="(item,index) in progress" :key="index">
         <span :class="active > index ? 'start-stups-num active':'start-stups-num' ">{{index+1}}</span>
         <span :class="active > index ? 'start-stups-rows active':'start-stups-rows' ">{{item}}</span>
-        <span :class="active > index ? 'start-stups-width active':'start-stups-width' " v-if="index!=progress.length-1"></span>
+        <span
+          :class="active > index ? 'start-stups-width active':'start-stups-width' "
+          v-if="index!=progress.length-1"
+        ></span>
       </div>
     </div>
 
@@ -25,7 +28,9 @@
         class="fr"
         :items="headBtnGroup"
         v-bind="{
-                    overshow:{ callback: overshow }
+                    overshow:{visible:activeIndex=='1', callback: overshow },
+                    passAct:{visible:activeIndex=='2',callback:passAct},
+                    noPassAct:{visible:activeIndex=='2',callback:noPassAct},
                 }"
       />
     </section>
@@ -40,69 +45,24 @@
       @selection-change="changeSelection"
     >
       <el-table-column type="selection" align="center" width="55"></el-table-column>
-      <el-table-column prop="courseName" label="课程名称" align="center" show-overflow-tooltip />
-      <el-table-column label="课程分类" align="center" show-overflow-tooltip>
-        <template
-          slot-scope="scope"
-        >{{scope.row.classificationParentName}}</template>
-      </el-table-column>
       <el-table-column
-        prop="baseInstName"
-        label="基地/机构"
-        align="center"
+        v-for="(col, index) in rowHeader"
+        :key="index"
+        :prop="col.prop"
+        :label="col.label"
         show-overflow-tooltip
-        v-if="identity=='9'||identity=='6'||identity=='7'||identity=='10'"
-      />
-      <el-table-column
-        prop="schoolName"
-        label="参与学校"
         align="center"
-        show-overflow-tooltip
-        v-if="identity=='13'||identity=='6'||identity=='7'||identity=='10'"
-      />
-      <!-- <el-table-column prop="orgName" label="发布教育局" align="center" show-overflow-tooltip></el-table-column> -->
-      <el-table-column
-        prop="startTime"
-        label="活动开始时间"
-        align="center"
-        sortable
-        show-overflow-tooltip
-        width="140"
-      />
-      <el-table-column label="活动时长" align="center" width="80">
-        <template slot-scope="scope">
-          <span>{{scope.row.courseDuration|filterCode(6)}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="gmtCreate"
-        label="发起活动时间"
-        align="center"
-        sortable
-        show-overflow-tooltip
-        width="140"
-      />
-      <el-table-column
-        prop="actJoinStuNums"
-        label="学生人数"
-        align="center"
-        sortable
-        show-overflow-tooltip
-        width="110"
-      />
-      <el-table-column
-        label="基地确认状态"
-        align="center"
-        sortable
-        width="150"
-        v-if="identity=='9'||identity=='6'||identity=='7'||identity=='10'"
       >
-        <template slot-scope="scope">
-          <span v-if="scope.row.baseInstAuditStatus==0">未确定</span>
-          <span v-if="scope.row.baseInstAuditStatus==1" class="statusActive">已确定</span>
+        <template slot-scope="scope" v-if="listData.length">
+          <my-render
+            v-if="col.render"
+            :row="scope.row"
+            :render="col.render(scope)"
+            :classTxt="col.classTxt?col.classTxt(scope):''"
+          ></my-render>
+          <div v-else>{{scope.row[col.prop]}}</div>
         </template>
       </el-table-column>
-
       <el-table-column label="操作" align="center" fixed="right" :width="operateWidth">
         <template slot-scope="scope">
           <list-operate
@@ -110,7 +70,8 @@
             :data="scope.row"
             :index="scope.$index"
             v-bind="{
-                         show: { callback: show },
+                         show: {visible:activeIndex=='1', callback: show },
+                         confirmOpenAct: {visible:activeIndex=='2', query: { id: 'id'} },
                     }"
           />
         </template>
@@ -206,6 +167,35 @@
         >基地/机构、教育局确认后方可打印</p>
       </div>
     </el-dialog>
+    <el-dialog title :visible.sync="offDialogVisible" width="500px">
+      <div class="visble_conter" v-if="openActNotPass.length">
+        <div class="visble_title">
+          <span>*</span> 请选择屏蔽原因：
+        </div>
+        <div class="radio_list">
+          <el-row>
+            <el-col :span="8" v-for="item in openActNotPass" :key="item.id">
+              <el-radio v-model="radio" :label="item.code">{{item.name}}</el-radio>
+            </el-col>
+          </el-row>
+        </div>
+        <div
+          class="other"
+          v-if="openActNotPass.length&&radio==openActNotPass[openActNotPass.length-1].code"
+        >
+          <div class="visble_title">
+            <span>*</span> 屏蔽原因说明：
+          </div>
+          <div>
+            <el-input type="textarea" autosize placeholder="请输入内容" v-model="othertxt"></el-input>
+          </div>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="offDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="shieidSubmi">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -214,8 +204,15 @@ import { mapState, mapActions } from "vuex";
 import permission from "@/mixin/admin-operate";
 import user from "@/mixin/admin-user";
 import { activityState } from "@/utils/utility/dict.js";
-import { activityWtAudit, cbookView, confirmActivity } from "@/api/newApi";
-
+import {
+  activityWtAudit,
+  cbookView,
+  confirmActivity,
+  openActivityStayPager,
+  openActivityAuditBatchAdd
+} from "@/api/newApi";
+import { requestDataDict } from "@/api/common.js";
+import MyRender from "@/components/admin/common/MyRender.vue";
 import {
   auditStatus,
   fit,
@@ -224,27 +221,107 @@ import {
   courseType,
   courseDuration
 } from "@/utils/utility/dict.js";
-
+let _filterCode = (val, num) => {
+  let name, arr;
+  let typeArr = {
+    "1": auditStatus,
+    "2": fit,
+    "3": status,
+    "4": isFree,
+    "5": courseType,
+    "6": courseDuration
+  };
+  arr = typeArr[num];
+  arr.forEach(v => {
+    if (v.code == val) name = v.name;
+  });
+  return name;
+};
 export default {
   name: "sure",
   mixins: [permission, user],
-
+  components: {
+    "my-render": MyRender
+  },
   data() {
     return {
-      progress:['学校发起活动','基地/机构确认活动','教育局确认活动','开展实践活动','活动评价'],
-      activeIndex: '1',
+      progress: [
+        "学校发起活动",
+        "基地/机构确认活动",
+        "教育局确认活动",
+        "开展实践活动",
+        "活动评价"
+      ],
+      activeIndex: "1",
       pos: "0",
       active: 2,
       activityState: activityState,
       listData: [],
       centerDialogVisible: false,
+      offDialogVisible: false,
+      openActNotPass: [],
+      radio: "",
+      othertxt: "",
       multipleSelection: [],
       form: {
         activityTitle: "",
         commentStatus: "",
         schoolName: ""
       },
-      confirmation: {}
+      confirmation: {},
+      openActHeader: [
+        {
+          prop: "name",
+          label: "活动名称"
+        },
+        {
+          prop: "typeParentName",
+          label: "活动分类"
+        },
+        {
+          prop: "typeParentName",
+          label: "基地/机构"
+        },
+        {
+          prop: "enrollDate",
+          label: "报名时间",
+          render: params => {
+            return params.row.enrollStartDate + "至" + params.row.enrollEndDate;
+          }
+        },
+        {
+          prop: "activityDate",
+          label: "活动时间",
+          render: params => {
+            return (
+              params.row.activityStartDate +
+              "至" +
+              params.row.activityEndDate +
+              " 共" +
+              params.row.enrollAllNum +
+              "场"
+            );
+          }
+        },
+        {
+          prop: "enrollMaxNum",
+          label: "每场人数限制",
+          render: params => {
+            return params.row.enrollMaxNum + "人";
+          }
+        },
+        {
+          prop: "free",
+          label: "是否收费",
+          render: params => {
+            return params.row.free ? params.row.price + "元" : "免费";
+          }
+        },
+        {
+          prop: "createDate",
+          label: "活动发起时间"
+        }
+      ]
     };
   },
   filters: {
@@ -283,23 +360,106 @@ export default {
   computed: {
     ...mapState("login", {
       identity: state => state.identity || {}
-    })
+    }),
+    rowHeader() {
+      if (this.activeIndex == 1) {
+        return this.ActHeader;
+      } else if (this.activeIndex == 2) {
+        return this.openActHeader;
+      }
+    },
+    ActHeader() {
+      let arr = [
+        {
+          prop: "courseName",
+          label: "课程名称"
+        },
+        {
+          prop: "classificationParentName",
+          label: "课程分类"
+        },
+        {
+          prop: "baseInstName",
+          label: "基地/机构"
+        },
+        {
+          prop: "schoolName",
+          label: "参与学校"
+        },
+        {
+          prop: "startTime",
+          label: "活动开始时间"
+        },
+        {
+          prop: "courseDuration",
+          label: "活动时长",
+          render: params => {
+            return _filterCode(params.row.courseDuration, "6");
+          }
+        },
+        {
+          prop: "gmtCreate",
+          label: "发起活动时间"
+        },
+        {
+          prop: "actJoinStuNums",
+          label: "学生人数"
+        },
+        {
+          prop: "baseInstAuditStatus",
+          label: "基地确认状态",
+          classTxt: params => {
+            return params.row.baseInstAuditStatus ? "statusActive" : "";
+          },
+          render: params => {
+            return params.row.baseInstAuditStatus ? "已确定" : "未确定";
+          }
+        }
+      ];
+      if (this.identity == 13) {
+        arr.splice(2, 1);
+        arr.splice(arr.length - 1, 1);
+      }
+      return arr;
+    }
   },
   created() {
     this.getDatas();
-    if (this.identity == "13") this.active = 2;
-    else this.active = 3;
+    if (this.identity == "13") {
+      this.active = 2;
+    } else {
+      this.active = 3;
+      this.getDataDict("CAUSE_PARENT");
+    }
   },
   methods: {
     handleSelect(key, keyPath) {
-      console.log(this.activeIndex);
-      if(key==1){
-        this.progress = ['学校发起活动','基地/机构确认活动','教育局确认活动','开展实践活动','活动评价'];
+      this.listData = [];
+      this.activeIndex = key;
+      if (key == 1) {
+        this.progress = [
+          "学校发起活动",
+          "基地/机构确认活动",
+          "教育局确认活动",
+          "开展实践活动",
+          "活动评价"
+        ];
         this.active = 3;
-      }else{
-        this.progress = ['基地/机构发起活动','教育局确认活动','开展实践活动','活动评价'];
+      } else {
+        this.progress = [
+          "基地/机构发起活动",
+          "教育局确认活动",
+          "开展实践活动",
+          "活动评价"
+        ];
         this.active = 2;
       }
+      this.resetPage();
+    },
+    async getDataDict(groupCode) {
+      const res = await requestDataDict({ groupCode });
+      const datas = res.data.entity || {};
+      this.openActNotPass = datas.dicList;
     },
     // 重置分页
     resetPage() {
@@ -309,8 +469,11 @@ export default {
     // 获取列表数据
     async getDatas() {
       this.isLoading = true;
+      let head;
+      if (this.activeIndex == 1) head = activityWtAudit;
+      else head = openActivityStayPager;
       const formList = Object.assign({}, this.form);
-      const res = await activityWtAudit(formList, this.pages);
+      const res = await head(formList, this.pages);
 
       const { entity: datas = {} } = res.data;
 
@@ -416,6 +579,123 @@ export default {
           console.log(err);
         }
       });
+    },
+    passAct() {
+      if (!this.multipleSelection.length) {
+        this.$message({
+          message: "最少要选择一个活动",
+          type: "warning"
+        });
+        return;
+      }
+      let param = {
+        auditStatus: "2",
+        auditList: []
+      };
+      this.multipleSelection.forEach(v => {
+        let obj = { activityId: v.id };
+        param.auditList.push(obj);
+      });
+      const h = this.$createElement;
+      this.$msgbox({
+        title: "",
+        message: h("p", { style: "padding: 30px 3px" }, [
+          h(
+            "span",
+            null,
+            "确认活动通过吗？确认后基地/机构将遵照确认书开展活动。"
+          )
+        ]),
+        showCancelButton: true,
+        confirmButtonText: "确定通过",
+        cancelButtonText: "取消",
+        beforeClose: (action, instance, done) => {
+          if (action === "confirm") {
+            instance.confirmButtonLoading = true;
+            instance.confirmButtonText = "确认中...";
+            openActivityAuditBatchAdd(param).then(res => {
+              try {
+                let _datas = res.data;
+                if (_datas.code == 200) {
+                  this.$message({
+                    message: "确认活动成功",
+                    type: "success"
+                  });
+                  this.centerDialogVisible = false;
+                  done();
+                  this.getDatas();
+                } else {
+                  this.$message({
+                    message: _datas.msg || `确认活动失败`,
+                    type: "error"
+                  });
+                  done();
+                }
+              } catch (err) {
+                console.log(err);
+              } finally {
+                instance.confirmButtonLoading = false;
+              }
+            });
+          } else {
+            done();
+          }
+        }
+      })
+        .then(action => {})
+        .catch(() => {});
+    },
+    noPassAct() {
+      if (!this.multipleSelection.length) {
+        this.$message({
+          message: "最少要选择一个活动",
+          type: "warning"
+        });
+        return;
+      }
+      this.offDialogVisible = true;
+    },
+    shieidSubmi() {
+      if(!this.radio) return
+      if (this.radio ==this.openActNotPass[this.openActNotPass.length - 1].code &&!this.othertxt) {
+        this.$message({
+          message: "请选择屏蔽原因或填写屏蔽原因",
+          type: "warning"
+        });
+        return;
+      }
+      let param = {
+        auditStatus: "3",
+        auditList: [],
+        causeCode: this.radio,
+        content: this.othertxt
+      };
+      this.multipleSelection.forEach(v => {
+        let obj = {activityId: v.id,};
+        param.auditList.push(obj);
+      });
+      openActivityAuditBatchAdd(param).then(res => {
+        try {
+          let _datas = res.data;
+          if (_datas.code == 200) {
+            this.$message({
+              message: "不通过活动成功",
+              type: "success"
+            });
+            this.centerDialogVisible = false;
+            this.getDatas();
+          } else {
+            this.$message({
+              message: _datas.msg || `不通过活动失败`,
+              type: "error"
+            });
+          }
+        } catch (err) {
+          console.log(err);
+        } finally {
+          this.offDialogVisible = false;
+        }
+      });
     }
   }
 };
@@ -473,6 +753,11 @@ export default {
       border-color: #000;
       color: #000;
     }
+  }
+}
+.sure {
+  /deep/ .statusActive {
+    color: #70b603;
   }
 }
 .box {
@@ -540,7 +825,16 @@ export default {
 .print_tips {
   color: #d9001b;
 }
-.tab{
+.tab {
   margin-top: 20px;
+}
+.visble_conter {
+  line-height: 30px;
+  .visble_title {
+    color: #000;
+    span {
+      color: #d9001b;
+    }
+  }
 }
 </style>

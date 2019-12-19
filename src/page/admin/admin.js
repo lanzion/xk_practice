@@ -2,8 +2,8 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import 'babel-polyfill'
 import Vue from 'vue'
-import App from './App'
 import ElementUI from 'element-ui'
+import App from './App'
 import router from '@/router/admin'
 import store from '@/store/index'
 import '@utils/lib/aliyun-upload-sdk-1.4.0.min.js'

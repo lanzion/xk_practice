@@ -1,6 +1,34 @@
 <template>
   <div class="cal">
     <div class="l_calendar">
+      <div class="select_region" v-if="identity!=9&&identity!=13">
+        学校地区:
+        <el-select v-model="parentId" clearable placeholder="请选择省份">
+          <el-option
+            v-for="item in regionList"
+            :key="item.code"
+            :label="item.name"
+            :value="item.code"
+          ></el-option>
+        </el-select>
+        <el-select v-model="cityId" clearable placeholder="请选择市">
+          <el-option
+            v-for="item in cityList"
+            :key="item.code"
+            :label="item.name"
+            :value="item.code"
+          ></el-option>
+        </el-select>
+        <el-select v-model="areaId" clearable placeholder="请选择区">
+          <el-option
+            v-for="item in areaList"
+            :key="item.code"
+            :label="item.name"
+            :value="item.code"
+          ></el-option>
+        </el-select>&nbsp;&nbsp;&nbsp;
+        <el-button type="primary" @click="getActivityInM(new Date())">搜索</el-button>
+      </div>
       <ele-calendar
         border
         :render-content="renderContent"
@@ -10,7 +38,157 @@
         @date-change="dateChange"
       ></ele-calendar>
     </div>
-    <div class="activitybox">
+    <div class="activitybox" v-if="identity!=9&&identity!=13">
+      <div class="activitylist_title">{{activeDate}}活动安排：</div>
+      <div
+        class="activity_list"
+        v-if="activeList.amActivities&&activeList.amActivities.length||activeList.pmActivities&&activeList.pmActivities.length||activeList.allDayActivities&&activeList.allDayActivities.length"
+      >
+        <div class="amActivity_list" v-if="activeList.amActivities&&activeList.amActivities.length">
+          <el-row>
+            <el-col :span="2" class="amActivity_list_title">上午{{activeList.amActivities.length}}场</el-col>
+            <el-col :span="22">
+              <el-row
+                class="activity_box"
+                v-for="cityItem in activeList.amActivities"
+                :key="cityItem.cityId"
+              >
+                <div class="city_title">{{cityItem.cityName}} ({{cityItem.cityTimeCount}})场</div>
+                <div
+                  v-for="areaItem in cityItem.countryActivities"
+                  :key="areaItem.countryId"
+                  class="city_list"
+                >
+                  <div class="city_title">{{areaItem.countryName}} ({{areaItem.countryTimeCount}})场</div>
+                  <div v-for="item in areaItem.activities" :key="item.id" class="act_box">
+                    <el-row>
+                      <el-col :span="13">
+                        <el-col :span="24" class="txt_box">学校名称：{{item.schoolName}}</el-col>
+                        <el-col :span="24" class="txt_box">课程名称：{{item.courseName}}</el-col>
+                        <el-col :span="24" class="txt_box">
+                          报名人数：共{{item.actJoinStuNums}}人&nbsp;&nbsp;
+                          <span
+                            v-for="(subItem,index) in item.classInfos"
+                            :key="index"
+                          >{{subItem.className}}（{{subItem.enrollNum}}人）</span>
+                        </el-col>
+                      </el-col>
+                      <el-col :span="8">
+                        <el-col :span="24" class="txt_box">基地/机构：{{item.baseInstName}}</el-col>
+                        <el-col
+                          :span="24"
+                          class="txt_box"
+                        >活动开始时间及时长：{{item.startTime}}&nbsp;&nbsp;&nbsp;半天</el-col>
+                      </el-col>
+                      <el-col :span="3" class="btn">
+                        <el-button type="primary" @click="look(item.id)">活动确认书</el-button>
+                      </el-col>
+                    </el-row>
+                  </div>
+                </div>
+              </el-row>
+            </el-col>
+          </el-row>
+        </div>
+        <div class="amActivity_list" v-if="activeList.pmActivities&&activeList.pmActivities.length">
+          <el-row>
+            <el-col :span="2" class="amActivity_list_title">下午{{activeList.pmActivities.length}}场</el-col>
+            <el-col :span="22">
+              <el-row
+                class="activity_box"
+                v-for="cityItem in activeList.pmActivities"
+                :key="cityItem.cityId"
+              >
+                <div class="city_title">{{cityItem.cityName}} ({{cityItem.cityTimeCount}})场</div>
+                <div
+                  v-for="areaItem in cityItem.countryActivities"
+                  :key="areaItem.countryId"
+                  class="city_list"
+                >
+                  <div class="city_title">{{areaItem.countryName}} ({{areaItem.countryTimeCount}})场</div>
+                  <div v-for="item in areaItem.activities" :key="item.id" class="act_box">
+                    <el-row>
+                      <el-col :span="13">
+                        <el-col :span="24" class="txt_box">学校名称：{{item.schoolName}}</el-col>
+                        <el-col :span="24" class="txt_box">课程名称：{{item.courseName}}</el-col>
+                        <el-col :span="24" class="txt_box">
+                          报名人数：共{{item.actJoinStuNums}}人&nbsp;&nbsp;
+                          <span
+                            v-for="(subItem,index) in item.classInfos"
+                            :key="index"
+                          >{{subItem.className}}（{{subItem.enrollNum}}人）</span>
+                        </el-col>
+                      </el-col>
+                      <el-col :span="8">
+                        <el-col :span="24" class="txt_box">基地/机构：{{item.baseInstName}}</el-col>
+                        <el-col
+                          :span="24"
+                          class="txt_box"
+                        >活动开始时间及时长：{{item.startTime}}&nbsp;&nbsp;&nbsp;半天</el-col>
+                      </el-col>
+                      <el-col :span="3" class="btn">
+                        <el-button type="primary" @click="look(item.id)">活动确认书</el-button>
+                      </el-col>
+                    </el-row>
+                  </div>
+                </div>
+              </el-row>
+            </el-col>
+          </el-row>
+        </div>
+        <div
+          class="amActivity_list"
+          v-if="activeList.allDayActivities&&activeList.allDayActivities.length"
+        >
+          <el-row>
+            <el-col :span="2" class="amActivity_list_title">全天{{activeList.allDayActivities.length}}场</el-col>
+            <el-col :span="22">
+              <el-row
+                class="activity_box"
+                v-for="cityItem in activeList.allDayActivities"
+                :key="cityItem.cityId"
+              >
+                <div class="city_title">{{cityItem.cityName}} ({{cityItem.cityTimeCount}})场</div>
+                <div
+                  v-for="areaItem in cityItem.countryActivities"
+                  :key="areaItem.countryId"
+                  class="city_list"
+                >
+                  <div class="city_title">{{areaItem.countryName}} ({{areaItem.countryTimeCount}})场</div>
+                  <div v-for="item in areaItem.activities" :key="item.id" class="act_box">
+                    <el-row>
+                      <el-col :span="13">
+                        <el-col :span="24" class="txt_box">学校名称：{{item.schoolName}}</el-col>
+                        <el-col :span="24" class="txt_box">课程名称：{{item.courseName}}</el-col>
+                        <el-col :span="24" class="txt_box">
+                          报名人数：共{{item.actJoinStuNums}}人&nbsp;&nbsp;
+                          <span
+                            v-for="(subItem,index) in item.classInfos"
+                            :key="index"
+                          >{{subItem.className}}（{{subItem.enrollNum}}人）</span>
+                        </el-col>
+                      </el-col>
+                      <el-col :span="8">
+                        <el-col :span="24" class="txt_box">基地/机构：{{item.baseInstName}}</el-col>
+                        <el-col
+                          :span="24"
+                          class="txt_box"
+                        >活动开始时间及时长：{{item.startTime}}&nbsp;&nbsp;&nbsp;全天</el-col>
+                      </el-col>
+                      <el-col :span="3" class="btn">
+                        <el-button type="primary" @click="look(item.id)">活动确认书</el-button>
+                      </el-col>
+                    </el-row>
+                  </div>
+                </div>
+              </el-row>
+            </el-col>
+          </el-row>
+        </div>
+      </div>
+      <div class="activity_none" v-else>当天没有活动安排</div>
+    </div>
+    <div class="activitybox" v-else>
       <div class="activitylist_title">{{activeDate}}活动安排：</div>
       <div
         class="activity_list"
@@ -219,7 +397,8 @@ import {
   baseinstActivityDayTimes,
   baseinstActivityDayDetail,
   areaActivityDayTimes,
-  areatActivityDayDetail
+  areatActivityDayDetail,
+  areatActivityAreaList
 } from "@/api/newApi.js";
 
 import {
@@ -244,7 +423,13 @@ export default {
         allDayActivities: [],
         amActivities: [],
         pmActivities: []
-      }
+      },
+      regionList: [],
+      cityList: [],
+      areaList: [],
+      parentId: 440000,
+      cityId: "",
+      areaId: ""
     };
   },
   components: {
@@ -276,6 +461,17 @@ export default {
       if (val == 0) return "基地/机构未确认";
       if (val == 2) return "教育局已确认";
       if (val == 1) return "活动双方已确认";
+    }
+  },
+  watch: {
+    parentId(n) {
+      this.getAreatActivityAreaList(n, 2);
+      this.cityId = "";
+      this.areaId = "";
+      this.areaList = [];
+    },
+    cityId(n) {
+      this.getAreatActivityAreaList(n, 3);
     }
   },
   methods: {
@@ -326,18 +522,79 @@ export default {
     dateChange(date) {
       this.getActivityInM(date);
     },
+    getAreatActivityAreaList(pCode, type) {
+      if (pCode == "999" || pCode == "-1") {
+        areatActivityAreaList({ pCode: pCode, type: type }).then(res => {
+          try {
+            this.regionList = res.data.appendInfo.list;
+            this.getAreatActivityAreaList(this.parentId, 2);
+          } catch (err) {
+            console.log(err);
+          }
+        });
+      } else {
+        if (type == 2) {
+          this.regionList.forEach(v => {
+            if (v.code == pCode) {
+              if (v.items) {
+                this.cityList = v.items;
+              } else {
+                areatActivityAreaList({ pCode: pCode, type: type }).then(
+                  res => {
+                    try {
+                      v["items"] = res.data.appendInfo.list;
+                      this.cityList = res.data.appendInfo.list;
+                      if (this.cityList.length == 1)
+                        this.cityId = this.cityList[0].code;
+                    } catch (err) {
+                      console.log(err);
+                    }
+                  }
+                );
+              }
+            }
+          });
+        } else {
+          this.cityList.forEach(v => {
+            if (v.code == pCode) {
+              if (v.items) {
+                this.areaList = v.items;
+              } else {
+                areatActivityAreaList({ pCode: pCode, type: type }).then(
+                  res => {
+                    try {
+                      v["items"] = res.data.appendInfo.list;
+                      this.areaList = res.data.appendInfo.list;
+                      if (this.areaList.length == 1)
+                        this.areaId = this.areaList[0].code;
+                    } catch (err) {
+                      console.log(err);
+                    }
+                  }
+                );
+              }
+            }
+          });
+        }
+      }
+    },
     async getActivityInM(date) {
       let month = moment(date).format("YYYY-MM");
       let haed;
       if (this.identity == 9) {
         haed = schoolActivityDayTimes;
-      }else if(this.identity==13){
-         haed = baseinstActivityDayTimes;
-      }else{
+      } else if (this.identity == 13) {
+        haed = baseinstActivityDayTimes;
+      } else {
         haed = areaActivityDayTimes;
       }
       if (!haed) return;
-      let res = await haed({ month });
+      let res = await haed({
+        month: month,
+        provinceId: this.parentId,
+        cityId: this.cityId,
+        countryId: this.areaId
+      });
       try {
         if (res.data.code == 200) {
           this.datedef = res.data.appendInfo.dayTimes;
@@ -353,10 +610,10 @@ export default {
       let haed;
       if (this.identity == 9) {
         haed = schoolActivityDayDetail;
-      }else if(this.identity==13){
-        haed = baseinstActivityDayDetail
-      }else{
-        haed = areatActivityDayDetail
+      } else if (this.identity == 13) {
+        haed = baseinstActivityDayDetail;
+      } else {
+        haed = areatActivityDayDetail;
       }
       if (!haed) return;
       let res = await haed({ day });
@@ -399,9 +656,15 @@ export default {
       });
     }
   },
+  mounted() {},
   created() {
     this.getActivityInM(new Date());
     this.getActivityInDay(new Date());
+    if (this.identity == "5") {
+      this.getAreatActivityAreaList("999", 2);
+    } else {
+      this.getAreatActivityAreaList("-1", 1);
+    }
   }
 };
 </script>
@@ -421,6 +684,13 @@ export default {
 
 .cal {
   padding-top: 20px;
+  .select_region {
+    background: #fff;
+    padding: 20px;
+    /deep/ .el-select {
+      width: 200px;
+    }
+  }
 }
 .l_calendar {
   width: 80%;
@@ -529,6 +799,23 @@ export default {
         border-bottom: 1px solid #eee;
         padding-bottom: 10px;
         margin-bottom: 20px;
+        .city_title{
+          color: #333;
+          font-weight: 600;
+          padding-bottom: 20px;
+        }
+        .city_list{
+          padding-left: 10px;
+          .city_title{
+            padding-left: 20px;
+          }
+          .act_box{
+            padding-left: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+             margin-bottom: 20px;
+          }
+        }
         .txt_box {
           white-space: nowrap;
           overflow: hidden;
@@ -542,6 +829,12 @@ export default {
       }
       .activity_box:last-child {
         border-bottom: none;
+        .city_list{
+          .act_box:last-child{
+            border-bottom: none;
+            padding-bottom: 0;
+          }
+        }
       }
     }
     .amActivity_list:nth-of-type(2),

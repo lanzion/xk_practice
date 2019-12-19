@@ -79,7 +79,7 @@ const state = {
     title: {}, // 职称
     compileType: {}, // 编制类型
     GB_T_4761_2008: {}, // 学生家长关系
-    technicalClassification:{}
+    technicalClassification: {}
 }
 
 const getters = {}

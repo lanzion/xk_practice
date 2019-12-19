@@ -295,8 +295,6 @@
 
                 const _this = this
                 let _file = file
-                console.log(1,file.file);
-                console.log(1,file);
 
                 const fileType = Object.prototype.toString.call(file.file)
                 // if (fileType !== '[object File]') {

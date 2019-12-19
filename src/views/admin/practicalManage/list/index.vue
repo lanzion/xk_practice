@@ -40,25 +40,26 @@
             ></el-option>
           </el-select>
         </el-form-item>
-
         <el-form-item label="基地/机构" v-if="identity!=13">
           <el-select
-            clearable
             v-model="form.baseInstId"
-            remote
-            reserve-keyword
-            :remote-method="getBaseList"
             filterable
-            placeholder="请输入关键词"
+            remote
+            placeholder="请选择基地/机构"
+            :remote-method="remoteMethod"
+            v-el-select-loadmore="loadmore"
+            clearable
+            @clear="remoteMethod"
           >
             <el-option
-              v-for="item in beasList"
-              :key="item.baseInstId"
-              :label="item.baseInstName"
-              :value="item.baseInstId"
+              v-for="(item,index) in beasList"
+              :key="index"
+              :label="item.name"
+              :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
+
         <el-form-item label="学校名称" v-if="identity!=9">
           <el-select
             clearable
@@ -85,9 +86,7 @@
     <el-table ref="table" :data="listData" stripe align="center" v-loading="isLoading" border>
       <el-table-column prop="courseName" label="课程名称" align="center" show-overflow-tooltip />
       <el-table-column label="课程分类" align="center" show-overflow-tooltip>
-        <template
-          slot-scope="scope"
-        >{{scope.row.classificationParentName}}</template>
+        <template slot-scope="scope">{{scope.row.classificationParentName}}</template>
       </el-table-column>
       <el-table-column
         prop="baseInstName"
@@ -426,14 +425,14 @@ import permission from "@/mixin/admin-operate";
 import user from "@/mixin/admin-user";
 import { activityState } from "@/utils/utility/dict.js";
 import {
-  searchBaselist,
   activityList,
   cbookView,
   delActivity,
   activityDetail,
   addActivityEval,
   evalActivityView,
-  searchSchoollist
+  searchSchoollist,
+  BaseList
 } from "@/api/newApi";
 
 import {
@@ -451,6 +450,12 @@ export default {
 
   data() {
     return {
+      beasList: [],
+      baseData: {
+        pageNum: 1,
+        pageSize: 20
+      },
+      baseName: "",
       pos: "0",
       beasList: [],
       schoolList: [],
@@ -513,6 +518,22 @@ export default {
       if (val == 1) return "活动双方已确认";
     }
   },
+  directives: {
+    "el-select-loadmore": {
+      bind(el, binding) {
+        const SELECTWRAP_DOM = el.querySelector(
+          ".el-select-dropdown .el-select-dropdown__wrap"
+        );
+        SELECTWRAP_DOM.addEventListener("scroll", function() {
+          const condition =
+            this.scrollHeight - this.scrollTop <= this.clientHeight;
+          if (condition) {
+            binding.value();
+          }
+        });
+      }
+    }
+  },
   computed: {
     ...mapState("login", {
       identity: state => state.identity || {}
@@ -529,8 +550,8 @@ export default {
     }
   },
   created() {
+    this.getBaseList(this.baseData);
     this.getDatas();
-    this.getBaseList();
     this.getSchoolList();
     if (this.$route.query.activityId) {
       let id = this.$route.query.activityId;
@@ -540,18 +561,29 @@ export default {
     else this.evalPointsTitle = "基地/机构对学校评价";
   },
   methods: {
+    loadmore(val) {
+      this.baseData.pageNum++;
+      this.getBaseList(this.baseData);
+    },
+    getBaseList(baseData, searchName) {
+      BaseList({ name: this.baseName }, baseData).then(res => {
+        const { entity: datas = {} } = res.data;
+        let _list = datas.resultData || [];
+        if (searchName) {
+          this.beasList = [];
+        }
+        this.beasList = [...this.beasList, ..._list];
+      });
+    },
+    remoteMethod(query) {
+      this.baseName = query;
+      this.baseData.pageNum = 1;
+      this.getBaseList(this.baseData, true);
+    },
     selectList() {
       this.getDatas();
     },
-    // 获取基地列表
-    getBaseList(query) {
-      searchBaselist({ baseInstName: query }).then(res => {
-        let _data = res.data;
-        if (_data.code == 200) {
-          this.beasList = _data.appendInfo.baseInsts;
-        }
-      });
-    },
+
     getSchoolList(query) {
       searchSchoollist({ schoolName: query }).then(res => {
         let _data = res.data;

@@ -137,12 +137,26 @@ const baseinstActivityDayDetail = (options = {}) => xhr.post('/practice/activity
 const areaActivityDayTimes = (options = {}) => xhr.post('/practice/activity/calendar/area/day-times', options)
 // [活动日历]-日-活动统计-教育局
 const areatActivityDayDetail = (options = {}) => xhr.post('/practice/activity/calendar/area/day-detail', options)
+// [活动日历]-区域列表
+const areatActivityAreaList = (options = {}) => xhr.post('/practice/activity/calendar/area/list', options)
 // 获取开放式活动列表 - 基地
 const openActivityPager = (options = {}, page) => xhr.post(`/practice/openActivity/selectPager?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
+// 获取开放式活动待确认列表
+const openActivityStayPager = (options = {}, page) => xhr.post(`/practice/openActivity/selectAffirmPager?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 // 参与情况
 const openActivitySignupPager = (options = {}, page) => xhr.post(`/practice/openActivitySignup/selectPager?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 // 查看确认书
 const openActivityCheckConfirmationById = (options = {}) => xhr.post(`/practice/openActivity/CheckConfirmationById`, options)
+// 发起开放式活动
+const openActivityAdd = (options = {}) => xhr.post(`/practice/openActivity/add`, options)
+// 获取开放式活动详情
+const openActivityDetail = (options = {}) => xhr.post(`/practice/openActivity/selectDetail`, options)
+// 编辑开放式活动
+const openActivityModify = (options = {}) => xhr.post(`/practice/openActivity/modify`, options)
+// 开放式活动确认
+const openActivityAudit = (options = {}) => xhr.post(`/practice/openActivityAudit/add`, options)
+// 开放式活动批量审批
+const openActivityAuditBatchAdd = (options = {}) => xhr.post(`/practice/openActivityAudit/batchAdd`, options)
 
 export {
     selectUserList,
@@ -209,7 +223,14 @@ export {
     baseinstActivityDayDetail,
     areaActivityDayTimes,
     areatActivityDayDetail,
+    areatActivityAreaList,
     openActivityPager,
+    openActivityStayPager,
     openActivitySignupPager,
-    openActivityCheckConfirmationById
+    openActivityCheckConfirmationById,
+    openActivityAdd,
+    openActivityDetail,
+    openActivityModify,
+    openActivityAudit,
+    openActivityAuditBatchAdd
 }

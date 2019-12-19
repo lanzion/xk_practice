@@ -39,37 +39,57 @@
           :value="item.code"
         >{{ item.name }}</el-radio>
       </el-radio-group>
-      <el-input :style="{'width':'100px'}" v-if="form.isFree==1" v-model="form.price"></el-input>
-      <span v-if="form.isFree==1">元</span>
+      <el-input :style="{'width':'100px'}" v-if="form.free==1" v-model="form.price"></el-input>
+      <span v-if="form.free==1">元</span>
     </el-form-item>
-    <el-form-item label="报名时间">
+    <el-form-item label="报名时间" prop="enrollEndDateStr">
       <el-row>
         <el-col :span="14">
-          <div class>
-            <el-date-picker
-              v-model="startTimeAndEndTime"
-              @change="changestartTimeAndEndTime"
-              format="yyyy 年 MM 月 dd 日"
-              value-format="timestamp"
-              type="datetimerange"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :default-time="['00:00:00', '23:59:59']"
-            ></el-date-picker>
+          <div class="c-datepicker-date-editor J-datepicker-range-between30 mt10 enrolldate">
+            <i class="el-input__icon el-range__icon el-icon-time"></i>
+            <input
+              placeholder="开始日期"
+              name
+              class="c-datepicker-data-input"
+              :value="form.enrollStartDateStr"
+            />
+            <span class="c-datepicker-range-separator">-</span>
+            <input
+              placeholder="结束日期"
+              name
+              class="c-datepicker-data-input"
+              :value="form.enrollEndDateStr"
+            />
           </div>
         </el-col>
       </el-row>
     </el-form-item>
-    <el-form-item label="活动时间">
-      <div class="block">
-    <el-date-picker
-      v-model="value"
-      value-format="yyyy-MM-dd HH:mm:ss"
-      type="datetime"
-      placeholder="选择日期">
-    </el-date-picker>
-    <span>{{value}}</span>
-  </div>
+    <el-form-item label="活动时间" prop="activityDates">
+      <el-col :span="14" class="activity_box">
+        <div
+          class="c-datepicker-date-editor J-datepicker-range-between30 mt10 activitydate"
+          v-for="(item,index) in activityArr"
+          :key="index"
+        >
+          <i class="el-input__icon el-range__icon el-icon-time"></i>
+          <input
+            placeholder="开始日期"
+            name
+            class="c-datepicker-data-input"
+            :class="'activityStartDateStr'+index"
+            :value="item.activityStartDateStr"
+          />
+          <span class="c-datepicker-range-separator">-</span>
+          <input
+            placeholder="结束日期"
+            name
+            class="c-datepicker-data-input"
+            :class="'activityEndDateStr'+index"
+            :value="item.activityEndDateStr"
+          />
+        </div>
+      </el-col>
+      <el-button type="primary" @click="addActivity" class="addactivity">+ 新增活动场次</el-button>
     </el-form-item>
     <el-form-item label="每场人数限制" prop="enrollMaxNum">
       <el-input
@@ -97,8 +117,8 @@
     <editor-bar v-model="form.detail" :isClear="isClear" @change="activityDesignChange"></editor-bar>
     <br />
     <br />
-    <el-form-item label="活动配套资源" prop="resourceList">
-      <upload listType="file" :file-list.sync="form.resourceList" :accept="fileType">
+    <el-form-item label="活动配套资源" prop="resourcesLists">
+      <upload listType="file" :file-list.sync="form.resourcesLists" :accept="fileType">
         <p
           class="upload_tips"
         >不限数量，文件格式：doc / docx / ppt / pptx / xls / xlsx / zip / rar，单个文件大小不超过8M</p>
@@ -112,11 +132,17 @@
 </template>
 
 <script>
+// import "@/assets/laydate/laydate.js"
 import { upload } from "@/mixin/common";
 import { uploadFileSize } from "@/mixin/uploadFileSize.js";
 import aliUpload from "@/components/common/upload.vue";
 import EditorBar from "@/components/common/wangEnduit.vue";
 import { getActivityTypeParent } from "@/api/resetApi";
+import {
+  openActivityAdd,
+  openActivityDetail,
+  openActivityModify
+} from "@/api/newApi";
 import {
   auditStatus,
   fit,
@@ -134,8 +160,12 @@ export default {
   },
   data() {
     return {
-      value: '',
-      startTimeAndEndTime: '',
+      activityArr: [
+        {
+          activityStartDateStr: "",
+          activityEndDateStr: ""
+        }
+      ],
       activityTypeParent: [],
       fit: fit,
       status: status,
@@ -146,7 +176,9 @@ export default {
       fileType: ".doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,.rar",
       form: {
         fitSection: [],
-        resourceList: []
+        resourcesLists: [],
+        enrollEndDateStr: "",
+        activityDates: []
       },
       rules: {
         typeParent: [
@@ -195,14 +227,14 @@ export default {
           {
             required: true,
             message: "请填写每场限制人数",
-            trigger: ["change","blur"]
+            trigger: ["change", "blur"]
           }
         ],
         address: [
           {
             required: true,
             message: "请填写活动地点",
-            trigger: ["change","blur"]
+            trigger: ["change", "blur"]
           }
         ],
         contactName: [
@@ -216,18 +248,40 @@ export default {
           {
             required: true,
             message: "请填写联系人电话",
-            trigger: ["blur"],
+            // trigger: ["blur"],
             validator: validatePhone
           }
         ],
+        enrollEndDateStr: [
+          {
+            required: true,
+            message: "请选择报名时间",
+            trigger: "blur"
+          }
+        ],
+        activityDates: [
+          {
+            required: true,
+            message: "请选择报名时间",
+            trigger: "blur"
+          }
+        ]
       }
     };
   },
   computed: {},
   methods: {
-    test(e){
-      console.log(e);
-      this.form.activityDates = e;
+    addActivity() {
+      this.activityArr.forEach((v, i) => {
+        if ($(".activityEndDateStr" + i).val()) {
+          v.activityStartDateStr = $(".activityStartDateStr" + i).val();
+          v.activityEndDateStr = $(".activityEndDateStr" + i).val();
+        }
+      });
+      this.activityArr.push({
+        activityStartDateStr: "",
+        activityEndDateStr: ""
+      });
     },
     uploadCover({ file } = {}) {
       this.form.cover = this.cover.map((item, index) => item.url);
@@ -242,16 +296,59 @@ export default {
       this.$router.go(-1);
     },
     submit() {
+      this.form.activityDates = [];
+      this.activityArr.forEach((v, i) => {
+        let obj = {
+          activityStartDateStr: "",
+          activityEndDateStr: ""
+        };
+        if ($(".activityEndDateStr" + i).val()) {
+          obj.activityStartDateStr = $(".activityStartDateStr" + i).val();
+          obj.activityEndDateStr = $(".activityEndDateStr" + i).val();
+          this.form.activityDates.push(obj);
+        }
+      });
       this.$refs.form.validate(valid => {
         if (valid) {
+          let head, Text;
+          const id = this.form.id;
           this.isLoading = true;
           const formList = Object.assign({}, this.form);
-          let resourceList = formList.resourceList.map(v => {
+          let resourcesLists = formList.resourcesLists.map(v => {
             return { resourceUrl: v.url, name: v.name };
           });
-          formList.resourceList = resourceList;
+          formList.resourcesLists = resourcesLists;
           formList.cover = this.getFileUrl(formList.cover[0]);
-          console.log(formList);
+          formList.fitSection = formList.fitSection.join(",");
+          if (id) {
+            head = openActivityModify;
+            Text = "修改";
+          } else {
+            head = openActivityAdd;
+            Text = "新增";
+          }
+          head(formList).then(res => {
+            try {
+              let _data = res.data;
+              if (_data.code == 200) {
+                this.$message({
+                  message: `${Text}成功`,
+                  type: "success"
+                });
+                this.$router.push({
+                  path: "/practicalManage/openActivityList"
+                });
+              } else {
+                this.$message({
+                  message: res.data.msg || `${Text}失败`,
+                  type: "error"
+                });
+              }
+            } catch (err) {
+              console.log(err);
+            } finally {
+            }
+          });
         }
       });
     },
@@ -274,16 +371,88 @@ export default {
                 children: arr
               });
             });
-
             this.activityTypeParent = arrBox;
+            this.getOpenActivityDetail();
           }
         })
         .finally(() => {});
     },
-    changestartTimeAndEndTime(val) {
-      console.log(val);
-      this.startTimeAndEndTime = val
+    getOpenActivityDetail() {
+      const id = this.id || this.$route.query.id;
+      if (!id) return;
+      this.showLoading();
+      openActivityDetail({ id }).then(res => {
+        try {
+          let data = res.data;
+          if (data.code == 200) {
+            let formList = Object.assign({}, data.entity);
+            formList.fitSection = formList.fitSection.split(",");
+            this.cover = [
+              {
+                name: "2.png",
+                status: "success",
+                uploadName: "_2.png",
+                url: formList.cover
+              }
+            ];
+            let _resourceList = [];
+            if (formList.resourcesLists) {
+              formList.resourcesLists.forEach(o => {
+                _resourceList.push({
+                  name: o.name,
+                  status: "success",
+                  uploadName: o.name,
+                  url: o.resourceUrl
+                });
+              });
+            }
+            formList.resourcesLists = _resourceList;
+            formList.cover = [formList.cover];
+            formList.enrollStartDateStr = formList.enrollStartDate;
+            formList.enrollEndDateStr = formList.enrollEndDate;
+            if (formList.activityDates) {
+              this.activityArr = [];
+              formList.activityDates.forEach(v => {
+                this.activityArr.push({
+                  activityStartDateStr: v.activityStartDate,
+                  activityEndDateStr: v.activityEndDate
+                });
+              });
+            }
+            this.form = formList;
+          }
+        } catch (err) {
+          console.log(err);
+        } finally {
+          this.hideLoading();
+        }
+      });
     }
+  },
+  mounted() {
+    let _this = this;
+    this.$nextTick(() => {
+      $(".enrolldate").datePicker({
+        isRange: true,
+        hide: function(type) {
+          _this.form.enrollStartDateStr = this.$input.eq(0).val();
+          _this.form.enrollEndDateStr = this.$input.eq(1).val();
+        }
+      });
+      $(".activity_box").on("focus", ".activitydate", function() {
+        $(this).datePicker({
+          isRange: true,
+          hide: function(type) {
+            _this.activityArr.forEach((v, i) => {
+              if ($(".activityEndDateStr" + i).val()) {
+                v.activityStartDateStr = $(".activityStartDateStr" + i).val();
+                v.activityEndDateStr = $(".activityEndDateStr" + i).val();
+              }
+            });
+          }
+        });
+      });
+    });
   },
   created() {
     this.getActivityTypeParent();
@@ -326,5 +495,17 @@ export default {
   line-height: 60px;
   font-size: 16px;
   color: #000;
+}
+.addactivity {
+  position: absolute;
+  left: 63%;
+  bottom: 0;
+}
+.c-datepicker-range-separator {
+  vertical-align: top;
+}
+.el-input__icon {
+  vertical-align: top;
+  line-height: 30px;
 }
 </style>
