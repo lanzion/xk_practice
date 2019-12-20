@@ -89,8 +89,26 @@ const myactivities = () => import('@/views/my/space/student/myactivities/index')
 const registrationactivities = () => import('@/views/my/space/student/myactivities/children/registrationactivities')
 const schoolactivity = () => import('@/views/my/space/student/myactivities/children/schoolactivity')
 
+// 学生--我的活动--活动详情
+const activityDetail = () => import('@/views/my/space/student/myactivities/activityDetail')
+
+// 学生--我的活动--活动评价
+const activityEvaluation = () => import('@/views/my/space/student/myactivities/activityEvaluation')
+
+// 学生--我的活动--活动评价
+const lookactivityEvaluation = () => import('@/views/my/space/student/myactivities/lookactivityEvaluation')
+
 // 学生--我的作品
 const mywork = () => import('@/views/my/space/student/mywork/index')
+
+// 学生--我的作品
+const publishedWorks = () => import('@/views/my/space/student/mywork/publishedWorks')
+
+// 学生--我的作品 --已提交
+const submitted = () => import('@/views/my/space/student/mywork/children/submitted')
+
+// 学生--我的作品 -- 草稿
+const drafts = () => import('@/views/my/space/student/mywork/children/drafts')
 
 // 学生--我的收藏
 const mycollection = () => import('@/views/my/space/student/mycollection/index')
@@ -104,6 +122,15 @@ const avatar = () => import('@/views/my/space/common/avatar/index')
 
 // 账号安全
 const accountsecurity = () => import('@/views/my/space/common/accountsecurity/index')
+
+// 修改邮箱
+const email = () => import('@/views/my/space/common/accountsecurity/email/index')
+
+// 修改手机
+const phone = () => import('@/views/my/space/common/accountsecurity/phone/index')
+
+// 修改密码
+const pswd = () => import('@/views/my/space/common/accountsecurity/pswd/index')
 // ---------------------------------------------------------------------------------------
 
 export default new Router({
@@ -300,9 +327,40 @@ export default new Router({
                 }]
             },
             {
+                path: '/space/myactivities/activityDetail', // 我的活动--活动详情
+                name: 'activityDetail',
+                component: activityDetail,
+            },
+            {
+                path: '/space/myactivities/activityEvaluation', // 我的活动--活动评价
+                name: 'activityEvaluation',
+                component: activityEvaluation,
+            },
+            {
+                path: '/space/myactivities/lookactivityEvaluation', // 我的活动--查看活动评价
+                name: 'lookactivityEvaluation',
+                component: lookactivityEvaluation,
+            },
+            {
                 path: '/space/mywork', // 我的作品
                 name: 'mywork',
                 component: mywork,
+                redirect: '/space/mywork/submitted',
+                children: [{
+                    path: '/space/mywork/submitted', // 我的作品-已提交
+                    name: 'submitted',
+                    component: submitted,
+                },
+                {
+                    path: '/space/mywork/drafts', // 我的作品-草稿
+                    name: 'drafts',
+                    component: drafts,
+                }]
+            },
+            {
+                path: '/space/mywork/publishedWorks', // 发布作品
+                name: 'publishedWorks',
+                component: publishedWorks,
             },
             {
                 path: '/space/mycollection', // 我的收藏
@@ -323,7 +381,22 @@ export default new Router({
                 path: '/space/accountsecurity', // 账号安全
                 name: 'accountsecurity',
                 component: accountsecurity,
-            }
+            },
+            {
+                path: '/space/accountsecurity/pswd', // 账号安全（公用）--密码
+                name: 'pswd',
+                component: pswd,
+            },
+            {
+                path: '/space/accountsecurity/phone', // 账号安全（公用）--手机
+                name: 'phone',
+                component: phone,
+            },
+            {
+                path: '/space/accountsecurity/email', // 账号安全（公用）--邮箱
+                name: 'email',
+                component: email,
+            },
 
         ]
     },

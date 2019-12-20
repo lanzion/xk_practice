@@ -61,8 +61,8 @@
           :value="item.code"
         >{{ item.name }}</el-radio>
       </el-radio-group>
-      <el-input :style="{'width':'100px'}" v-if="form.isFree==1" v-model="form.price"></el-input>
-      <span v-if="form.isFree==1">元</span>
+      <el-input :style="{'width':'100px'}" v-if="form.isFree==0" v-model="form.price"></el-input>
+      <span v-if="form.isFree==0">元</span>
     </el-form-item>
 
     <el-form-item label="课程时长" prop="courseDuration">

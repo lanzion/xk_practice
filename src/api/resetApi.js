@@ -109,7 +109,7 @@ const getevalList = (options = {}, page) => xhr.post(`/admin/statistics/eval/lis
 const selectCountArrange = (options = {}) => xhr.post('/admin/activityCount/selectCountArrange', options)
 const selectCountArrangeDetail = (options = {}) => xhr.post('/admin/activityCount/selectClassArrangeDetail', options)
 
-const activityType = (options = {}, page) => xhr.post(`/admin/activityType/selectPager?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
+const activityType = (options = {}, page) => xhr.post(`/practice/activityType/selectPager?pageNum=${page.pageNum}&pageSize=${page.pageSize}`, options)
 
 const activityTypeAdd = (options = {}) => xhr.post('/admin/activityType/addDicType', options)
 const activityTypeAddType = (options = {}) => xhr.post('/admin/activityType/addDicDetail', options)

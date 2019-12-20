@@ -493,13 +493,13 @@ select {
 }
 .psn-cancel-btn {
   padding: 4px 14px;
-  border: 1px solid #de1601;
-  color: #de1601;
+  border: 1px solid #008aff;
+  color: #008aff;
   font-size: 14px;
   border-radius: 5px;
   margin-right: 10px;
   &:hover {
-    background: #de1601;
+    background: #008aff;
     color: #fff;
   }
 }
@@ -523,7 +523,7 @@ a {
   padding: 5px 15px;
   font-size: 14px;
   color: #fff;
-  background-color: #2165fe;
+  background-color: #008aff;
   border-radius: 5px;
   margin-right: 10px;
 }

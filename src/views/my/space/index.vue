@@ -24,14 +24,17 @@
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item>我的大课堂</el-breadcrumb-item>
           <el-breadcrumb-item>{{gettitle}}</el-breadcrumb-item>
+          <el-breadcrumb-item v-if="$route.path =='/space/myactivities/activityDetail'">活动详情</el-breadcrumb-item>
+          <el-breadcrumb-item v-if="$route.path =='/space/myactivities/activityEvaluation'">活动评价</el-breadcrumb-item>
+          <el-breadcrumb-item v-if="$route.path =='/space/mywork/publishedWorks'">发表活动作品</el-breadcrumb-item>
         </el-breadcrumb>
         <router-view></router-view>
       </div>
-      <div class="space-pos">
+      <div class="space-pos" v-show="istrue">
         <h5>
           为了您能及时接受活动通知，请绑定手机号
-          <i>马上绑定</i>
-          <em>×</em>
+          <i @click="gophone()">马上绑定</i>
+          <em @click="changeshow()">×</em>
         </h5>
         <!-- <div class="space-pos-p"></div> -->
       </div>
@@ -46,6 +49,7 @@ export default {
   data() {
     return {
       code: "",
+      istrue:true,
       navlistteach: [
         {
           name: "实践课堂",
@@ -125,6 +129,14 @@ export default {
       this.$router.push({
         path: url
       });
+    },
+    gophone() {
+      this.$router.push({
+        path: '/space/accountsecurity/phone'
+      });
+    },
+    changeshow() {
+      this.istrue = false
     }
   }
 };
@@ -182,6 +194,10 @@ export default {
           font-size: 12px;
           letter-spacing: 0px;
           color: #008aff;
+          cursor: pointer;
+        }
+        em{
+          cursor: pointer;
         }
       }
       // .space-pos-p {

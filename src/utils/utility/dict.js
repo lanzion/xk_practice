@@ -28,8 +28,8 @@ export const status = [
 
 // 状态
 export const isFree = [
-    {code: 0, name: '免费'},
-    {code: 1, name: '收费'},
+    {code: 1, name: '免费'},
+    {code: 0, name: '收费'},
 ]
 
 // 课程类型
@@ -60,5 +60,19 @@ export const Courselevel = [
     {code: 'A', name: '省级'},
     {code: 'B', name: '市级'},
     {code: 'C', name: '区级'},
+]
+
+export const activityStatus = [
+    {code: 4, name: '即将开放报名'},
+    {code: 5, name: '报名中'},
+    {code: 6, name: '名额已满 '},
+    {code: 7, name: '时间截止'},
+]
+
+export const studentStatus = [
+    {code: '0', name: '未开始'},
+    {code: '1', name: '进行中'},
+    {code: '2', name: '待评价'},
+    {code: '3', name: '已结束'},
 ]
 // -------------------------------------------

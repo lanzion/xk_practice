@@ -43,7 +43,7 @@
       <div
         class="activity_list"
         v-if="activeList.amActivities&&activeList.amActivities.length||activeList.pmActivities&&activeList.pmActivities.length||activeList.allDayActivities&&activeList.allDayActivities.length"
-      >
+       >
         <div class="amActivity_list" v-if="activeList.amActivities&&activeList.amActivities.length">
           <el-row>
             <el-col :span="2" class="amActivity_list_title">上午{{activeList.amActivities.length}}场</el-col>
@@ -78,7 +78,7 @@
                         <el-col
                           :span="24"
                           class="txt_box"
-                        >活动开始时间及时长：{{item.startTime}}&nbsp;&nbsp;&nbsp;半天</el-col>
+                        >活动开始时间及时长：{{item.startTime}}&nbsp;&nbsp;&nbsp;{{item.courseDuration|filterCode(6)}}</el-col>
                       </el-col>
                       <el-col :span="3" class="btn">
                         <el-button type="primary" @click="look(item.id)">活动确认书</el-button>
@@ -124,7 +124,7 @@
                         <el-col
                           :span="24"
                           class="txt_box"
-                        >活动开始时间及时长：{{item.startTime}}&nbsp;&nbsp;&nbsp;半天</el-col>
+                        >活动开始时间及时长：{{item.startTime}}&nbsp;&nbsp;&nbsp;{{item.courseDuration|filterCode(6)}}</el-col>
                       </el-col>
                       <el-col :span="3" class="btn">
                         <el-button type="primary" @click="look(item.id)">活动确认书</el-button>
@@ -173,7 +173,7 @@
                         <el-col
                           :span="24"
                           class="txt_box"
-                        >活动开始时间及时长：{{item.startTime}}&nbsp;&nbsp;&nbsp;全天</el-col>
+                        >活动开始时间及时长：{{item.startTime}}&nbsp;&nbsp;&nbsp;{{item.courseDuration|filterCode(6)}}</el-col>
                       </el-col>
                       <el-col :span="3" class="btn">
                         <el-button type="primary" @click="look(item.id)">活动确认书</el-button>
@@ -215,7 +215,7 @@
                   <el-col
                     :span="24"
                     class="txt_box"
-                  >活动开始时间及时长：{{item.startTime}}&nbsp;&nbsp;&nbsp;半天</el-col>
+                  >活动开始时间及时长：{{item.startTime}}&nbsp;&nbsp;&nbsp;{{item.courseDuration|filterCode(6)}}</el-col>
                 </el-col>
                 <el-col :span="3" class="btn">
                   <el-button type="primary" @click="look(item.id)">活动确认书</el-button>
@@ -245,7 +245,7 @@
                   <el-col
                     :span="24"
                     class="txt_box"
-                  >活动开始时间及时长：{{item.startTime}}&nbsp;&nbsp;&nbsp;半天</el-col>
+                  >活动开始时间及时长：{{item.startTime}}&nbsp;&nbsp;&nbsp;{{item.courseDuration|filterCode(6)}}</el-col>
                 </el-col>
                 <el-col :span="3" class="btn">
                   <el-button type="primary" @click="look(item.id)">活动确认书</el-button>
@@ -285,7 +285,7 @@
                   <el-col
                     :span="24"
                     class="txt_box"
-                  >活动开始时间及时长：{{item.startTime}}&nbsp;&nbsp;&nbsp;全天</el-col>
+                  >活动开始时间及时长：{{item.startTime}}&nbsp;&nbsp;&nbsp;{{item.courseDuration|filterCode(6)}}</el-col>
                 </el-col>
                 <el-col :span="3" class="btn">
                   <el-button type="primary" @click="look(item.id)">活动确认书</el-button>

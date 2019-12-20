@@ -236,7 +236,7 @@ export default {
 <style lang="scss" scoped>
 @import "~@/assets/css/scss/vars.scss";
 .modify-email {
-  width: 100%;
+  width: 980px;
   min-height: 741px;
   .head-tit {
     padding: 14px 15px;

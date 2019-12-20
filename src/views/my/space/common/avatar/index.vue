@@ -275,4 +275,7 @@ $preview-item-size: (
     }
   }
 }
+.el-button--primary{
+  
+}
 </style>

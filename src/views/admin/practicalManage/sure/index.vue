@@ -279,7 +279,7 @@ export default {
           label: "活动分类"
         },
         {
-          prop: "typeParentName",
+          prop: "baseInfoName",
           label: "基地/机构"
         },
         {

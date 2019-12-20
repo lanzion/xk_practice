@@ -1,26 +1,21 @@
 // 排课系统
-const container = () => import('@/views/admin/container')
-const courseActivityList = () => import('@/views/admin/sortCourse/courseActivityList.vue')
-const courseActivityChangeList = () => import('@/views/admin/sortCourse/courseActivityChangeList.vue')
-const intellectSortActivity = () => import('@/views/admin/sortCourse/intellectSortActivity/index.vue')
-
 export default [
     {
         name: 'sortCourse',
         path: '/sortCourse',
-        component: container,
+        component: (resolve) => require(['@/views/admin/container.vue'], resolve),
         children: [
             {
                 path: 'courseActivityList',
-                component: courseActivityList
+                component: (resolve) => require(['@/views/admin/sortCourse/courseActivityList.vue'], resolve),
             },
             {
                 path: 'courseActivityChangeList',
-                component: courseActivityChangeList
+                component: (resolve) => require(['@/views/admin/sortCourse/courseActivityChangeList.vue'], resolve),
             },
             {
                 path: 'intellectSortActivity',
-                component: intellectSortActivity
+                component: (resolve) => require(['@/views/admin/sortCourse/intellectSortActivity/index.vue'], resolve),
             },
         ]
     }

@@ -169,7 +169,10 @@ export default {
       activityTypeParent: [],
       fit: fit,
       status: status,
-      isFree: isFree,
+      isFree: [
+        {code: 0, name: '免费'},
+        {code: 1, name: '收费'},
+      ],
       isClear: false,
       activityList: [],
       cover: [],

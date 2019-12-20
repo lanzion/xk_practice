@@ -7,20 +7,6 @@ const container = () => import('@/views/admin/container')
 
 // 首页
 const home = () => import('@/views/admin/home/index')
-const schedule = () => import('@/views/admin/home/children/schedule')
-
-// 活动审核记录
-const records = () => import('@/views/admin/records/records')
-const relist = () => import('@/views/admin/records/children/relist')
-// 活动排课记录
-const workout = () => import('@/views/admin/workout/workout')
-const worklist = () => import('@/views/admin/workout/children/worklist')
-// 基地项目管理
-const management = () => import('@/views/admin/management/management')
-const managelist = () => import('@/views/admin/management/children/managelist')
-// 基地管理
-const newgrounds = () => import('@/views/admin/newgrounds/newgrounds')
-// 基础管理
 
 // 系统管理
 const permiss = () => import('@/views/admin/system/permiss/index')
@@ -74,23 +60,6 @@ const openActivityInfo = () => import('@/views/admin/practicalManage/openActivit
 const openActivityPartake = () => import('@/views/admin/practicalManage/openActivity/openActivityPartake')
 // ------------------------------------------------------------------------------------------------
 
-// 评分管理2.0
-const evaluteManage = () => import('@/views/admin/evaluteManage/record/index')
-const evaluteModel = () => import('@/views/admin/evaluteManage/model/index')
-const evaluteModelDetail = () => import('@/views/admin/evaluteManage/model/detail')
-const evaluteModelAdd = () => import('@/views/admin/evaluteManage/model/add')
-const evaluteModeledit = () => import('@/views/admin/evaluteManage/model/edit')
-
-// 校园资讯2.0
-const informationManage = () => import('@/views/admin/information/index')
-const informationCreate = () => import('@/views/admin/information/add')
-const informationEdit = () => import('@/views/admin/information/edit')
-// 数据统计2.0
-const statisticsActive = () => import('@/views/admin/statistics/activty')
-const statisticsCourse = () => import('@/views/admin/statistics/course')
-const statisticsDetail = () => import('@/views/admin/statistics/courseDetail')
-const statisticsGrade = () => import('@/views/admin/statistics/grade')
-
 // 账号管理2.0
 const accountSchool = () => import('@/views/admin/account/school/index')
 const accountSchoolAdd = () => import('@/views/admin/account/school/add')
@@ -118,21 +87,11 @@ const baseInfo = () => import('@/views/admin/baseManage/baseInfo/index')
 const baseAuthortySchedule = () => import('@/views/admin/baseManage/schedule/index')
 const baseAuthortyScheduleDetail = () => import('@/views/admin/baseManage/schedule/scheduleDetail')
 
-// 通知公告
-const noticeManage = () => import('@/views/admin/noticeManage/index')
-const noticeManageCreate = () => import('@/views/admin/noticeManage/add')
-const noticeManageEdit = () => import('@/views/admin/noticeManage/edit')
-// 基地资讯2.0
-const informationBase = () => import('@/views/admin/informationBase/index')
-const informationBaseCreate = () => import('@/views/admin/informationBase/add')
-const informationBaseEdit = () => import('@/views/admin/informationBase/edit')
-
 // 教育局管理2.0
 const educationList = () => import('@/views/admin/educationBorad/educationList')
 const educationDetail = () => import('@/views/admin/educationBorad/detail')
 const educationAdd = () => import('@/views/admin/educationBorad/add')
 const educationEdit = () => import('@/views/admin/educationBorad/edit')
-
 const educationInfo = () => import('@/views/admin/educationBorad/EducationInfo')
 
 // 类型管理
@@ -157,58 +116,6 @@ export default new Router({
             path: '/',
             name: 'home',
             component: home
-        },
-        // 课程详情
-        {
-            path: '/schedule',
-            name: 'schedule',
-            component: schedule
-        },
-        // 实践系统
-        {
-            path: '/practice',
-            name: 'practice',
-            component: container,
-            children: [
-                // 活动审核记录
-                {
-                    path: 'records',
-                    component: records,
-                },
-                {
-                    path: 'records/relist',
-                    name: 'relist',
-                    component: relist,
-                },
-                // 活动排课记录
-                {
-                    path: 'workout',
-                    name: 'workout',
-                    component: workout,
-                },
-                {
-                    path: 'workout/worklist',
-                    name: 'worklist',
-                    component: worklist,
-                },
-                // 基地项目管理
-                {
-                    path: 'management',
-                    name: 'management',
-                    component: management,
-                },
-                {
-                    path: 'management/managelist',
-                    name: 'managelist',
-                    component: managelist,
-                },
-                // 基地管理
-                {
-                    path: 'newgrounds',
-                    name: 'newgrounds',
-                    component: newgrounds,
-                },
-            ]
         },
         // 系统管理
         {
@@ -468,107 +375,7 @@ export default new Router({
                 },
             ]
         },
-        // 评分管理2.0
-        {
-            name: 'evaluteManage',
-            path: '/evaluteManage',
-            component: container,
-            children: [{
-                path: 'record',
-                component: container,
-                children: [
-                    {
-                        path: '/',
-                        component: evaluteManage,
-
-                    }
-                ]
-            }, {
-                path: 'evaluteModel',
-                component: container,
-                children: [
-                    {
-                        path: '/',
-                        component: evaluteModel,
-
-                    }, {
-                        path: 'detail',
-                        component: evaluteModelDetail,
-                    }, {
-                        path: 'add',
-                        component: evaluteModelAdd,
-                    }, {
-                        path: 'edit',
-                        component: evaluteModeledit,
-                    }
-                ]
-            }]
-
-        },
-        // 校园资讯2.0
-        {
-            name: 'informationManage',
-            path: '/informationManage',
-            component: container,
-            children: [{
-                path: 'informationList',
-                component: container,
-                children: [
-                    {
-                        path: '/',
-                        component: informationManage,
-
-                    }, {
-                        path: 'informationCreate',
-                        component: informationCreate
-                    }, {
-                        path: 'edit',
-                        component: informationEdit
-                    }
-                ]
-            }]
-        },
-        // 数据统计2.0
-        {
-            name: 'statistics',
-            path: '/statistics',
-            component: container,
-            children: [{
-                path: 'activty',
-                component: container,
-                children: [
-                    {
-                        path: '/',
-                        component: statisticsActive,
-
-                    }
-                ]
-            }, {
-                path: 'course',
-                component: container,
-                children: [
-                    {
-                        path: '/',
-                        component: statisticsCourse,
-
-                    }, {
-                        path: 'detail',
-                        component: statisticsDetail,
-                    }
-                ]
-            }, {
-                path: 'grade',
-                component: container,
-                children: [
-                    {
-                        path: '/',
-                        component: statisticsGrade,
-
-                    }
-                ]
-            }]
-
-        },
+        
         // 账号管理2.0
         {
             name: 'accoutManage',
@@ -643,6 +450,7 @@ export default new Router({
             ]
 
         },
+        // 基地/机构
         {
             name: 'baseManage',
             path: '/baseManage',
@@ -675,42 +483,6 @@ export default new Router({
             ]
 
         },
-        // 通知公告
-        {
-            name: 'noticeManage',
-            path: '/noticeManage',
-            component: container,
-            children: [{
-                path: 'index',
-                component: noticeManage,
-            },
-            {
-                path: 'create',
-                component: noticeManageCreate
-            },
-            {
-                path: 'edit',
-                component: noticeManageEdit
-            }]
-        },
-        // 基地资讯.0
-        {
-            name: 'informationBase',
-            path: '/informationBase',
-            component: container,
-            children: [{
-                path: 'list',
-                component: informationBase,
-            },
-            {
-                path: 'create',
-                component: informationBaseCreate
-            },
-            {
-                path: 'edit',
-                component: informationBaseEdit
-            }]
-        },
         // 教育局管理2.0
         {
             name: 'educationBorad',
@@ -737,6 +509,7 @@ export default new Router({
                 component: educationInfo
             }]
         },
+        // 类型管理
         {
             name: 'typeManage',
             path: '/typeManage',
@@ -764,6 +537,7 @@ export default new Router({
             }]
 
         },
+        // 活动成果
         {
             name: 'activityfruit',
             path: '/activityfruit',

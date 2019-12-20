@@ -197,7 +197,7 @@ export default {
     box-sizing: border-box;
 }
 #modify_pwd {
-    width: 100%;
+    width: 980px;
     min-height: 741px;
     .head-tit {
         padding: 14px 15px;

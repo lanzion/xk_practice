@@ -35,7 +35,7 @@
     </div>
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">课程费用</span>
-      <div class="school-detail-list-redource">{{data.isFree|filterCode(4)}}</div>
+      <div class="school-detail-list-redource">{{data.isFree?(data.isFree|filterCode(4)):data.price+'元'}}</div>
     </div>
     <div class="school-detail-main-list">
       <span class="school-detail-list-head">课程时长</span>

@@ -33,7 +33,7 @@
         <infinite-loading @infinite="getgoods" ref="infiniteLoading">
             <span slot="spinner">正在加载中...</span>
             <span slot="no-more">没有更多数据了...</span>
-            <span slot="no-results">暂无数据...</span>
+            <no-data slot="no-results"></no-data>
         </infinite-loading>
     </div>
 </template>
