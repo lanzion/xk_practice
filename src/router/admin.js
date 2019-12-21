@@ -375,7 +375,7 @@ export default new Router({
                 },
             ]
         },
-        
+
         // 账号管理2.0
         {
             name: 'accoutManage',

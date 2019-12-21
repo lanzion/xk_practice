@@ -664,6 +664,11 @@ export default {
         });
         return;
       }
+      if(this.radio !=this.openActNotPass[this.openActNotPass.length - 1].code){
+        this.openActNotPass.forEach(v=>{
+          if(v.code==this.radio) this.othertxt = v.name
+        })
+      }
       let param = {
         auditStatus: "3",
         auditList: [],
